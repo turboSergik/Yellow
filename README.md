@@ -25,3 +25,5 @@ cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
 
+Для автоматизации этих действий добавлены build.bat и build.sh которые делают то же самое, используя в качестве генератора cmake Mingw Makefiles и Unix Makefiles соответственно
+
