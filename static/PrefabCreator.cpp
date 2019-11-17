@@ -3,45 +3,40 @@
 //
 
 #include "PrefabCreator.h"
-#include "../custom-components/Point.h"
-#include "../custom-components/Post.h"
-#include "../custom-components/Train.h"
-#include "../custom-components/Line.h"
-#include "../base-components/Camera.h"
 
 GameObject *PrefabCreator::createPoint(int idx) {
     GameObject *obj = new GameObject();
-    obj->addComponent<Point>();
+    obj->addComponent<Point>(idx);
     return obj;
 }
 
 GameObject *PrefabCreator::createLine(int idx) {
     GameObject *obj = new GameObject();
-    obj->addComponent<Line>();
+    obj->addComponent<Line>(idx);
     return obj;
 }
 
 GameObject *PrefabCreator::createTrain(int idx) {
     GameObject *obj = new GameObject();
-    obj->addComponent<Train>();
+    obj->addComponent<Train>(idx);
     return obj;
 }
 
 GameObject *PrefabCreator::createTown(int idx) {
     GameObject *obj = new GameObject();
-    obj->addComponent<Town>();
+    obj->addComponent<Town>(idx);
     return obj;
 }
 
 GameObject *PrefabCreator::createMarket(int idx) {
     GameObject *obj = new GameObject();
-    obj->addComponent<Market>();
+    obj->addComponent<Market>(idx);
     return obj;
 }
 
 GameObject *PrefabCreator::createStorage(int idx) {
     GameObject *obj = new GameObject();
-    obj->addComponent<Storage>();
+    obj->addComponent<Storage>(idx);
     return obj;
 }
 

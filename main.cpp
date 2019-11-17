@@ -7,7 +7,8 @@
 #include "static/graphdrawing.h"
 #include "json.hpp"
 #include "Database.h"
-#include "base-components/Camera.h"
+#include "core-components/Camera.h"
+#include "core-components/renderers/Renderer.h"
 
 
 int main() {
@@ -52,16 +53,11 @@ int main() {
 
         window.clear();
         //window.draw(map);
-        sf::RectangleShape shape({1000, 1000});
-        shape.setOrigin(500, 500);
-        sf::Transform t1;
-        t1.translate({1000, 0}).rotate(45).scale({2, 2});
-        std::cout << t1.transformPoint(-500, 500).x << " " << t1.transformPoint(-500, 500).y << std::endl;
-        window.draw(shape, t1);
-        //        center /= float(graph.size());
-//        mainCamera.setCenter(center);
+        //center /= float(graph.size());
+        //mainCamera.setCenter(center);
         mainCamera.update(clock.restart().asSeconds());
         window.setView(mainCamera);
+        Renderer::draw(window, sf::RenderStates::Default);
         window.display();
     }
 

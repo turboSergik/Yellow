@@ -5,8 +5,12 @@
 #ifndef WG_PREFABCREATOR_H
 #define WG_PREFABCREATOR_H
 
-
 #include "../core/GameObject.h"
+#include "../custom-components/Point.h"
+#include "../custom-components/Post.h"
+#include "../custom-components/Train.h"
+#include "../custom-components/Line.h"
+#include "../core-components/Camera.h"
 
 class PrefabCreator {
 public:

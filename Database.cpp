@@ -84,7 +84,7 @@ void Database::generateCoordinates() {
     sf::Vector2f center = {0, 0};
     for (auto& pair : points) {
         const auto& position = coordinates[pair.second->idx];
-        pair.second->setPosition(position);
+        pair.second->transform->setLocalPosition(position);
         center += position;
     }
 }
