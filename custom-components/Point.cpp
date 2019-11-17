@@ -4,11 +4,10 @@
 
 #include "Point.h"
 
-Point::Point(int idx) : CircleShape(10) {
+Point::Point(int idx) {
     this->idx = idx;
-    this->setOrigin(10, 10);
 }
 
 void Point::applyLayer10(const nlohmann::json &json) {
-    this->setPosition({json["x"], json["y"]});
+    transform->setLocalPosition({json["x"], json["y"]});
 }

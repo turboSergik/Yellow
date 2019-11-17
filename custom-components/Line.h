@@ -6,17 +6,15 @@
 #define WG_LINE_H
 
 
-#include "Point.h"
+#include "Behaviour.h"
 
-class Line : public sf::Drawable, public sf::Transformable, public Behaviour {
+class Line : public Behaviour {
 public:
     int length;
     Point* points[2];
 
     explicit Line(int idx);
     void applyLayer0(const nlohmann::json &json) override;
-protected:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
 #endif //WG_LINE_H

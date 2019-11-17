@@ -5,13 +5,11 @@
 #ifndef WG_POINT_H
 #define WG_POINT_H
 
-#include <SFML/Graphics.hpp>
-#include "../json.hpp"
 #include "Behaviour.h"
 
 class Post;
 
-class Point : public sf::CircleShape, public Behaviour {
+class Point : public Behaviour {
 public:
     Post* post;
 

@@ -5,10 +5,10 @@
 #ifndef WG_TRAIN_H
 #define WG_TRAIN_H
 
+#include "Behaviour.h"
 
-#include "Line.h"
 
-class Train : public sf::Sprite, public Behaviour {
+class Train : public Behaviour {
 public:
     explicit Train(int idx);
 };
