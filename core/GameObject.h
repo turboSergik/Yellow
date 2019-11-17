@@ -23,9 +23,11 @@ public:
     template <class T>
     T * addComponent(const T *component);
 
-    template<class T, class... Args>
+    template <class T, class... Args>
     T * addComponent(Args &&... args);
-
+    
+    template <class T>
+    T * getComponent();
 };
 
 template<class T, class... Args>
