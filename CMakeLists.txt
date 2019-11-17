@@ -23,7 +23,9 @@ set(SOURCES
         core/GameObject.cpp
         static/PrefabCreator.cpp
         core-components/renderers/LineRenderer.cpp
-        core-components/renderers/Renderer.cpp core-components/renderers/SpriteRenderer.cpp core-components/renderers/SpriteRenderer.h core-components/renderers/CircleRenderer.cpp core-components/renderers/CircleRenderer.h)
+        core-components/renderers/Renderer.cpp
+        core-components/renderers/SpriteRenderer.cpp
+        core-components/renderers/CircleRenderer.cpp)
 
 add_executable(WG ${SOURCES})
 
