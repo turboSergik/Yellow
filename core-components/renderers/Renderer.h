@@ -16,7 +16,9 @@ private:
     std::list<Renderer*>::iterator iterator;
 public:
     static void draw(sf::RenderTarget &target, sf::RenderStates states);
+
     Renderer();
+    ~Renderer();
 
     virtual void onDraw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 };
