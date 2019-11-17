@@ -14,13 +14,13 @@
 
 class PrefabCreator {
 public:
-    static GameObject *createCamera();
-    static GameObject *createPoint(int idx);
-    static GameObject *createLine(int idx);
-    static GameObject *createTrain(int idx);
-    static GameObject *createTown(int idx);
-    static GameObject *createMarket(int idx);
-    static GameObject *createStorage(int idx);
+    static Camera *createCamera();
+    static Point *createPoint(int idx);
+    static Line *createLine(int idx);
+    static Train *createTrain(int idx);
+    static Town *createTown(int idx);
+    static Market *createMarket(int idx);
+    static Storage *createStorage(int idx);
 };
 
 
