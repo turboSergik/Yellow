@@ -3,6 +3,7 @@
 //
 
 #include "Transform.h"
+#include "GameObject.h"
 
 const sf::Vector2f &Transform::getPosition() const {
     return position;
@@ -157,9 +158,9 @@ std::list<Transform *>::iterator Transform::end() { return children.end(); }
 
 Transform::~Transform() {
     //TODO: who should delete children (gameObject or transform)?
-//    for (auto child : children) {
-//        delete child;
-//    }
+    for (auto child : children) {
+        delete child->gameObject;
+    }
 }
 
 Transform::Transform(GameObject *gameObject) {

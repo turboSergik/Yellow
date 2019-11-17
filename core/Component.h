@@ -7,8 +7,6 @@
 
 #include "Transform.h"
 
-class GameObject;
-
 class Component {
 public:
     GameObject *gameObject; //TODO: prevent changes of this field

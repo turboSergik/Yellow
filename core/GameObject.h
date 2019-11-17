@@ -54,28 +54,4 @@ T * GameObject::getComponent() {
     }
 }
 
-void GameObject::update() {
-    for (auto component : components) {
-        component->update();
-    }
-    for (auto child : *transform) {
-        child->gameObject->update();
-    }
-}
-
-GameObject::GameObject() {
-    transform = new Transform(this);
-}
-
-GameObject::~GameObject() {
-    for (auto component : components) {
-        delete component;
-    }
-    for (auto child : *transform) {
-        delete child->gameObject;
-    }
-    delete transform;
-}
-
-
 #endif //WG_GAMEOBJECT_H
