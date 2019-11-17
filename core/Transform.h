@@ -29,9 +29,10 @@ private:
 
     void recalculateAccordingToLocals();
 public:
-    GameObject *gameObject;
+    GameObject *gameObject; //TODO: prevent changes of this field
 
-    virtual ~Transform();
+    explicit Transform(GameObject *gameObject);
+    ~Transform();
 
     const sf::Vector2f &getUp() const;
 

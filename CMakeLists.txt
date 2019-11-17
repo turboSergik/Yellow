@@ -10,17 +10,20 @@ conan_basic_setup(TARGET)
 
 set(SOURCES
         main.cpp
-        Camera.cpp
-        Behaviour.cpp
-        Point.cpp
-        Line.cpp
-        Post.cpp
-        Train.cpp
+        core-components/Camera.cpp
+        custom-components/Behaviour.cpp
+        custom-components/Point.cpp
+        custom-components/Line.cpp
+        custom-components/Post.cpp
+        custom-components/Train.cpp
         Database.cpp
-        graphdrawing.cpp
-        Transformable.cpp
-        Component.cpp
-        GameObject.cpp)
+        static/graphdrawing.cpp
+        core/Transform.cpp
+        core/Component.cpp
+        core/GameObject.cpp
+        static/PrefabCreator.cpp
+        core-components/LineRenderer.cpp
+        core-components/Renderer.cpp)
 
 add_executable(WG ${SOURCES})
 

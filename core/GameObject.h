@@ -13,8 +13,9 @@ class GameObject {
 private:
     std::list<Component*> components;
 public:
-    Transform transform;
-
+    Transform *transform; //TODO: prevent changes of this field
+    GameObject();
+    ~GameObject();
     void update();
     void draw();
 
@@ -42,9 +43,23 @@ void GameObject::update() {
     for (auto component : components) {
         component->update();
     }
-    for (auto child : transform) {
+    for (auto child : *transform) {
         child->gameObject->update();
     }
+}
+
+GameObject::GameObject() {
+    transform = new Transform(this);
+}
+
+GameObject::~GameObject() {
+    for (auto component : components) {
+        delete component;
+    }
+    for (auto child : *transform) {
+        delete child->gameObject;
+    }
+    delete transform;
 }
 
 

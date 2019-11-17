@@ -9,7 +9,7 @@ class GameObject;
 
 class Component {
 public:
-    GameObject *gameObject;
+    GameObject *gameObject; //TODO: prevent changes of this field
 
     virtual void update();
     virtual void onDraw();
