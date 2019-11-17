@@ -15,6 +15,8 @@ private:
     static Camera* mainCamera;
     float width; //horizontal half-size
 public:
+    //TODO: make camera fully control view
+    //TODO: split camera control and camera
     sf::Keyboard::Key up = sf::Keyboard::Up;
     sf::Keyboard::Key left = sf::Keyboard::Left;
     sf::Keyboard::Key down = sf::Keyboard::Down;

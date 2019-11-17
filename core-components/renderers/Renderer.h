@@ -8,14 +8,17 @@
 
 #include <SFML/Graphics.hpp>
 #include <list>
-#include "../core/Component.h"
+#include "../../core/Component.h"
 
-class Renderer : public Component, public sf::Drawable {
+class Renderer : public Component {
 private:
     static std::list<Renderer*> renderers;
     std::list<Renderer*>::iterator iterator;
 public:
+    static void draw(sf::RenderTarget &target, sf::RenderStates states);
     Renderer();
+
+    virtual void onDraw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 };
 
 
