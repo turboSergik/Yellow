@@ -2,13 +2,15 @@
 // Created by Олег Бобров on 17.11.2019.
 //
 
-#ifndef WG_TRANSFORMABLE_H
-#define WG_TRANSFORMABLE_H
+#ifndef WG_TRANSFORM_H
+#define WG_TRANSFORM_H
 
 #include <SFML/Graphics/Transform.hpp>
 #include <list>
 
-class Transformable {
+class GameObject;
+
+class Transform {
 private:
     sf::Vector2f position;
     sf::Vector2f localPosition;
@@ -22,11 +24,15 @@ private:
     sf::Vector2f up;
     sf::Vector2f right;
 
-    Transformable *parent;
-    std::list<Transformable*> children;
+    Transform *parent;
+    std::list<Transform*> children;
 
     void recalculateAccordingToLocals();
 public:
+    GameObject *gameObject;
+
+    virtual ~Transform();
+
     const sf::Vector2f &getUp() const;
 
     const sf::Vector2f &getRight() const;
@@ -57,15 +63,17 @@ public:
 
     void setPositionAndRotation(const sf::Vector2f &position, float rotation);
 
-    Transformable *getParent() const;
+    Transform *getParent() const;
 
-    void setParent(Transformable *parent, bool worldPositionStays = false);
+    void setParent(Transform *parent, bool worldPositionStays = false);
 
-    sf::Vector2f transformToLocalPosition (const sf::Vector2f &position) const;
-    sf::Vector2f transformToLocalDirection (const sf::Vector2f &direction) const;
-    sf::Vector2f transformToGlobalPosition (const sf::Vector2f &position) const;
-    sf::Vector2f transformToGlobalDirection (const sf::Vector2f &direction) const;
+    sf::Vector2f toLocalPosition (const sf::Vector2f &position) const;
+    sf::Vector2f toLocalDirection (const sf::Vector2f &direction) const;
+    sf::Vector2f toGlobalPosition (const sf::Vector2f &position) const;
+    sf::Vector2f toGlobalDirection (const sf::Vector2f &direction) const;
+    std::list<Transform*>::iterator begin();
+    std::list<Transform*>::iterator end();
 };
 
 
-#endif //WG_TRANSFORMABLE_H
+#endif //WG_TRANSFORM_H
