@@ -19,6 +19,12 @@ private:
     sf::Vector2f scale;
     sf::Vector2f localScale;
     sf::Transform localToWorld;
+public:
+    const sf::Transform &getLocalToWorldTransform() const;
+
+    const sf::Transform &getWorldToLocalTransform() const;
+
+private:
     sf::Transform worldToLocal;
 
     sf::Vector2f up;

@@ -166,3 +166,11 @@ Transform::Transform(GameObject *gameObject) {
     Transform::gameObject = gameObject;
 }
 
+const sf::Transform &Transform::getLocalToWorldTransform() const {
+    return localToWorld;
+}
+
+const sf::Transform &Transform::getWorldToLocalTransform() const {
+    return worldToLocal;
+}
+

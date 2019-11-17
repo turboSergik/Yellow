@@ -14,30 +14,42 @@ class GameObject {
 private:
     std::list<Component*> components;
 public:
-    Transform *transform; //TODO: prevent changes of this field
+    Transform * transform; //TODO: prevent changes of this field
     GameObject();
     ~GameObject();
     void update();
     void draw();
 
     template <class T>
-    T* addComponent(const T *component);
+    T * addComponent(const T *component);
 
     template<class T, class... Args>
-    T *addComponent(Args &&... args);
+    T * addComponent(Args &&... args);
+
 };
 
 template<class T, class... Args>
-T *GameObject::addComponent(Args &&... args) {
+T * GameObject::addComponent(Args &&... args) {
     T *instance = new T(std::forward<Args>(args)...);
     components.push_back(instance);
     return instance;
 }
 
 template<class T>
-T *GameObject::addComponent(const T *component) {
+T * GameObject::addComponent(const T *component) {
     components.push_back(component);
     return component;
+}
+
+template<class T>
+T * GameObject::getComponent() {
+    T * result;
+    for (Component * component : components) {
+        result = dynamic_cast<T *>(component);
+        if (result) {
+            return result;
+        }
+    }
 }
 
 void GameObject::update() {
