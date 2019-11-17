@@ -7,7 +7,7 @@
 
 
 #include <SFML/System.hpp>
-#include "../json.hpp"
+#include "../json/json.hpp"
 #include "../core/Component.h"
 
 class Behaviour : public Component {
@@ -15,7 +15,8 @@ private:
 public:
     int idx;
 
-    virtual void update(float deltaTime);
+    explicit Behaviour(int idx);
+
     virtual void applyLayer0(const nlohmann::json &json);
     virtual void applyLayer1(const nlohmann::json &json);
     virtual void applyLayer10(const nlohmann::json &json);

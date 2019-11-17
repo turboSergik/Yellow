@@ -15,6 +15,7 @@ public:
 
     explicit Point(int idx);
     void applyLayer10(const nlohmann::json &json) override;
+    void applyLayer0(const nlohmann::json &json) override;
 };
 
 

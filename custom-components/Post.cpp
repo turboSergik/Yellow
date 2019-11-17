@@ -3,51 +3,52 @@
 //
 
 #include "Post.h"
+#include "../static/Database.h"
 
 void Post::applyLayer1(const nlohmann::json &json) {
-    this->name = json["name"];
+    Post::name = json["name"];
+    Post::point = Database::points[json["point_idx"]];
 }
 
-Post::Post(int idx) {
-    this->idx = idx;
-}
+Post::Post(int idx) : Behaviour(idx) {}
+
 
 Town::Town(int idx) : Post(idx) {
-    this->type = PostType::TOWN;
+    Post::type = PostType::TOWN;
 }
 
 void Town::applyLayer1(const nlohmann::json &json) {
     Post::applyLayer1(json);
-    this->armor = json["armor"];
-    this->armor_capacity = json["armor_capacity"];
-    this->level = json["level"];
-    this->next_level_price = json["next_level_price"];
+    Town::armor = json["armor"];
+    Town::armor_capacity = json["armor_capacity"];
+    Town::level = json["level"];
+    Town::next_level_price = json["next_level_price"];
     //this->player_idx = item["player_idx"];
-    this->population = json["population"];
-    this->population_capacity = json["population_capacity"];
-    this->product = json["product"];
-    this->product_capacity = json["product_capacity"];
-    this->train_cooldown = json["train_cooldown"];
+    Town::population = json["population"];
+    Town::population_capacity = json["population_capacity"];
+    Town::product = json["product"];
+    Town::product_capacity = json["product_capacity"];
+    Town::train_cooldown = json["train_cooldown"];
 }
 
 Market::Market(int idx): Post(idx) {
-    this->type = PostType::MARKET;
+    Post::type = PostType::MARKET;
 }
 
 void Market::applyLayer1(const nlohmann::json &json) {
     Post::applyLayer1(json);
-    this->product = json["product"];
-    this->product_capacity = json["product_capacity"];
-    this->replenishment = json["replenishment"];
+    Market::product = json["product"];
+    Market::product_capacity = json["product_capacity"];
+    Market::replenishment = json["replenishment"];
 }
 
 Storage::Storage(int idx) : Post(idx) {
-    this->type = PostType::STORAGE;
+    Post::type = PostType::STORAGE;
 }
 
 void Storage::applyLayer1(const nlohmann::json &json) {
     Post::applyLayer1(json);
-    this->armor = json["armor"];
-    this->armor_capacity = json["armor_capacity"];
-    this->replenishment = json["replenishment"];
+    Storage::armor = json["armor"];
+    Storage::armor_capacity = json["armor_capacity"];
+    Storage::replenishment = json["replenishment"];
 }

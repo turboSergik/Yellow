@@ -10,6 +10,7 @@
 
 class Train : public Behaviour {
 public:
+    //TODO: init fields pls
     explicit Train(int idx);
 };
 

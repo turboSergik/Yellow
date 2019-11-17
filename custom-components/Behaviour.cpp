@@ -16,6 +16,6 @@ void Behaviour::applyLayer10(const nlohmann::json &json) {
 
 }
 
-void Behaviour::update(float deltaTime) {
-
+Behaviour::Behaviour(int idx) {
+    Behaviour::idx = idx;
 }

@@ -3,12 +3,19 @@
 //
 
 #include "Line.h"
+#include "../static/Database.h"
 
+Line::Line(int idx) : Behaviour(idx) {
 
-Line::Line(int idx) {
-    this->idx = idx;
 }
 
 void Line::applyLayer0(const nlohmann::json &json) {
-    this->length = json["length"];
+    Line::length = json["length"];
+    auto & item_points = json["points"];
+    Line::points[0] = Database::points[item_points[0]];
+    Line::points[1] = Database::points[item_points[1]];
 }
+
+
+
+
