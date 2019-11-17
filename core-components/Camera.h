@@ -8,6 +8,7 @@
 
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window.hpp>
+#include "../core/Component.h"
 
 class Camera : public sf::View, public Component {
 private:

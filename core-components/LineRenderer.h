@@ -12,6 +12,12 @@ class LineRenderer : public Renderer {
 private:
     sf::Vertex vertices[2];
 public:
+    const sf::Vertex *getVertices() const;
+    void setVertices(const sf::Vector2f &v1, const sf::Vector2f &v2);
+protected:
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+protected:
 
 };
 
