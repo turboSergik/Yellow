@@ -16,7 +16,7 @@ set(SOURCES
         custom-components/Line.cpp
         custom-components/Post.cpp
         custom-components/Train.cpp
-        Database.cpp
+        static/Database.cpp
         static/graphdrawing.cpp
         core/Transform.cpp
         core/Component.cpp
