@@ -3,85 +3,41 @@
 #include <utility>
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <SFML/Graphics.hpp>
-
-#include "graphdrawing.hpp"
-
+#include "static/graphdrawing.h"
 #include "json.hpp"
-using json = nlohmann::json;
-
-class Camera : public sf::View {
-private:
-    float width; //horizontal half-size
-public:
-    using sf::View::View;
-
-    Camera(const sf::View &view) : sf::View(view) {
-        setWidth(10);
-    }
-    float getWidth() {
-        return width;
-    }
-    void setWidth(float width) {
-        this->width = width;
-        setSize(sf::View::getSize());
-    }
-    void setSize(float width, float height) {
-        sf::View::setSize(2 * this->width, 2 * this->width * height / width);
-    }
-    void setSize(const sf::Vector2f &size) {
-        sf::View::setSize(2 * this->width, 2 * this->width * size.y / size.x);
-    }
-};
+#include "Database.h"
+#include "base-components/Camera.h"
 
 
-int main()
-{
-    std::unordered_map<int, std::list<int>> graph;
-        
-    srand(time(0));
+int main() {
+    srand(time(nullptr));
+    //auto graph = readGraphFromJson("big_graph.json");
+    //auto positions = GraphDrawing::forceMethod(graph);
 
-    size_t a;
-    size_t b;
-
-    json jsonGraph;
-    
-    std::ifstream in("small_graph.json");
-    in >> jsonGraph;
+    nlohmann::json layer0, layer1;
+    std::ifstream in;
+    in.open("map_layer0.json");
+    in >> layer0;
+    in.close();
+    in.open("map_layer1.json");
+    in >> layer1;
     in.close();
 
-    for (auto & point : jsonGraph["points"]) {
-        graph[point["idx"]] = std::list<int>{};
-    }
-    
-    for (auto & line : jsonGraph["lines"]) {
-        auto & points = line["points"];
-        std::pair<int, int> pointsPair{points[0], points[1]};
-        graph[pointsPair.first].push_back(pointsPair.second);
-        graph[pointsPair.second].push_back(pointsPair.first);
-    }
-    
-    std::cout << std::endl;
-    
-    std::unordered_map<int, sf::Vector2<float>> positions = 
-            GraphDrawing::forceMethod(graph);
-    
-    
-    sf::CircleShape shape(20);
-    shape.setOrigin(20, 20);
-    shape.setFillColor(sf::Color::Red);
-    sf::Vertex line[2];
-    
-    
-    // sf::String name = "Graph";
+//    Database map(layer0["idx"]);
+//    map.applyLayer0(layer0);
+//    map.applyLayer1(layer1);
+//    map.generateCoordinates();
+
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
     Camera mainCamera = window.getView();
-    mainCamera.setWidth(2000);
+    mainCamera.setWidth(1000);
     mainCamera.setCenter(0, 0);
     window.setView(mainCamera);
-    
+
+    sf::Clock clock; // starts the clock
+
     while (window.isOpen()) {
         sf::Event event{};
         while (window.pollEvent(event)) {
@@ -93,23 +49,18 @@ int main()
                 window.setView(mainCamera);
             }
         }
-        
+
         window.clear();
-        sf::Vector2f center(0, 0);
-        for (auto position : positions) {
-            center += position.second;
-            shape.setPosition(position.second);
-            window.draw(shape);
-        }
-        for (const auto& pair : graph) {
-            line[0].position = positions[pair.first];
-            for (auto index : pair.second) {
-                line[1].position = positions[index];
-                window.draw(line, 2, sf::Lines);
-            }
-        }
-        center /= float(graph.size());
-        mainCamera.setCenter(center);
+        //window.draw(map);
+        sf::RectangleShape shape({1000, 1000});
+        shape.setOrigin(500, 500);
+        sf::Transform t1;
+        t1.translate({1000, 0}).rotate(45).scale({2, 2});
+        std::cout << t1.transformPoint(-500, 500).x << " " << t1.transformPoint(-500, 500).y << std::endl;
+        window.draw(shape, t1);
+        //        center /= float(graph.size());
+//        mainCamera.setCenter(center);
+        mainCamera.update(clock.restart().asSeconds());
         window.setView(mainCamera);
         window.display();
     }

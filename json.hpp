@@ -15587,7 +15587,6 @@ class basic_json
                 // it's now safe that current_item get destructed
                 // since it doesn't have any children
             }
-
             switch (t)
             {
                 case value_t::object:
