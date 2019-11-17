@@ -1,12 +1,8 @@
 #include <algorithm>
-#include <vector>
-#include <utility>
-#include <iostream>
 #include <fstream>
 #include <SFML/Graphics.hpp>
-#include "static/graphdrawing.h"
-#include "json.hpp"
-#include "Database.h"
+#include "json/json.hpp"
+#include "static/Database.h"
 #include "core-components/Camera.h"
 #include "core-components/renderers/Renderer.h"
 
