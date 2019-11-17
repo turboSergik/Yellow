@@ -8,6 +8,7 @@
 
 #include "Transform.h"
 #include "Component.h"
+#include <utility>
 
 class GameObject {
 private:
@@ -22,13 +23,13 @@ public:
     template <class T>
     T* addComponent(const T *component);
 
-    template<class T>
-    T *addComponent();
+    template<class T, class... Args>
+    T *addComponent(Args &&... args);
 };
 
-template<class T>
-T *GameObject::addComponent() {
-    T *instance = new T();
+template<class T, class... Args>
+T *GameObject::addComponent(Args &&... args) {
+    T *instance = new T(std::forward<Args>(args)...);
     components.push_back(instance);
     return instance;
 }
