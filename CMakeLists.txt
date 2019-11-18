@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.13)
 
 project(WG LANGUAGES CXX)
 
@@ -27,7 +27,10 @@ set(SOURCES
         core-components/renderers/SpriteRenderer.cpp
         core-components/renderers/CircleRenderer.cpp
         custom-components/CameraController.cpp
-        static/Time.cpp)
+        static/Time.cpp
+        Networking/Connection.cpp
+        Networking/Packet.cpp
+        Networking/PacketQueue.cpp)
 
 add_executable(WG ${SOURCES})
 
