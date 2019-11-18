@@ -80,4 +80,11 @@ void Database::applyLayer0(const nlohmann::json &json) {
     }
 }
 
+void Database::generateCoordinates() {
+    auto positions = GraphDrawing::forceMethod(graph);
+    for (auto & pair : points) {
+        pair.second->transform->setLocalPosition(positions[pair.second->idx]);
+    }
+}
+
 
