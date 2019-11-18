@@ -3,9 +3,28 @@
 #include <SFML/Graphics.hpp>
 #include "json/json.hpp"
 #include "static/Database.h"
+#include "core/GameObject.h"
 #include "core-components/Camera.h"
 #include "core-components/renderers/Renderer.h"
+#include "core-components/renderers/CircleRenderer.h"
 
+GameObject *initSceneTree() {
+    GameObject *root = new GameObject();
+    sf::Vector2f center;
+    for (auto & pair : Database::points) {
+        pair.second->transform->setParent(root->transform);
+        center += pair.second->transform->getLocalPosition();
+    }
+    center /= static_cast<float>(Database::points.size());
+    root->transform->setPosition(-center);
+    for (auto & pair : Database::lines) {
+        pair.second->transform->setParent(root->transform);
+    }
+    for (auto & pair : Database::posts) {
+        pair.second->transform->setParent(pair.second->point->transform);
+    }
+    return root;
+}
 
 int main() {
     srand(time(nullptr));
@@ -21,19 +40,27 @@ int main() {
     in >> layer1;
     in.close();
 
-//    Database map(layer0["idx"]);
-//    map.applyLayer0(layer0);
-//    map.applyLayer1(layer1);
-//    map.generateCoordinates();
+    Database::applyLayer0(layer0);
+    Database::applyLayer1(layer1);
+    Database::generateCoordinates();
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
     Camera mainCamera = window.getView();
-    mainCamera.setWidth(1000);
+    mainCamera.setWidth(4000);
     mainCamera.setCenter(0, 0);
     window.setView(mainCamera);
 
     sf::Clock clock; // starts the clock
+
+    GameObject *root = initSceneTree();
+
+//    GameObject *test = new GameObject();
+//    auto cr = test->addComponent<CircleRenderer>();
+//    cr->circle.setRadius(20);
+//    cr->circle.setOrigin(20, 20);
+//
+//    test->transform->setLocalPosition({0, 100});
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -48,11 +75,7 @@ int main() {
         }
 
         window.clear();
-        //window.draw(map);
-        //center /= float(graph.size());
-        //mainCamera.setCenter(center);
-        mainCamera.update(clock.restart().asSeconds());
-        window.setView(mainCamera);
+        root->update();
         Renderer::draw(window, sf::RenderStates::Default);
         window.display();
     }
