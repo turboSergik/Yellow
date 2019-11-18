@@ -17,19 +17,10 @@ private:
 public:
     //TODO: make camera fully control view
     //TODO: split camera control and camera
-    sf::Keyboard::Key up = sf::Keyboard::Up;
-    sf::Keyboard::Key left = sf::Keyboard::Left;
-    sf::Keyboard::Key down = sf::Keyboard::Down;
-    sf::Keyboard::Key right = sf::Keyboard::Right;
-    float maxSize = 10000;
-    float minSize = 1000;
-    float scrollFactor = 0.1f;
-    float moveFactor = 0.1f;
 
     using sf::View::View;
 
     Camera(const sf::View &view);
-    void update(float deltaTime);
     float getWidth();
     void setWidth(float width);
     void setSize(float width, float height);
