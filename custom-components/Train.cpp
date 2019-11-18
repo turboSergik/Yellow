@@ -4,6 +4,6 @@
 
 #include "Train.h"
 
-Train::Train(int idx) {
-    this->idx = idx;
+Train::Train(int idx) : Behaviour(idx) {
+
 }

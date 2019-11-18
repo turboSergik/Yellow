@@ -1,14 +1,30 @@
 #include <algorithm>
-#include <vector>
-#include <utility>
-#include <iostream>
 #include <fstream>
 #include <SFML/Graphics.hpp>
-#include "static/graphdrawing.h"
-#include "json.hpp"
-#include "Database.h"
-#include "base-components/Camera.h"
+#include "json/json.hpp"
+#include "static/Database.h"
+#include "core/GameObject.h"
+#include "core-components/Camera.h"
+#include "core-components/renderers/Renderer.h"
+#include "core-components/renderers/CircleRenderer.h"
 
+GameObject *initSceneTree() {
+    GameObject *root = new GameObject();
+    sf::Vector2f center;
+    for (auto & pair : Database::points) {
+        pair.second->transform->setParent(root->transform);
+        center += pair.second->transform->getLocalPosition();
+    }
+    center /= static_cast<float>(Database::points.size());
+    root->transform->setPosition(-center);
+    for (auto & pair : Database::lines) {
+        pair.second->transform->setParent(root->transform);
+    }
+    for (auto & pair : Database::posts) {
+        pair.second->transform->setParent(pair.second->point->transform);
+    }
+    return root;
+}
 
 int main() {
     srand(time(nullptr));
@@ -24,19 +40,27 @@ int main() {
     in >> layer1;
     in.close();
 
-//    Database map(layer0["idx"]);
-//    map.applyLayer0(layer0);
-//    map.applyLayer1(layer1);
-//    map.generateCoordinates();
+    Database::applyLayer0(layer0);
+    Database::applyLayer1(layer1);
+    Database::generateCoordinates();
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
     Camera mainCamera = window.getView();
-    mainCamera.setWidth(1000);
+    mainCamera.setWidth(4000);
     mainCamera.setCenter(0, 0);
     window.setView(mainCamera);
 
     sf::Clock clock; // starts the clock
+
+    GameObject *root = initSceneTree();
+
+//    GameObject *test = new GameObject();
+//    auto cr = test->addComponent<CircleRenderer>();
+//    cr->circle.setRadius(20);
+//    cr->circle.setOrigin(20, 20);
+//
+//    test->transform->setLocalPosition({0, 100});
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -51,17 +75,8 @@ int main() {
         }
 
         window.clear();
-        //window.draw(map);
-        sf::RectangleShape shape({1000, 1000});
-        shape.setOrigin(500, 500);
-        sf::Transform t1;
-        t1.translate({1000, 0}).rotate(45).scale({2, 2});
-        std::cout << t1.transformPoint(-500, 500).x << " " << t1.transformPoint(-500, 500).y << std::endl;
-        window.draw(shape, t1);
-        //        center /= float(graph.size());
-//        mainCamera.setCenter(center);
-        mainCamera.update(clock.restart().asSeconds());
-        window.setView(mainCamera);
+        root->update();
+        Renderer::draw(window, sf::RenderStates::Default);
         window.display();
     }
 

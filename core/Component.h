@@ -7,15 +7,14 @@
 
 #include "Transform.h"
 
-class GameObject;
-
 class Component {
 public:
     GameObject *gameObject; //TODO: prevent changes of this field
     Transform *transform;
 
     virtual void update();
-    virtual void onDraw();
+    virtual void onDraw();//remove this
+    //TODO: add start() event (check add to scene and call)
 };
 
 

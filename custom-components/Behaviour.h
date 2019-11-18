@@ -7,9 +7,7 @@
 
 
 #include <SFML/System.hpp>
-#include <SFML/Graphics/Transform.hpp>
-#include "../json.hpp"
-#include "../core/Transform.h"
+#include "../json/json.hpp"
 #include "../core/Component.h"
 
 class Behaviour : public Component {
@@ -17,11 +15,21 @@ private:
 public:
     int idx;
 
-    virtual void update(float deltaTime);
+    explicit Behaviour(int idx);
+
     virtual void applyLayer0(const nlohmann::json &json);
     virtual void applyLayer1(const nlohmann::json &json);
     virtual void applyLayer10(const nlohmann::json &json);
 };
+
+class Point;
+class Line;
+class Train;
+class Post;
+class Town;
+class Market;
+class Storage;
+
 
 
 #endif //WG_BEHAVIOUR_H

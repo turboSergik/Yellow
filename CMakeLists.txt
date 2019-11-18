@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.13)
 
 project(WG LANGUAGES CXX)
 
@@ -16,14 +16,18 @@ set(SOURCES
         custom-components/Line.cpp
         custom-components/Post.cpp
         custom-components/Train.cpp
-        Database.cpp
+        static/Database.cpp
         static/graphdrawing.cpp
         core/Transform.cpp
         core/Component.cpp
         core/GameObject.cpp
         static/PrefabCreator.cpp
-        core-components/LineRenderer.cpp
-        core-components/Renderer.cpp
+        core-components/renderers/LineRenderer.cpp
+        core-components/renderers/Renderer.cpp
+        core-components/renderers/SpriteRenderer.cpp
+        core-components/renderers/CircleRenderer.cpp
+        custom-components/CameraController.cpp
+        static/Time.cpp
         Networking/Connection.cpp
         Networking/Packet.cpp
         Networking/PacketQueue.cpp)

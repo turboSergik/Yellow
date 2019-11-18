@@ -16,8 +16,8 @@ private:
     sf::Vector2f localPosition;
     float rotation;
     float localRotation;
-    sf::Vector2f scale;
-    sf::Vector2f localScale;
+    sf::Vector2f scale = {1, 1};
+    sf::Vector2f localScale = {1, 1};
     sf::Transform localToWorld;
 public:
     const sf::Transform &getLocalToWorldTransform() const;

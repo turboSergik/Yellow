@@ -5,18 +5,17 @@
 #ifndef WG_POINT_H
 #define WG_POINT_H
 
-#include <SFML/Graphics.hpp>
-#include "../json.hpp"
 #include "Behaviour.h"
 
 class Post;
 
-class Point : public sf::CircleShape, public Behaviour {
+class Point : public Behaviour {
 public:
     Post* post;
 
     explicit Point(int idx);
     void applyLayer10(const nlohmann::json &json) override;
+    void applyLayer0(const nlohmann::json &json) override;
 };
 
 

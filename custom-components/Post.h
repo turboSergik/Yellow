@@ -7,7 +7,7 @@
 
 
 #include <string>
-#include "Point.h"
+#include "Behaviour.h"
 
 enum PostType
 {
@@ -16,7 +16,7 @@ enum PostType
     STORAGE = 3
 };
 
-class Post : public sf::Sprite, public Behaviour {
+class Post : public Behaviour {
 public:
     Point* point;
     PostType type;

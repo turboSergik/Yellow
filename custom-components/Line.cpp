@@ -3,20 +3,29 @@
 //
 
 #include "Line.h"
+#include "../static/Database.h"
+#include "../core/GameObject.h"
 
-void Line::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    states.transform *= getTransform();
-    sf::Vertex vertices[] = {
-            sf::Vertex(points[0]->getPosition()),
-            sf::Vertex(points[1]->getPosition())
-    };
-    target.draw(vertices, 2, sf::Lines, states);
-}
+Line::Line(int idx) : Behaviour(idx) {
 
-Line::Line(int idx) {
-    this->idx = idx;
 }
 
 void Line::applyLayer0(const nlohmann::json &json) {
-    this->length = json["length"];
+    Line::length = json["length"];
+    auto & item_points = json["points"];
+    Line::points[0] = Database::points[item_points[0]];
+    Line::points[1] = Database::points[item_points[1]];
 }
+
+void Line::update() {
+    if (!lineRenderer) {
+        lineRenderer = gameObject->getComponent<LineRenderer>();
+    }
+    lineRenderer->setVertices(
+            points[0]->transform->getLocalPosition(),
+            points[1]->transform->getLocalPosition());
+}
+
+
+
+

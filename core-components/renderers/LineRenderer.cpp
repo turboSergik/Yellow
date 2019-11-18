@@ -8,7 +8,7 @@ const sf::Vertex *LineRenderer::getVertices() const {
     return vertices;
 }
 
-void LineRenderer::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void LineRenderer::onDraw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= transform->getLocalToWorldTransform();
     target.draw(vertices, 2, sf::Lines, states);
 }
