@@ -34,12 +34,16 @@ template<class T, class... Args>
 T * GameObject::addComponent(Args &&... args) {
     T *instance = new T(std::forward<Args>(args)...);
     components.push_back(instance);
+    instance->gameObject = this;
+    instance->transform = GameObject::transform;
     return instance;
 }
 
 template<class T>
 T * GameObject::addComponent(const T *component) {
     components.push_back(component);
+    component->gameObject = this;
+    component->transform = GameObject::transform;
     return component;
 }
 
