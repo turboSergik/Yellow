@@ -25,7 +25,9 @@ set(SOURCES
         core-components/renderers/LineRenderer.cpp
         core-components/renderers/Renderer.cpp
         core-components/renderers/SpriteRenderer.cpp
-        core-components/renderers/CircleRenderer.cpp)
+        core-components/renderers/CircleRenderer.cpp
+        custom-components/CameraController.cpp
+        static/Time.cpp)
 
 add_executable(WG ${SOURCES})
 
