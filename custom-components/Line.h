@@ -7,13 +7,18 @@
 
 
 #include "Behaviour.h"
+#include "../core-components/renderers/LineRenderer.h"
 
 class Line : public Behaviour {
+private:
+    LineRenderer *lineRenderer;
 public:
     int length;
     Point* points[2];
 
     explicit Line(int idx);
+
+    void update() override;
     void applyLayer0(const nlohmann::json &json) override;
 };
 
