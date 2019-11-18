@@ -23,7 +23,10 @@ set(SOURCES
         core/GameObject.cpp
         static/PrefabCreator.cpp
         core-components/LineRenderer.cpp
-        core-components/Renderer.cpp)
+        core-components/Renderer.cpp
+        Networking/Connection.cpp
+        Networking/Packet.cpp
+        Networking/PacketQueue.cpp)
 
 add_executable(WG ${SOURCES})
 
