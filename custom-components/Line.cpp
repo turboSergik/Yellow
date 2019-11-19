@@ -15,15 +15,16 @@ void Line::applyLayer0(const nlohmann::json &json) {
     auto & item_points = json["points"];
     Line::points[0] = Database::points[item_points[0]];
     Line::points[1] = Database::points[item_points[1]];
+    Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
 }
 
 void Line::update() {
     if (!lineRenderer) {
         lineRenderer = gameObject->getComponent<LineRenderer>();
     }
-    lineRenderer->setVertices(
-            points[0]->transform->getLocalPosition(),
-            points[1]->transform->getLocalPosition());
+    Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
+    lineRenderer->setVertices({0, 0},
+            transform->toLocalPosition(points[1]->transform->getPosition()));
 }
 
 
