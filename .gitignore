@@ -33,3 +33,7 @@
 
 # Project files
 *.user
+
+# Project folders
+build-*
+
