@@ -11,6 +11,7 @@
 #include "../custom-components/Train.h"
 #include "../custom-components/Line.h"
 #include "../core-components/Camera.h"
+#include "../custom-components/GraphController.h"
 
 class PrefabCreator {
 public:
@@ -21,6 +22,7 @@ public:
     static Town *createTown(int idx);
     static Market *createMarket(int idx);
     static Storage *createStorage(int idx);
+    static GraphController *createRoot();
 };
 
 

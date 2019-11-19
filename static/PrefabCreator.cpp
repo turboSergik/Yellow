@@ -6,6 +6,8 @@
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
 
+
+//TODO: add constants to easy manipulate default values of shapes
 Point *PrefabCreator::createPoint(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
@@ -31,8 +33,8 @@ Train *PrefabCreator::createTrain(int idx) {
 Town *PrefabCreator::createTown(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(20);
-    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setRadius(30);
+    circleRenderer->circle.setOrigin(30, 30);
     circleRenderer->circle.setFillColor(sf::Color::Black);
     Town *town = obj->addComponent<Town>(idx);
     return town;
@@ -41,8 +43,8 @@ Town *PrefabCreator::createTown(int idx) {
 Market *PrefabCreator::createMarket(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(20);
-    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setRadius(30);
+    circleRenderer->circle.setOrigin(30, 30);
     circleRenderer->circle.setFillColor(sf::Color::Red);
     Market *market = obj->addComponent<Market>(idx);
     return market;
@@ -51,8 +53,8 @@ Market *PrefabCreator::createMarket(int idx) {
 Storage *PrefabCreator::createStorage(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(20);
-    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setRadius(30);
+    circleRenderer->circle.setOrigin(30, 30);
     circleRenderer->circle.setFillColor(sf::Color::Blue);
     Storage *storage = obj->addComponent<Storage>(idx);
     return storage;
@@ -62,4 +64,10 @@ Camera *PrefabCreator::createCamera(sf::RenderTarget *renderTarget) {
     GameObject *obj = new GameObject();
     Camera *camera = obj->addComponent<Camera>(renderTarget);
     return camera;
+}
+
+GraphController *PrefabCreator::createRoot() {
+    GameObject *obj = new GameObject();
+    GraphController *graphController = obj->addComponent<GraphController>();
+    return graphController;
 }
