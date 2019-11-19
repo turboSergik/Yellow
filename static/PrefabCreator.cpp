@@ -26,6 +26,11 @@ Line *PrefabCreator::createLine(int idx) {
 
 Train *PrefabCreator::createTrain(int idx) {
     GameObject *obj = new GameObject();
+    CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
+    circleRenderer->circle.setRadius(30);
+    circleRenderer->circle.setOrigin(30, 30);
+    circleRenderer->circle.setFillColor(sf::Color::Green);
+    circleRenderer->circle.setPointCount(3);
     Train *train = obj->addComponent<Train>(idx);
     return train;
 }
