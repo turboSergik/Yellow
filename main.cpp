@@ -1,12 +1,14 @@
 #include <algorithm>
 #include <fstream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "json/json.hpp"
 #include "static/Database.h"
 #include "core/GameObject.h"
 #include "core-components/Camera.h"
 #include "core-components/renderers/Renderer.h"
 #include "core-components/renderers/CircleRenderer.h"
+#include "static/PrefabCreator.h"
 
 GameObject *initSceneTree() {
     GameObject *root = new GameObject();
@@ -46,10 +48,13 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
-    Camera mainCamera = window.getView();
-    mainCamera.setWidth(4000);
-    mainCamera.setCenter(0, 0);
-    window.setView(mainCamera);
+
+    Camera *mainCamera = PrefabCreator::createCamera(&window);
+    mainCamera->setWidth(2000);
+//    Camera mainCamera = window.getView();
+//    mainCamera.setWidth(4000);
+//    mainCamera.setCenter(0, 0);
+//    window.setView(mainCamera);
 
     sf::Clock clock; // starts the clock
 
@@ -59,24 +64,25 @@ int main() {
 //    auto cr = test->addComponent<CircleRenderer>();
 //    cr->circle.setRadius(20);
 //    cr->circle.setOrigin(20, 20);
-//
+
 //    test->transform->setLocalPosition({0, 100});
 
     while (window.isOpen()) {
         sf::Event event{};
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+                delete root;
+            }
             if (event.type == sf::Event::Resized) {
                 // update the view to the new size of the window
-                mainCamera.setSize(window.getSize().x, window.getSize().y);
-                window.setView(mainCamera);
+                mainCamera->onWindowResized();
             }
         }
 
         window.clear();
         root->update();
-        Renderer::draw(window, sf::RenderStates::Default);
+        Renderer::draw(window, mainCamera->getRenderState());
         window.display();
     }
 

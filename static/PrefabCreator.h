@@ -14,13 +14,13 @@
 
 class PrefabCreator {
 public:
-    static Camera *createCamera();
-    static Point *createPoint(int idx, Transform *parent = nullptr);
-    static Line *createLine(int idx, Transform *parent = nullptr);
-    static Train *createTrain(int idx, Transform *parent = nullptr);
-    static Town *createTown(int idx, Transform *parent = nullptr);
-    static Market *createMarket(int idx, Transform *parent = nullptr);
-    static Storage *createStorage(int idx, Transform *parent = nullptr);
+    static Camera *createCamera(sf::RenderTarget *renderTarget);
+    static Point *createPoint(int idx);
+    static Line *createLine(int idx);
+    static Train *createTrain(int idx);
+    static Town *createTown(int idx);
+    static Market *createMarket(int idx);
+    static Storage *createStorage(int idx);
 };
 
 
