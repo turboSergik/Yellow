@@ -16,7 +16,6 @@ Renderer::~Renderer() {
 }
 
 void Renderer::draw(sf::RenderTarget &target, sf::RenderStates states) {
-    //states.transform.scale(1, -1);
     for (auto renderer : renderers) {
         renderer->onDraw(target, states);
     }

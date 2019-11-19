@@ -8,23 +8,23 @@
 
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 #include "../core/Component.h"
 
-class Camera : public sf::View, public Component {
+class Camera : public Component {
 private:
     static Camera* mainCamera;
     float width; //horizontal half-size
+    sf::RenderTarget *renderTarget;
+    sf::View view;
 public:
-    //TODO: make camera fully control view
-    //TODO: split camera control and camera
-
-    using sf::View::View;
-
-    Camera(const sf::View &view);
+    Camera(sf::RenderTarget *renderTarget1);
     float getWidth();
     void setWidth(float width);
-    void setSize(float width, float height);
-    void setSize(const sf::Vector2f &size);
+    void setWindowSize(float width, float height);
+    void setWindowSize(const sf::Vector2f &size);
+    void onWindowResized();
+    sf::RenderStates getRenderState();
 };
 
 
