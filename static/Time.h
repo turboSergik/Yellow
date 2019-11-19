@@ -8,7 +8,7 @@
 
 class Time {
 public:
-    float deltaTime;
+    static float deltaTime;
 };
 
 
