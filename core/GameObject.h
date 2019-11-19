@@ -14,7 +14,7 @@ class GameObject {
 private:
     std::list<Component*> components;
 public:
-    Transform * transform; //TODO: prevent changes of this field
+    Transform * transform = nullptr; //TODO: prevent changes of this field
     GameObject();
     ~GameObject();
     void update();

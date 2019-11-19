@@ -19,23 +19,17 @@ private:
     sf::Vector2f scale = {1, 1};
     sf::Vector2f localScale = {1, 1};
     sf::Transform localToWorld;
-public:
-    const sf::Transform &getLocalToWorldTransform() const;
-
-    const sf::Transform &getWorldToLocalTransform() const;
-
-private:
     sf::Transform worldToLocal;
 
     sf::Vector2f up;
     sf::Vector2f right;
 
-    Transform *parent;
+    Transform *parent = nullptr;
     std::list<Transform*> children;
 
     void recalculateAccordingToLocals();
 public:
-    GameObject *gameObject; //TODO: prevent changes of this field
+    GameObject *gameObject = nullptr; //TODO: prevent changes of this field
 
     explicit Transform(GameObject *gameObject);
     ~Transform();
@@ -73,6 +67,10 @@ public:
     Transform *getParent() const;
 
     void setParent(Transform *parent, bool worldPositionStays = false);
+
+    const sf::Transform &getLocalToWorldTransform() const;
+
+    const sf::Transform &getWorldToLocalTransform() const;
 
     sf::Vector2f toLocalPosition (const sf::Vector2f &position) const;
     sf::Vector2f toLocalDirection (const sf::Vector2f &direction) const;
