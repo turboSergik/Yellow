@@ -11,9 +11,9 @@ Train::Train(int idx) : Behaviour(idx) {
 
 void Train::applyLayer1(const nlohmann::json &json) {
     Train::cooldown = json["cooldown"];
-    Train::fuel = json["fuel"];
-    Train::fuel_capacity = json["fuel_capacity"];
-    Train::fuel_consumption = json["fuel_consumption"];
+    //Train::fuel = json["fuel"];
+    //Train::fuel_capacity = json["fuel_capacity"];
+    //Train::fuel_consumption = json["fuel_consumption"];
     Train::goods = json["goods"];
     Train::goods_capacity = json["goods_capacity"];
     //TODO: ask what this field store

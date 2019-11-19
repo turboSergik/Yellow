@@ -13,9 +13,9 @@ public:
     explicit Train(int idx);
 
     int cooldown = 0;
-    int fuel = 0;
-    int fuel_capacity = 0;
-    int fuel_consumption = 1;
+    //int fuel = 0;
+    //int fuel_capacity = 0;
+    //int fuel_consumption = 1;
     int goods = 0;
     int goods_capacity = 40;
     //TODO: ask what this field store
