@@ -7,8 +7,13 @@
 
 void Post::applyLayer1(const nlohmann::json &json) {
     Post::name = json["name"];
-    Post::point = Database::points[json["point_idx"]];
-    Post::transform->setParent(point->transform);//TODO: change to Instantiate(original, parent)
+    auto & point_idx = json["point_idx"];
+    if (point_idx != nullptr) {
+        Post::point = Database::points[point_idx];
+        Post::transform->setParent(Post::point->transform);//TODO: change to Instantiate(original, parent)
+    } else {
+        //TODO: alert that point_idx = null (exception or smth else)
+    }
 }
 
 Post::Post(int idx) : Behaviour(idx) {}
