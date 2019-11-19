@@ -12,7 +12,11 @@ Camera::Camera(sf::RenderTarget *renderTarget) {
     }
     Camera::renderTarget = renderTarget;
     Camera::view = renderTarget->getView();
-    setWidth(10);
+    Camera::width = 1000;
+    sf::Vector2u size = Camera::renderTarget->getSize();
+    Camera::view.setSize(2 * Camera::width, 2 * Camera::width * size.y / size.x);
+    Camera::view.setCenter(0, 0);
+    Camera::renderTarget->setView(view);
 }
 
 void Camera::setWindowSize(float width, float height) {

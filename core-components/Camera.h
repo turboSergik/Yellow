@@ -13,11 +13,11 @@
 
 class Camera : public Component {
 private:
-    static Camera* mainCamera;
     float width; //horizontal half-size
     sf::RenderTarget *renderTarget;
     sf::View view;
 public:
+    static Camera* mainCamera;
     Camera(sf::RenderTarget *renderTarget1);
     float getWidth();
     void setWidth(float width);
