@@ -6,54 +6,60 @@
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
 
-Point *PrefabCreator::createPoint(int idx, Transform *parent) {
+Point *PrefabCreator::createPoint(int idx) {
     GameObject *obj = new GameObject();
-    obj->transform->setParent(parent);
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(20);
-    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setRadius(40);
+    circleRenderer->circle.setOrigin(40, 40);
     Point *point = obj->addComponent<Point>(idx);
     return point;
 }
 
-Line *PrefabCreator::createLine(int idx, Transform *parent) {
+Line *PrefabCreator::createLine(int idx) {
     GameObject *obj = new GameObject();
-    obj->transform->setParent(parent);
     obj->addComponent<LineRenderer>();
     Line *line = obj->addComponent<Line>(idx);
     return line;
 }
 
-Train *PrefabCreator::createTrain(int idx, Transform *parent) {
+Train *PrefabCreator::createTrain(int idx) {
     GameObject *obj = new GameObject();
     Train *train = obj->addComponent<Train>(idx);
-    obj->transform->setParent(parent);
     return train;
 }
 
-Town *PrefabCreator::createTown(int idx, Transform *parent) {
+Town *PrefabCreator::createTown(int idx) {
     GameObject *obj = new GameObject();
+    CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
+    circleRenderer->circle.setRadius(20);
+    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setFillColor(sf::Color::Black);
     Town *town = obj->addComponent<Town>(idx);
-    obj->transform->setParent(parent);
     return town;
 }
 
-Market *PrefabCreator::createMarket(int idx, Transform *parent) {
+Market *PrefabCreator::createMarket(int idx) {
     GameObject *obj = new GameObject();
+    CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
+    circleRenderer->circle.setRadius(20);
+    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setFillColor(sf::Color::Red);
     Market *market = obj->addComponent<Market>(idx);
-    obj->transform->setParent(parent);
     return market;
 }
 
-Storage *PrefabCreator::createStorage(int idx, Transform *parent) {
+Storage *PrefabCreator::createStorage(int idx) {
     GameObject *obj = new GameObject();
+    CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
+    circleRenderer->circle.setRadius(20);
+    circleRenderer->circle.setOrigin(20, 20);
+    circleRenderer->circle.setFillColor(sf::Color::Blue);
     Storage *storage = obj->addComponent<Storage>(idx);
-    obj->transform->setParent(parent);
     return storage;
 }
 
-Camera *PrefabCreator::createCamera() {
+Camera *PrefabCreator::createCamera(sf::RenderTarget *renderTarget) {
     GameObject *obj = new GameObject();
-    Camera *camera = obj->addComponent<Camera>();
+    Camera *camera = obj->addComponent<Camera>(renderTarget);
     return camera;
 }
