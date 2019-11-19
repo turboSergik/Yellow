@@ -8,6 +8,7 @@
 void Post::applyLayer1(const nlohmann::json &json) {
     Post::name = json["name"];
     Post::point = Database::points[json["point_idx"]];
+    Post::transform->setParent(point->transform);//TODO: change to Instantiate(original, parent)
 }
 
 Post::Post(int idx) : Behaviour(idx) {}
