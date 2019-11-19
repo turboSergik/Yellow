@@ -51,7 +51,13 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
         }
     }
     for (const auto & item : json["trains"]) {
-        //TODO: init trains
+        int idx = item["idx"];
+        auto & train = Database::trains[idx];
+        if (!train) {
+            train = PrefabCreator::createTrain(idx);
+            train->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
+        }
+        train->applyLayer1(item);
     }
 }
 
