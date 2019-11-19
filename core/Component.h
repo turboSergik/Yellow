@@ -9,8 +9,8 @@
 
 class Component {
 public:
-    GameObject *gameObject; //TODO: prevent changes of this field
-    Transform *transform;
+    GameObject *gameObject = nullptr; //TODO: prevent changes of this field
+    Transform *transform = nullptr;
 
     virtual void update();
     virtual void onDraw();//remove this
