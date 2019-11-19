@@ -10,45 +10,17 @@
 #include "static/PrefabCreator.h"
 #include "static/Time.h"
 
-//GameObject *initSceneTree() {
-//    GameObject *root = new GameObject();
-//    sf::Vector2f center;
-//    for (auto & pair : Database::points) {
-//        pair.second->transform->setParent(root->transform);
-//        center += pair.second->transform->getLocalPosition();
-//    }
-//    center /= static_cast<float>(Database::points.size());
-//    root->transform->setPosition(-center);
-//    for (auto & pair : Database::lines) {
-//        pair.second->transform->setParent(root->transform);
-//    }
-//    for (auto & pair : Database::posts) {
-//        pair.second->transform->setParent(pair.second->point->transform);
-//    }
-//    return root;
-//}
-
 int main() {
     srand(time(nullptr));
-    //auto graph = readGraphFromJson("big_graph.json");
-    //auto positions = GraphDrawing::forceMethod(graph);
-
-
-
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
 
     GameObject *root = PrefabCreator::createRoot()->gameObject;
+    //TODO: crate scene class which update will be called and that allow us have multiple root objects
     Camera *mainCamera = PrefabCreator::createCamera(&window);
     mainCamera->transform->setParent(root->transform);
     //mainCamera->setWidth(2000);
-
-//    GameObject *test = new GameObject();
-//    auto cr = test->addComponent<CircleRenderer>();
-//    cr->circle.setRadius(20);
-//    cr->circle.setOrigin(20, 20);
-//    test->transform->setLocalPosition({0, 100});
 
     sf::Clock clock; // starts the clock
 
