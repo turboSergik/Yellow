@@ -14,15 +14,15 @@ class Transform {
 private:
     sf::Vector2f position;
     sf::Vector2f localPosition;
-    float rotation;
-    float localRotation;
+    float rotation = 0;
+    float localRotation = 0;
     sf::Vector2f scale = {1, 1};
     sf::Vector2f localScale = {1, 1};
     sf::Transform localToWorld;
     sf::Transform worldToLocal;
 
-    sf::Vector2f up;
-    sf::Vector2f right;
+    sf::Vector2f up = {0, 1};
+    sf::Vector2f right = {1, 0};
 
     Transform *parent = nullptr;
     std::list<Transform*> children;
