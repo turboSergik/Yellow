@@ -8,10 +8,12 @@
 
 #include "../core/Component.h"
 #include "../json/json.hpp"
+#include "../json/GraphVisualizer.h"
 
 class GraphController : public Component {
 private:
     bool called = false;
+    GraphVisualizer graphVisualizer;
     nlohmann::json playerInfo;
 public:
     std::unordered_map<int, std::list<int>> graph;
@@ -19,7 +21,8 @@ public:
     void applyLayer0(const nlohmann::json& json);
     void applyLayer1(const nlohmann::json& json);
     void applyLayer10(const nlohmann::json& json);
-    void generateCoordinates();
+    void applyForceMethod();
+    void applyForceMethodIteration();
 
     void update() override;
 };
