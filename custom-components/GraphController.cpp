@@ -55,7 +55,6 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
         auto & train = Database::trains[idx];
         if (!train) {
             train = PrefabCreator::createTrain(idx);
-            train->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
         }
         train->applyLayer1(item);
     }
