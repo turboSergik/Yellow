@@ -19,8 +19,9 @@ Connection & Connection::instance() {
 
 void Connection::logout() {
     PacketQueue::instance().sendPacket(Packet(Action::LOGOUT, json{}));
-    PacketQueue::instance().waitSending();
     // may be check some error codes
+    // now it seems that server dont send responce to
+    // logout action
     connection.close();
 }
 

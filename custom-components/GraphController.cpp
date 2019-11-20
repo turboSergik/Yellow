@@ -138,6 +138,8 @@ void GraphController::update() {
         
         message["layer"] = 0;
         pQueue.sendPacket(Packet(Action::MAP, message));
+        
+        message.clear();
         message["layer"] = 1;
         pQueue.sendPacket(Packet(Action::MAP, message));
         
@@ -150,8 +152,9 @@ void GraphController::update() {
         received = pQueue.receivePacket();
         checkResult(received.first);
         layer1 = received.first.getJson();
-        std::ofstream out("info.txt");
-        out << layer0.dump(4) << std::endl << layer1.dump(4) << std::endl;
+        
+        // std::ofstream out("info.txt");
+        // out << layer0.dump(4) << std::endl << layer1.dump(4) << std::endl;
         
         GraphController::applyLayer0(layer0);
         GraphController::applyLayer1(layer1);

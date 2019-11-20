@@ -15,21 +15,22 @@ class PacketQueue {
     // queue of sended codes
     typedef std::queue<int32_t, std::list<int32_t>> CQueue;
     
+    bool sending = true;
+    
     PQueue sendQueue;
     PQueue receiveQueue;
     
     CQueue codesQueue;
     Packet receivingPacket;
     
-    PacketQueue() {}
+    PacketQueue() = default;
     PacketQueue(const PacketQueue &) = delete;
     PacketQueue(Connection &&) = delete;
     PacketQueue & operator=(const PacketQueue &) = delete;
     PacketQueue & operator=(PacketQueue &&) = delete;
     
-    void sendUpdate();
-    void trySend();
-    void tryReceive();
+    bool trySend();
+    bool tryReceive();
 public:
     void update();
     void sendPacket(Packet);
@@ -42,11 +43,8 @@ public:
     // behaviour is undefined
     
     std::pair<Packet, int32_t> receivePacket();
-    
-    // wait only for send packets
-    void waitSending();
-    
-    // wait ALL answers
+        
+    // wait answers
     void wait();
 };
 

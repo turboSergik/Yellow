@@ -2,94 +2,65 @@
 #include "Connection.hpp"
 #include <iostream>
 
-void PacketQueue::sendUpdate() {
-    if (!sendQueue.empty()) {
-        trySend();
-    }
-}
-
-void PacketQueue::trySend() {
+bool PacketQueue::trySend() {
     Connection & connection = Connection::instance();
     size_t sended;
     size_t remained = sendQueue.front().remained();
     connection.send(sendQueue.front().getPtr(), remained, sended);
     if (sended == remained) {
         sendQueue.pop();
+        return true;
     } else {
         sendQueue.front().process(sended);
+        return false;
     }
 }
 
-void printStatus(sf::TcpSocket::Status status) {
-    switch (status) {
-    case (sf::TcpSocket::Status::Done): {
-        std::cout << "Done" << std::endl;
-        break;
-    }
-    case (sf::TcpSocket::Status::NotReady): {
-        // std::cout << "NotReady" << std::endl;
-        break;
-    }
-    case (sf::TcpSocket::Status::Partial): {
-        std::cout << "Partial" << std::endl;
-        break;
-    }
-    case (sf::TcpSocket::Status::Disconnected): {
-        std::cout << "Disconnected" << std::endl;
-        break;
-    }
-    case (sf::TcpSocket::Status::Error): {
-        std::cout << "Error" << std::endl;
-        break;
-    }
-    }
-}
-
-void PacketQueue::tryReceive() {
+bool PacketQueue::tryReceive() {
     Connection & connection = Connection::instance();
     if (receivingPacket.getProcessed() < 8) {
         size_t remained = 8 - receivingPacket.getProcessed();
         size_t received;
-        sf::TcpSocket::Status res = 
         connection.receive(receivingPacket.getPtr(), remained, received);
-        printStatus(res);
         if (remained == received) {
             if (receivingPacket.getJsonSize() == 0) {
                 receiveQueue.push(std::move(receivingPacket));
                 receivingPacket = Packet();
+                return true;
             } else {
                 receivingPacket = Packet(receivingPacket.message.get());                
             }
         } else {
             receivingPacket.process(received);
         }
+        return false;
     } else {
         size_t remained = receivingPacket.remained();
         size_t received;
-        sf::TcpSocket::Status res = 
         connection.receive(receivingPacket.getPtr(), remained, received);
-        printStatus(res);        
         if (received == remained) {
             receiveQueue.push(std::move(receivingPacket));
-            std::cout << receiveQueue.back().getJson().dump(4) << std::endl;
-            std::cout << receiveQueue.back().getJson().dump(4).size() << std::endl;
-            std::cout << receiveQueue.back().getJsonSize() << std::endl;
-            std::cout.flush();
             receivingPacket = Packet();
+            return true;
         } else {
             receivingPacket.process(received);
+            return false;
         }
     }
 }
 
 void PacketQueue::update() {
-    sendUpdate();
-    tryReceive();
+    if (sending) {
+        // this means if not empty return !trySend()
+        sending = sendQueue.empty() || !trySend();        
+    } else {
+        sending = tryReceive();
+    }
 }
 
 void PacketQueue::sendPacket(Packet packet) {
     int32_t code = *reinterpret_cast<int32_t *>(packet.message.get());
-    sendQueue.push(std::move(packet));
+     sendQueue.push(std::move(packet));
     codesQueue.push(code);
 }
 
@@ -110,15 +81,8 @@ std::pair<Packet, int32_t> PacketQueue::receivePacket() {
     return std::make_pair(std::move(frontPacket), code);
 }
 
-void PacketQueue::waitSending() {
-    while (!sendQueue.empty()) {
-        trySend();
-    }
-}
-
 void PacketQueue::wait() {
-    waitSending();
     while (codesQueue.size() != receiveQueue.size()) {
-        tryReceive();
+        update();
     }
 }
