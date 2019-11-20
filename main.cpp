@@ -26,6 +26,7 @@ int main() {
     sf::Clock clock; // starts the clock
 
     Input & input = Input::instance();
+    window.setKeyRepeatEnabled(false);
     
     while (window.isOpen()) {
         sf::Event event{};
