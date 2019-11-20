@@ -27,6 +27,8 @@ private:
     Transform *parent = nullptr;
     std::list<Transform*> children;
 
+    std::list<Transform*>::iterator it;
+
     void recalculateAccordingToLocals();
 public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field

@@ -84,16 +84,21 @@ Transform *Transform::getParent() const {
 }
 
 void Transform::setParent(Transform *parent, bool worldPositionStays) {
+    if (Transform::parent) {
+        Transform::parent->children.erase(it);
+    }
     Transform::parent = parent;
     if (worldPositionStays) {
         setPositionAndRotation(Transform::position, Transform::rotation);
         if (Transform::parent) {
             Transform::parent->children.push_back(this);
+            it = std::prev(parent->children.end());
         }
     } else {
         recalculateAccordingToLocals();
         if (Transform::parent) {
             Transform::parent->children.push_back(this);
+            it = std::prev(parent->children.end());
         }
     }
 
