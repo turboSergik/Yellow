@@ -12,6 +12,8 @@ public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field
     Transform *transform = nullptr;
 
+    virtual ~Component() = default;
+
     virtual void update();
     virtual void onDraw();//remove this
     //TODO: add start() event (check add to scene and call)
