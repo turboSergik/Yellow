@@ -170,7 +170,7 @@ void GraphController::update() {
         GraphController::applyLayer1(layer1);
         GraphController::graphVisualizer.setGraph(GraphController::graph);
     }
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < 1000; i++) {
         GraphController::applyForceMethodIteration();
     }
 }
