@@ -1708,7 +1708,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 
 
 // This file contains all internal macro definitions
-// You MUST include macro_unscope.hpp at the end of json.hpp to undef all of them
+// You MUST include macro_unscope.hpp at the end of utility.hpp to undef all of them
 
 // exclude unsupported compilers
 #if !defined(JSON_SKIP_UNSUPPORTED_COMPILER_CHECK)
@@ -1880,7 +1880,7 @@ class exception : public std::exception
 
     static std::string name(const std::string& ename, int id_)
     {
-        return "[json.exception." + ename + "." + std::to_string(id_) + "] ";
+        return "[utility.exception." + ename + "." + std::to_string(id_) + "] ";
     }
 
   private:
@@ -2515,7 +2515,7 @@ using from_json_function = decltype(T::from_json(std::declval<Args>()...));
 template <typename T, typename U>
 using get_template_function = decltype(std::declval<T>().template get<U>());
 
-// trait checking if JSONSerializer<T>::from_json(json const&, udt&) exists
+// trait checking if JSONSerializer<T>::from_json(utility const&, udt&) exists
 template <typename BasicJsonType, typename T, typename = void>
 struct has_from_json : std::false_type {};
 
@@ -2530,7 +2530,7 @@ struct has_from_json<BasicJsonType, T,
         const BasicJsonType&, T&>::value;
 };
 
-// This trait checks if JSONSerializer<T>::from_json(json const&) exists
+// This trait checks if JSONSerializer<T>::from_json(utility const&) exists
 // this overload is used for non-default-constructible user-defined-types
 template <typename BasicJsonType, typename T, typename = void>
 struct has_non_default_from_json : std::false_type {};
@@ -14869,7 +14869,7 @@ class basic_json
 
         result["copyright"] = "(C) 2013-2017 Niels Lohmann";
         result["name"] = "JSON for Modern C++";
-        result["url"] = "https://github.com/nlohmann/json";
+        result["url"] = "https://github.com/nlohmann/utility";
         result["version"]["string"] =
             std::to_string(NLOHMANN_JSON_VERSION_MAJOR) + "." +
             std::to_string(NLOHMANN_JSON_VERSION_MINOR) + "." +

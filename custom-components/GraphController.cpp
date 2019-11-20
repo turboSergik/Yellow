@@ -8,7 +8,6 @@
 #include "../static/Database.h"
 #include "Post.h"
 #include "../static/PrefabCreator.h"
-#include "../static/graphdrawing.h"
 #include "../Networking/Connection.hpp"
 #include "../Networking/PacketQueue.hpp"
 #include "../Networking/Packet.hpp"
@@ -91,8 +90,19 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
     }
 }
 
-void GraphController::generateCoordinates() {
-    auto positions = GraphDrawing::forceMethod(graph);
+void GraphController::applyForceMethod() {
+    auto positions = graphVisualizer.forceMethod();
+    sf::Vector2f center = {0, 0};
+    for (auto & pair : Database::points) {
+        pair.second->transform->setLocalPosition(positions[pair.second->idx]);
+        center += positions[pair.second->idx];
+    }
+    center /= static_cast<float>(Database::points.size());
+    Camera::mainCamera->transform->setLocalPosition(center);
+}
+
+void GraphController::applyForceMethodIteration() {
+    auto positions = graphVisualizer.forceMethodIteration();
     sf::Vector2f center = {0, 0};
     for (auto & pair : Database::points) {
         pair.second->transform->setLocalPosition(positions[pair.second->idx]);
@@ -158,7 +168,9 @@ void GraphController::update() {
         
         GraphController::applyLayer0(layer0);
         GraphController::applyLayer1(layer1);
-        GraphController::generateCoordinates();
+        GraphController::graphVisualizer.setGraph(GraphController::graph);
     }
-
+    for (int i = 0; i < 200; i++) {
+        GraphController::applyForceMethodIteration();
+    }
 }
