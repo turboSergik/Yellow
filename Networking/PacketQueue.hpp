@@ -29,7 +29,7 @@ class PacketQueue {
     
     void sendUpdate();
     void trySend();
-    void receiveUpdate();
+    void tryReceive();
 public:
     void update();
     void sendPacket(Packet);

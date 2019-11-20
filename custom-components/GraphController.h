@@ -12,6 +12,7 @@
 class GraphController : public Component {
 private:
     bool called = false;
+    nlohmann::json playerInfo;
 public:
     std::unordered_map<int, std::list<int>> graph;
 

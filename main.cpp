@@ -9,6 +9,7 @@
 #include "core-components/renderers/CircleRenderer.h"
 #include "static/PrefabCreator.h"
 #include "static/Time.h"
+#include "Networking/PacketQueue.hpp"
 
 int main() {
     srand(time(nullptr));
@@ -42,7 +43,9 @@ int main() {
         root->update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
+        
+        PacketQueue::instance().update();
     }
-
+    
     return 0;
 }

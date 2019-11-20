@@ -25,7 +25,7 @@ Packet & Packet::operator=(Packet && rPacket) {
     return *this;
 }
 
-json Packet::getJson() {
+json Packet::getJson() const {
     uint8_t * json_addr = message.get() + 8;
     if (getJsonSize() == 0) {
         return json{};
@@ -34,7 +34,7 @@ json Packet::getJson() {
     }
 }
 
-int32_t Packet::getFlag() {
+int32_t Packet::getFlag() const {
     return *reinterpret_cast<int32_t *>(message.get());
 }
 
@@ -42,7 +42,7 @@ uint8_t * Packet::getPtr() {
     return message.get() + processed;
 }
 
-uint32_t Packet::getJsonSize() {
+uint32_t Packet::getJsonSize() const {
     return reinterpret_cast<uint32_t *>(message.get())[1];
 }
 
