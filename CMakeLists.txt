@@ -31,7 +31,7 @@ set(SOURCES
         Networking/Packet.cpp
         Networking/PacketQueue.cpp
         custom-components/GraphController.cpp
-        graphs/GraphVisualizer.cpp)
+        utility/GraphVisualizer.cpp)
 
 add_executable(WG ${SOURCES})
 
