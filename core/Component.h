@@ -17,6 +17,7 @@ public:
     virtual void update();
     virtual void onDraw();//remove this
     //TODO: add start() event (check add to scene and call)
+    virtual ~Component();
 };
 
 

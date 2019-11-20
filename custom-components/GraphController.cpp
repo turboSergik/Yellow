@@ -66,7 +66,8 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
         auto& point = Database::points[idx];
         if (!point) {
             point = PrefabCreator::createPoint(idx);
-            point->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
+            point->transform->setParent(GraphController::transform);
+            //TODO: change to Instantiate(original, parent)
         }
         point->applyLayer0(item);
     }
