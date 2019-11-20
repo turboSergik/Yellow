@@ -17,7 +17,6 @@ set(SOURCES
         custom-components/Post.cpp
         custom-components/Train.cpp
         static/Database.cpp
-        static/graphdrawing.cpp
         core/Transform.cpp
         core/Component.cpp
         core/GameObject.cpp
@@ -31,7 +30,8 @@ set(SOURCES
         Networking/Connection.cpp
         Networking/Packet.cpp
         Networking/PacketQueue.cpp
-        custom-components/GraphController.cpp)
+        custom-components/GraphController.cpp
+        graphs/GraphVisualizer.cpp)
 
 add_executable(WG ${SOURCES})
 
