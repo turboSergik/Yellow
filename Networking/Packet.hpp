@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
-#include "../json/json.hpp"
+#include "../utility/json.hpp"
 
 typedef nlohmann::json json;
 

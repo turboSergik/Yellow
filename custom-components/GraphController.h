@@ -7,8 +7,8 @@
 
 
 #include "../core/Component.h"
-#include "../json/json.hpp"
-#include "../json/GraphVisualizer.h"
+#include "../utility/json.hpp"
+#include "../utility/GraphVisualizer.h"
 
 class GraphController : public Component {
 private:
