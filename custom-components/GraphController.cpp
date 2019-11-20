@@ -3,11 +3,16 @@
 //
 
 #include <fstream>
+#include <iostream>
 #include "GraphController.h"
 #include "../static/Database.h"
 #include "Post.h"
 #include "../static/PrefabCreator.h"
 #include "../static/graphdrawing.h"
+#include "../Networking/Connection.hpp"
+#include "../Networking/PacketQueue.hpp"
+#include "../Networking/Packet.hpp"
+
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     for (const auto & item : json["coordinates"]) {
@@ -97,21 +102,63 @@ void GraphController::generateCoordinates() {
     Camera::mainCamera->transform->setLocalPosition(center);
 }
 
+void checkResult(const Packet & received) {
+    if (received.getFlag() != Result::OKEY) {
+        std::cout << "something went wrong. Returned code: " << 
+                     received.getFlag() << std::endl;
+        std::cout << received.getJson();
+        exit(1);
+    }
+}
+
 void GraphController::update() {
     if (!called) {
         //TODO: do all network stuff here
         called = true;
+        
+        Connection::login();
+        
+        PacketQueue & pQueue = PacketQueue::instance();
+        json message;
+        message["name"] = "Pasha";
+        pQueue.sendPacket(Packet(Action::LOGIN, message));
+        
+        
+        pQueue.wait();
+        
+        std::pair<Packet, int32_t> received = pQueue.receivePacket();
+        
+        checkResult(received.first);        
+        
+        playerInfo = received.first.getJson();
+        
         nlohmann::json layer0, layer1;
-        std::ifstream in;
-        in.open("map_layer0.json");
-        in >> layer0;
-        in.close();
-        in.open("map_layer1.json");
-        in >> layer1;
-        in.close();
-
+        
+        message.clear();
+        
+        message["layer"] = 0;
+        pQueue.sendPacket(Packet(Action::MAP, message));
+        
+        message.clear();
+        message["layer"] = 1;
+        pQueue.sendPacket(Packet(Action::MAP, message));
+        
+        pQueue.wait();
+        
+        received = pQueue.receivePacket();
+        checkResult(received.first);
+        layer0 = received.first.getJson();
+        
+        received = pQueue.receivePacket();
+        checkResult(received.first);
+        layer1 = received.first.getJson();
+        
+        // std::ofstream out("info.txt");
+        // out << layer0.dump(4) << std::endl << layer1.dump(4) << std::endl;
+        
         GraphController::applyLayer0(layer0);
         GraphController::applyLayer1(layer1);
         GraphController::generateCoordinates();
     }
+
 }
