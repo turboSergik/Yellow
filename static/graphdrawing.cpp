@@ -11,7 +11,8 @@ const float k = 0.1f;
 const float q2 = 5000.f;
 const float gamma_s = 1.f;
 const float l0 = 100.f;
-const float eps = 1e-4f;
+// const float eps = 1e-4f;
+const float eps = 1e-2f;
 
 void add(std::unordered_map<int, sf::Vector2f> &x, 
          const std::unordered_map<int, sf::Vector2f> &dx) {

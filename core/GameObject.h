@@ -56,6 +56,7 @@ T * GameObject::getComponent() {
             return result;
         }
     }
+    return nullptr;
 }
 
 #endif //WG_GAMEOBJECT_H

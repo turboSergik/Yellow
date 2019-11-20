@@ -6,7 +6,7 @@
 #include "../static/Database.h"
 
 Train::Train(int idx) : Behaviour(idx) {
-
+    
 }
 
 void Train::applyLayer1(const nlohmann::json &json) {

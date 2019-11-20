@@ -9,5 +9,9 @@ void Component::update() {
 }
 
 void Component::onDraw() {
+    
+}
 
+Component::~Component() {
+    
 }
