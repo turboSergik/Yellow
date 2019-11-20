@@ -11,7 +11,7 @@
 
 class Line : public Behaviour {
 private:
-    LineRenderer *lineRenderer;
+    LineRenderer *lineRenderer = nullptr;
 public:
     int length;
     Point* points[2];

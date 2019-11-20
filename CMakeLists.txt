@@ -30,7 +30,8 @@ set(SOURCES
         static/Time.cpp
         Networking/Connection.cpp
         Networking/Packet.cpp
-        Networking/PacketQueue.cpp)
+        Networking/PacketQueue.cpp
+        custom-components/GraphController.cpp)
 
 add_executable(WG ${SOURCES})
 

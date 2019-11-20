@@ -17,16 +17,10 @@ class Database {
 
 public:
     //if someone need singleton, he can do it himself
-    static std::unordered_map<int, std::list<int>> graph;
     static std::unordered_map<int, Point*> points;
     static std::unordered_map<int, Line*> lines;
     static std::unordered_map<int, Post*> posts;
     static std::unordered_map<int, Train*> trains;
-
-    static void applyLayer0(const nlohmann::json& json);
-    static void applyLayer1(const nlohmann::json& json);
-    static void applyLayer10(const nlohmann::json& json);
-    static void generateCoordinates();
 };
 
 
