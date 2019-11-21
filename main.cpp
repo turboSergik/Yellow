@@ -32,6 +32,8 @@ int main() {
         sf::Event event{};
         input.reset();
         while (window.pollEvent(event)) {
+            // scary event handling
+            // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
                 window.close();
@@ -42,19 +44,22 @@ int main() {
                 mainCamera->onWindowResized();
                 break;
             case sf::Event::KeyPressed:
-                input.addKey(event.key);
+                input.addKeyPressed(event.key);
+                break;
+            case sf::Event::KeyReleased:
+                input.addKeyReleased(event.key);
+                break;
+            case sf::Event::MouseButtonPressed:
+                input.addMouseButtonPressed(event.mouseButton);
+                break;
+            case sf::Event::MouseButtonReleased:
+                input.addMouseButtonReleased(event.mouseButton);
+                break;
+            case sf::Event::MouseWheelScrolled:
+                input.addWheelScroll(event.mouseWheelScroll);
                 break;
             default:
                 break;
-            }
-            if (event.type == sf::Event::Closed) {
-                window.close();
-                delete root;
-                return 0;
-            }
-            if (event.type == sf::Event::Resized) {
-                // update the view to the new size of the window
-                mainCamera->onWindowResized();
             }
             
         }

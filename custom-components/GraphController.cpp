@@ -162,15 +162,14 @@ void GraphController::update() {
         received = pQueue.receivePacket();
         checkResult(received.first);
         layer1 = received.first.getJson();
-        
-        // std::ofstream out("info.txt");
-        // out << layer0.dump(4) << std::endl << layer1.dump(4) << std::endl;
-        
+                
         GraphController::applyLayer0(layer0);
         GraphController::applyLayer1(layer1);
         GraphController::graphVisualizer.setGraph(GraphController::graph);
     }
-    for (int i = 0; i < 1000; i++) {
+    
+    // TODO normal timer for iterations
+    for (int i = 0; i < 400; i++) {
         GraphController::applyForceMethodIteration();
     }
 }
