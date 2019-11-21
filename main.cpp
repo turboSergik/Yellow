@@ -9,6 +9,7 @@
 #include "static/PrefabCreator.h"
 #include "static/Time.h"
 #include "Networking/PacketQueue.hpp"
+#include "static/Input.hpp"
 
 int main() {
     srand(time(nullptr));
@@ -24,18 +25,43 @@ int main() {
 
     sf::Clock clock; // starts the clock
 
+    Input & input = Input::instance();
+    window.setKeyRepeatEnabled(false);
+    
     while (window.isOpen()) {
         sf::Event event{};
+        input.reset();
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+            // scary event handling
+            // TODO handle events somewhere else
+            switch (event.type) {
+            case sf::Event::Closed:
                 window.close();
                 delete root;
                 return 0;
-            }
-            if (event.type == sf::Event::Resized) {
+            case sf::Event::Resized:
                 // update the view to the new size of the window
                 mainCamera->onWindowResized();
+                break;
+            case sf::Event::KeyPressed:
+                input.addKeyPressed(event.key);
+                break;
+            case sf::Event::KeyReleased:
+                input.addKeyReleased(event.key);
+                break;
+            case sf::Event::MouseButtonPressed:
+                input.addMouseButtonPressed(event.mouseButton);
+                break;
+            case sf::Event::MouseButtonReleased:
+                input.addMouseButtonReleased(event.mouseButton);
+                break;
+            case sf::Event::MouseWheelScrolled:
+                input.addWheelScroll(event.mouseWheelScroll);
+                break;
+            default:
+                break;
             }
+            
         }
         Time::deltaTime = clock.restart().asSeconds();
         window.clear();
