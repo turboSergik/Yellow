@@ -32,7 +32,8 @@ set(SOURCES
         Networking/PacketQueue.cpp
         custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
-        static/Input.cpp)
+        static/Input.cpp
+        utility/methodWrapper.cpp)
 
 add_executable(WG ${SOURCES})
 
