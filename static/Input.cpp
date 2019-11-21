@@ -1,13 +1,30 @@
 #include "Input.hpp"
 
-Input & Input::instance() {
-    static Input input;
-    return input;
-}
+//for keys
+std::bitset<sf::Keyboard::KeyCount> Input::pressedKeys;
+std::bitset<sf::Keyboard::KeyCount> Input::heldKeys;
+std::bitset<sf::Keyboard::KeyCount> Input::releasedKeys;
+
+//for mouse buttons
+std::bitset<sf::Mouse::ButtonCount> Input::pressedMouseButtons;
+std::bitset<sf::Mouse::ButtonCount> Input::releasedMouseButtons;
+std::array<sf::Event::MouseButtonEvent,
+        sf::Mouse::ButtonCount> Input::pressedMouseEvents;
+std::array<sf::Event::MouseButtonEvent,
+        sf::Mouse::ButtonCount> Input::releasedMouseEvents;
+
+sf::Event::MouseWheelScrollEvent Input::wheelScrollEvent;
+bool Input::wheelScrolled = false;
+
+//Input & Input::instance() {
+//    static Input input;
+//    return input;
+//}
 
 void Input::addKeyPressed(sf::Event::KeyEvent keyEvent) {
     if (keyEvent.code >= 0) {
         pressedKeys.set(static_cast<size_t>(keyEvent.code));
+        heldKeys.set(static_cast<size_t>(keyEvent.code));
     }
     // another case will trigger if 
     // sfml don't know what is this button
@@ -16,16 +33,21 @@ void Input::addKeyPressed(sf::Event::KeyEvent keyEvent) {
 void Input::addKeyReleased(sf::Event::KeyEvent keyEvent) {
     if (keyEvent.code >= 0) {
         releasedKeys.set(static_cast<size_t>(keyEvent.code));
+        heldKeys.reset(static_cast<size_t>(keyEvent.code));
     }
 }
 
-bool Input::getKeyPressed(sf::Keyboard::Key key) {
+bool Input::isKeyDown(sf::Keyboard::Key key) {
     // assume you will not ask sf::Keybord::Unknown
     return pressedKeys[static_cast<size_t>(key)];
 }
 
-bool Input::getKeyReleased(sf::Keyboard::Key key) {
+bool Input::isKeyUp(sf::Keyboard::Key key) {
     return releasedKeys[static_cast<size_t>(key)];
+}
+
+bool Input::isKey(sf::Keyboard::Key key) {
+    return heldKeys[static_cast<size_t>(key)];
 }
 
 void Input::addMouseButtonPressed(sf::Event::MouseButtonEvent buttonEvent) {
@@ -56,7 +78,7 @@ sf::Event::MouseButtonEvent Input::getMBReleasedEvent(sf::Mouse::Button button) 
 
 void Input::addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEvent) {
     wheelScrolled = true;
-    this->wheelScrollEvent = mouseScrollEvent;
+    Input::wheelScrollEvent = mouseScrollEvent;
 }
 
 sf::Event::MouseWheelScrollEvent Input::getWheelScrollEvent() {

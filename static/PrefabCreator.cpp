@@ -5,6 +5,7 @@
 #include "PrefabCreator.h"
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
+#include "../custom-components/CameraController.h"
 
 
 //TODO: add constants to easy manipulate default values of shapes
@@ -68,6 +69,7 @@ Storage *PrefabCreator::createStorage(int idx) {
 Camera *PrefabCreator::createCamera(sf::RenderTarget *renderTarget) {
     GameObject *obj = new GameObject();
     Camera *camera = obj->addComponent<Camera>(renderTarget);
+    obj->addComponent<CameraController>();
     return camera;
 }
 

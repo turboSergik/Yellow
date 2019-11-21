@@ -98,7 +98,8 @@ void GraphController::applyForceMethod() {
         center += positions[pair.second->idx];
     }
     center /= static_cast<float>(Database::points.size());
-    Camera::mainCamera->transform->setLocalPosition(center);
+    GraphController::transform->setPosition(-center);
+    //Camera::mainCamera->transform->setLocalPosition(center);
 }
 
 void GraphController::applyForceMethodIteration() {
@@ -109,7 +110,8 @@ void GraphController::applyForceMethodIteration() {
         center += positions[pair.second->idx];
     }
     center /= static_cast<float>(Database::points.size());
-    Camera::mainCamera->transform->setLocalPosition(center);
+    GraphController::transform->setPosition(-center);
+    //Camera::mainCamera->transform->setLocalPosition(center);
 }
 
 void checkResult(const Packet & received) {
