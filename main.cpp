@@ -20,17 +20,17 @@ int main() {
     GameObject *root = PrefabCreator::createRoot()->gameObject;
     //TODO: crate scene class which update will be called and that allow us have multiple root objects
     Camera *mainCamera = PrefabCreator::createCamera(&window);
-    mainCamera->transform->setParent(root->transform);
+    //mainCamera->transform->setParent(root->transform);
     //mainCamera->setWidth(2000);
 
     sf::Clock clock; // starts the clock
 
-    Input & input = Input::instance();
+    //Input & input = Input::instance();
     window.setKeyRepeatEnabled(false);
     
     while (window.isOpen()) {
         sf::Event event{};
-        input.reset();
+        Input::reset();
         while (window.pollEvent(event)) {
             // scary event handling
             // TODO handle events somewhere else
@@ -44,19 +44,21 @@ int main() {
                 mainCamera->onWindowResized();
                 break;
             case sf::Event::KeyPressed:
-                input.addKeyPressed(event.key);
+                Input::addKeyPressed(event.key);
                 break;
             case sf::Event::KeyReleased:
-                input.addKeyReleased(event.key);
+                Input::addKeyReleased(event.key);
                 break;
             case sf::Event::MouseButtonPressed:
-                input.addMouseButtonPressed(event.mouseButton);
+                Input::addMouseButtonPressed(event.mouseButton);
                 break;
             case sf::Event::MouseButtonReleased:
-                input.addMouseButtonReleased(event.mouseButton);
+                Input::addMouseButtonReleased(event.mouseButton);
                 break;
             case sf::Event::MouseWheelScrolled:
-                input.addWheelScroll(event.mouseWheelScroll);
+                if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+                    Input::addWheelScroll(event.mouseWheelScroll);
+                }
                 break;
             default:
                 break;
@@ -66,6 +68,7 @@ int main() {
         Time::deltaTime = clock.restart().asSeconds();
         window.clear();
         root->update();
+        mainCamera->gameObject->update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
         
