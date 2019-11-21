@@ -21,16 +21,26 @@ const float VERTEXES_DISTANCE = 50;
 
 const float TREE_LAYER_DISTANSE = 100;
 
-const float dt = 0.01f;
-const float init_size = 200.f;
-const float vmax = 100.f;
+//const float dt = 0.015f;
+//const float init_size = 200.f;
+//const float vmax = 100.f;
 
-const float k = 0.1f;
-const float q2 = 5000.f;
-const float gamma_s = 1.f;
-const float l0 = 100.f;
+//const float k = 0.1f;
+//const float q2 = 5000.f;
+//const float gamma_s = 1.f;
+//const float l0 = 100.f;
 const float eps = 1e-4f;
 // const float eps = 1e-2f;
+
+const float dt = 0.01f;
+const float init_size = 200.f;
+const float vmax = 50.f;
+
+const float k = 0.1f;
+const float q2 = 2000.f;
+const float gamma_s = 1.f;
+const float l0 = 100.f;
+
 
 void GraphVisualizer::setGraph(const std::unordered_map<int, std::list<int>> & graph) {
     GraphVisualizer::graph = graph;
@@ -125,7 +135,7 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::force(
             float fs = hasEdge(graph, pairI.first, pairJ.first)
                        ? edge(dl) : noedge(dl);
 
-            sf::Vector2f f = fs * dv / dl;
+            sf::Vector2f f = fs * dv;
 
             forces[pairI.first] += f;
             forces[pairJ.first] -= f;

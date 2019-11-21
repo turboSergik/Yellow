@@ -169,7 +169,7 @@ void GraphController::update() {
     }
     
     // TODO normal timer for iterations
-    for (int i = 0; i < 400; i++) {
+    for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();
     }
 }
