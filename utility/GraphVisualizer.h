@@ -17,6 +17,7 @@ private:
     std::unordered_map<int, sf::Vector2f> positions;
     std::unordered_map<int, sf::Vector2f> velocities;
     std::unordered_map<int, sf::Vector2f> fv;
+    //TODO: optimize code
 
     void add(
             std::unordered_map<int, sf::Vector2f> &x,
