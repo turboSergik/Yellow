@@ -31,3 +31,10 @@ void Train::applyLayer1(const nlohmann::json &json) {
         //TODO: alert that line_idx = null (exception or smth else)
     }
 }
+
+void Train::update() {
+    sf::Vector2f endPosition = Train::line->transform->toLocalPosition(
+            Train::line->points[1]->transform->getPosition());
+    sf::Vector2f step = endPosition / static_cast<float>(Train::line->length);
+    Train::transform->setLocalPosition(step* static_cast<float>(Train::position));
+}

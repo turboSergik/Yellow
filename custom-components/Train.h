@@ -28,6 +28,7 @@ public:
     Line *line = nullptr;
 
     void applyLayer1(const nlohmann::json &json) override;
+    void update() override ;
 };
 
 
