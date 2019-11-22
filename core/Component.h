@@ -6,16 +6,20 @@
 #define WG_COMPONENT_H
 
 #include "Transform.h"
+#include "../utility/methodWrapper.hpp"
 
 class Component {
 public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field
     Transform *transform = nullptr;
-
+    
+    std::list<Component *>::iterator componentPosition;
+    
+    std::list<MethodWrapper>::iterator updatePosition;
+    
     virtual ~Component() = default;
 
     virtual void update();
-    virtual void onDraw();//remove this
     //TODO: add start() event (check add to scene and call)
 };
 

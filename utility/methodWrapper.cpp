@@ -1,6 +1,6 @@
 #include "methodWrapper.hpp"
 
-void MethodWrapper::operator()() {
+void MethodWrapper::operator()() const {
     wrappedMethod(obj, method);
 }
 

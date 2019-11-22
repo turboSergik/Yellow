@@ -23,3 +23,4 @@ GameObject::~GameObject() {
     }
     delete transform;
 }
+

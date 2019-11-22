@@ -8,7 +8,3 @@ void Component::update() {
 
 }
 
-void Component::onDraw() {
-    
-}
-

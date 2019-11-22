@@ -33,6 +33,7 @@ set(SOURCES
         custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
         static/Input.cpp
+        static/MethodsPool.cpp
         utility/methodWrapper.cpp)
 
 add_executable(WG ${SOURCES})
