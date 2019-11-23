@@ -15,7 +15,10 @@
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     for (const auto & item : json["coordinates"]) {
-        int idx = item["idx"];
+        int idx = -1;
+        if (!item.tryGetValue("idx", idx)) {
+            continue;
+        }
         auto & point = Database::points[idx];
         if (!point) {
             point = PrefabCreator::createPoint(idx);
@@ -27,9 +30,13 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
 
 void GraphController::applyLayer1(const nlohmann::json &json) {
     for (const auto & item : json["posts"]) {
-        int idx = item["idx"];
+        int idx = -1;
+        if (!item.tryGetValue("idx", idx)) {
+            continue;
+        }
         auto & post = Database::posts[idx];
-        PostType type = item["type"];
+        PostType type = PostType::DEFAULT;
+        item.tryGetValue("type", type);
         switch (type) {
             case PostType::TOWN: {
                 if (!post) {
@@ -52,11 +59,17 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
                 post->applyLayer1(item);
                 break;
             }
+            default: {
+                break;
+            }
         }
     }
     for (const auto & item : json["trains"]) {
-        int idx = item["idx"];
-        auto & train = Database::trains[idx];
+        int idx = -1;
+        if (!item.tryGetValue("idx", idx)) {
+            continue;
+        }
+        auto &train = Database::trains[idx];
         if (!train) {
             train = PrefabCreator::createTrain(idx);
         }
@@ -66,7 +79,10 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
 
 void GraphController::applyLayer0(const nlohmann::json &json) {
     for (const auto & item : json["points"]) {
-        int idx = item["idx"];
+        int idx = -1;
+        if (!item.tryGetValue("idx", idx)) {
+            continue;
+        }
         auto& point = Database::points[idx];
         if (!point) {
             point = PrefabCreator::createPoint(idx);
@@ -76,7 +92,8 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
         point->applyLayer0(item);
     }
     for (const auto & item : json["lines"]) {
-        int idx = item["idx"];
+        int idx = -1;
+        item.tryGetValue("idx", idx);
         auto & line = Database::lines[idx];
         if (!line) {
             line = PrefabCreator::createLine(idx);
@@ -84,7 +101,8 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
         }
         line->applyLayer0(item);
         //for graph
-        auto& item_points = item["points"];
+        nlohmann::json item_points;
+        item.tryGetValue("points", item_points);
         graph[item_points[0]].push_back(item_points[1]);
         graph[item_points[1]].push_back(item_points[0]);
     }
