@@ -17949,7 +17949,7 @@ class basic_json
 
     //Added by Oleg Bobrov
     template <class TKey, class TValue>
-    bool tryGetValue(TKey && key, TValue & value) const {
+    bool tryGetValue(const TKey & key, TValue & value) const {
         auto iterator = m_value.object->find(key);
         if (iterator != m_value.object->end()) {
             value = iterator->second;
