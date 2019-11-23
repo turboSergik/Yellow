@@ -17947,6 +17947,16 @@ class basic_json
         JSON_THROW(type_error::create(305, "cannot use operator[] with a string argument with " + std::string(type_name())));
     }
 
+    //Added by Oleg Bobrov
+    template <class TKey, class TValue>
+    bool tryGetValue(TKey && key, TValue & value) const {
+        auto iterator = m_value.object->find(key);
+        if (iterator != m_value.object->end()) {
+            value = iterator->second;
+            return true;
+        }
+        return false;
+    }
     /*!
     @brief access specified object element with default value
 
