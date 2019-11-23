@@ -11,9 +11,10 @@
 
 enum PostType
 {
+    DEFAULT = 0,
     TOWN = 1,
     MARKET = 2,
-    STORAGE = 3
+    STORAGE = 3,
 };
 
 class Post : public Behaviour {
@@ -32,12 +33,12 @@ public:
     int armor_capacity;
     int level;
     int next_level_price;
-    //player_idx "a33dc107-04ab-4039-9578-1dccd00867d1" //TODO: what type use?
     int population;
     int population_capacity;
     int product;
     int product_capacity;
     int train_cooldown;
+    std::string player_idx;
 
     explicit Town(int idx);
     void applyLayer1(const nlohmann::json &json) override;
