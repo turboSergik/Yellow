@@ -10,26 +10,27 @@ Train::Train(int idx) : Behaviour(idx) {
 }
 
 void Train::applyLayer1(const nlohmann::json &json) {
-    Train::cooldown = json["cooldown"];
-    //Train::fuel = utility["fuel"];
-    //Train::fuel_capacity = utility["fuel_capacity"];
-    //Train::fuel_consumption = utility["fuel_consumption"];
-    Train::goods = json["goods"];
-    Train::goods_capacity = json["goods_capacity"];
-    //TODO: ask what this field store
-    //"goods_type": null, WTF?
-    Train::level = json["level"];
-    Train::next_level_price = json["next_level_price"];
-    //"player_idx": "a33dc107-04ab-4039-9578-1dccd00867d1",
-    Train::position = json["position"];
-    Train::speed = json["speed"];
-    auto & line_idx = json["line_idx"];
+    json.tryGetValue("cooldown", Train::cooldown);
+    json.tryGetValue("fuel", Train::fuel);
+    json.tryGetValue("fuel_capacity", Train::fuel_capacity);
+    json.tryGetValue("fuel_consumption", Train::fuel_consumption);
+    json.tryGetValue("goods", Train::goods);
+    json.tryGetValue("goods_capacity", Train::goods_capacity);
+    json.tryGetValue("level", Train::level);
+    json.tryGetValue("next_level_price", Train::next_level_price);
+    json.tryGetValue("position", Train::position);
+    json.tryGetValue("speed", Train::speed);
+    json.tryGetValue("player_idx", Train::player_idx);
+    nlohmann::json line_idx;
+    json.tryGetValue("line_idx", line_idx);
     if (line_idx != nullptr) {
         Train::line = Database::lines[line_idx];
         Train::transform->setParent(Train::line->transform);
     } else {
         //TODO: alert that line_idx = null (exception or smth else)
     }
+    //TODO: ask what this field store
+    //"goods_type": null, WTF?
 }
 
 void Train::update() {
