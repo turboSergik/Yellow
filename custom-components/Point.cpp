@@ -6,16 +6,15 @@
 #include "../static/Database.h"
 
 void Point::applyLayer10(const nlohmann::json &json) {
-    float x = 0, y = 0;
-    json.tryGetValue("x", x);
-    json.tryGetValue("y", y);
-    transform->setLocalPosition({x, y});
+    transform->setLocalPosition({json.value("x", 0.f),
+                                 json.value("y", 0.f)});
 }
 
 void Point::applyLayer0(const nlohmann::json &json) {
-    nlohmann::json post_idx;
-    json.tryGetValue("post_idx", post_idx);
-    Point::post = post_idx == nullptr ? nullptr : Database::posts[post_idx];
+    if (json.contains("post_idx")) {
+        auto &post_idx = json["post_idx"];
+        Point::post = post_idx == nullptr ? nullptr : Database::posts[post_idx];
+    }
 }
 
 Point::Point(int idx) : Behaviour(idx) {

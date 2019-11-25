@@ -14,97 +14,109 @@
 
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
-    for (const auto & item : json["coordinates"]) {
-        int idx = -1;
-        if (!item.tryGetValue("idx", idx)) {
-            continue;
+    if (json.contains("coordinates")) {
+        for (const auto &item : json["coordinates"]) {
+            int idx = item.value("idx", -1);
+            if (idx == -1) {
+                continue;
+            }
+            auto &point = Database::points[idx];
+            if (!point) {
+                point = PrefabCreator::createPoint(idx);
+                point->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
+            }
+            point->applyLayer10(item);
         }
-        auto & point = Database::points[idx];
-        if (!point) {
-            point = PrefabCreator::createPoint(idx);
-            point->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
-        }
-        point->applyLayer10(item);
     }
 }
 
 void GraphController::applyLayer1(const nlohmann::json &json) {
-    for (const auto & item : json["posts"]) {
-        int idx = -1;
-        if (!item.tryGetValue("idx", idx)) {
-            continue;
-        }
-        auto & post = Database::posts[idx];
-        PostType type = PostType::DEFAULT;
-        item.tryGetValue("type", type);
-        switch (type) {
-            case PostType::TOWN: {
-                if (!post) {
-                    post = PrefabCreator::createTown(idx);
-                }
-                post->applyLayer1(item);
-                break;
+    if (json.contains("posts")) {
+        for (const auto &item : json["posts"]) {
+            int idx = item.value("idx", -1);
+            if (idx == -1) {
+                continue;
             }
-            case MARKET: {
-                if (!post) {
-                    post = PrefabCreator::createMarket(idx);
+            auto &post = Database::posts[idx];
+            PostType type = item.value("type", PostType::DEFAULT);
+            switch (type) {
+                case PostType::TOWN: {
+                    if (!post) {
+                        post = PrefabCreator::createTown(idx);
+                    }
+                    post->applyLayer1(item);
+                    break;
                 }
-                post->applyLayer1(item);
-                break;
-            }
-            case STORAGE: {
-                if (!post) {
-                    post = PrefabCreator::createStorage(idx);
+                case MARKET: {
+                    if (!post) {
+                        post = PrefabCreator::createMarket(idx);
+                    }
+                    post->applyLayer1(item);
+                    break;
                 }
-                post->applyLayer1(item);
-                break;
-            }
-            default: {
-                break;
+                case STORAGE: {
+                    if (!post) {
+                        post = PrefabCreator::createStorage(idx);
+                    }
+                    post->applyLayer1(item);
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
     }
-    for (const auto & item : json["trains"]) {
-        int idx = -1;
-        if (!item.tryGetValue("idx", idx)) {
-            continue;
+    if (json.contains("trains")) {
+        for (const auto &item : json["trains"]) {
+            int idx = item.value("idx", -1);
+            if (idx == -1) {
+                continue;
+            }
+            auto &train = Database::trains[idx];
+            if (!train) {
+                train = PrefabCreator::createTrain(idx);
+            }
+            train->applyLayer1(item);
         }
-        auto &train = Database::trains[idx];
-        if (!train) {
-            train = PrefabCreator::createTrain(idx);
-        }
-        train->applyLayer1(item);
     }
 }
 
 void GraphController::applyLayer0(const nlohmann::json &json) {
-    for (const auto & item : json["points"]) {
-        int idx = -1;
-        if (!item.tryGetValue("idx", idx)) {
-            continue;
+    if (json.contains("points")) {
+        for (const auto &item : json["points"]) {
+            int idx = item.value("idx", -1);
+            if (idx == -1) {
+                continue;
+            }
+            auto &point = Database::points[idx];
+            if (!point) {
+                point = PrefabCreator::createPoint(idx);
+                point->transform->setParent(GraphController::transform);
+                //TODO: change to Instantiate(original, parent)
+            }
+            point->applyLayer0(item);
         }
-        auto& point = Database::points[idx];
-        if (!point) {
-            point = PrefabCreator::createPoint(idx);
-            point->transform->setParent(GraphController::transform);
-            //TODO: change to Instantiate(original, parent)
-        }
-        point->applyLayer0(item);
     }
-    for (const auto & item : json["lines"]) {
-        int idx = -1;
-        item.tryGetValue("idx", idx);
-        auto & line = Database::lines[idx];
-        if (!line) {
-            line = PrefabCreator::createLine(idx);
-            line->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
+    if (json.contains("lines")) {
+        for (const auto &item : json["lines"]) {
+            int idx = item.value("idx", -1);
+            if (idx == -1) {
+                continue;
+            }
+            auto &line = Database::lines[idx];
+            if (!line) {
+                line = PrefabCreator::createLine(idx);
+                line->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
+            }
+            line->applyLayer0(item);
+            //for graph
+            if (item.contains("points")) {
+                const auto &item_points = item["points"];
+                graph[item_points[0]].push_back(item_points[1]);
+                graph[item_points[1]].push_back(item_points[0]);
+            }
         }
-        line->applyLayer0(item);
-        //for graph
-        nlohmann::json item_points;
-        item.tryGetValue("points", item_points);
-        graph[item_points[0]].push_back(item_points[1]);
-        graph[item_points[1]].push_back(item_points[0]);
     }
 }
 
