@@ -34,5 +34,7 @@
 # Project files
 *.user
 
-# Build folders
+# Project folders
 build-*
+.idea
+
