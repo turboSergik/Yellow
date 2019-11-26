@@ -18,8 +18,10 @@ public:
     MethodWrapper(T * objPtr, void (T::* objMethod)()) : obj(objPtr) {
         method = ::operator new(sizeof(objPtr));
         std::memcpy(method, &objMethod, sizeof(objMethod));
-        wrappedMethod = concreteWrapperMethod<T>;
+        wrappedMethod = MethodWrapper::concreteWrapperMethod<T>;
     }
+    
+    void * getObject() const;
     
     void operator()() const;
     

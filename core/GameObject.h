@@ -20,6 +20,8 @@ private:
     std::list<MethodWrapper> awakePool;
     std::list<MethodWrapper> startPool;
     std::list<MethodWrapper> updatePool;
+    std::list<MethodWrapper> onDestroyPool;
+    bool onScene = false;
     
     template <class T, class... Args>
     T * initComponent(Args &&... args);
@@ -30,7 +32,7 @@ private:
     
     template <class T>
     typename std::enable_if<!HasAwake<T>::value>::type
-    addAwake(T * component);
+    addAwake(T * ) {}
 
     template <class T>
     typename std::enable_if<HasStart<T>::value>::type
@@ -38,7 +40,7 @@ private:
 
     template <class T>
     typename std::enable_if<!HasStart<T>::value>::type
-    addStart(T * component);
+    addStart(T * ) {}
     
     template <class T>
     typename std::enable_if<HasUpdate<T>::value>::type
@@ -46,13 +48,46 @@ private:
     
     template <class T>
     typename std::enable_if<!HasUpdate<T>::value>::type
-    addUpdate(T * component);
+    addUpdate(T * ) {}
+    
+    template <class T>
+    typename std::enable_if<HasOnDestroy<T>::value>::type
+    addOnDestroy(T * component);
+    
+    template <class T>
+    typename std::enable_if<!HasOnDestroy<T>::value>::type
+    addOnDestroy(T * ) {}
+    
+    template <class T>
+    typename std::enable_if<HasAwake<T>::value>::type
+    onSceneAwake(T * component);
+    
+    template <class T>
+    typename std::enable_if<!HasAwake<T>::value>::type
+    onSceneAwake(T * ) {}
+
+    template <class T>
+    typename std::enable_if<HasStart<T>::value>::type
+    onSceneStart(T * component);
+
+    template <class T>
+    typename std::enable_if<!HasStart<T>::value>::type
+    onSceneStart(T * ) {}
+    
+    template <class T>
+    typename std::enable_if<HasUpdate<T>::value>::type
+    onSceneUpdate(T * component);
+    
+    template <class T>
+    typename std::enable_if<!HasUpdate<T>::value>::type
+    onSceneUpdate(T * ) {}
     
 public:
     Transform * transform = nullptr; //TODO: prevent changes of this field
     GameObject();
     ~GameObject();
     void update();
+    void instantiate();
 
 //    template <class T>
 //    T * addComponent(const T *component);
@@ -77,9 +112,16 @@ T * GameObject::initComponent(Args &&... args) {
 template <class T, class... Args>
 T * GameObject::addComponent(Args &&... args) {
     T * instance = this->template initComponent<T>(std::forward<Args>(args)...);
-    addAwake(instance);
-    addStart(instance);
-    addUpdate(instance);
+    if (onScene) {
+        onSceneAwake(instance);
+        onSceneStart(instance);
+        onSceneUpdate(instance);
+    } else {
+        addAwake(instance);
+        addStart(instance);
+        addUpdate(instance);
+    }
+    addOnDestroy(instance);
     return instance;
 }
 
@@ -99,33 +141,45 @@ T * GameObject::getComponent() {
 template <class T>
 typename std::enable_if<HasAwake<T>::value>::type
 GameObject::addAwake(T * component) {
-    awakePool.push_back(MethodWrapper(component, &T::awake));
+    awakePool.push_front(MethodWrapper(component, &T::awake));
 }
-
-template <class T>
-typename std::enable_if<!HasAwake<T>::value>::type
-GameObject::addAwake(T * ) {}
 
 template <class T>
 typename std::enable_if<HasStart<T>::value>::type 
 GameObject::addStart(T * component) {
-    startPool.push_back(MethodWrapper(component, &T::start));
+    startPool.push_front(MethodWrapper(component, &T::start));
 }
-
-template <class T>
-typename std::enable_if<!HasStart<T>::value>::type 
-GameObject::addStart(T * ) {}
 
 template <class T>
 typename std::enable_if<HasUpdate<T>::value>::type 
 GameObject::addUpdate(T * component) {
-    updatePool.push_back(MethodWrapper(component, &T::start));
+    updatePool.push_front(MethodWrapper(component, &T::update));
 }
 
 template <class T>
-typename std::enable_if<!HasUpdate<T>::value>::type 
-GameObject::addUpdate(T * ) {}
+typename std::enable_if<HasOnDestroy<T>::value>::type
+GameObject::addOnDestroy(T * component) {
+    onDestroyPool.push_front(MethodWrapper(component, &T::onDestroy));
+}
 
+template <class T>
+typename std::enable_if<HasAwake<T>::value>::type
+GameObject::onSceneAwake(T * component) {
+    component->awake();
+}
+
+template <class T>
+typename std::enable_if<HasStart<T>::value>::type
+GameObject::onSceneStart(T * component) {
+    MethodsPool::startPool.push_front(MethodWrapper(component, &T::start));
+}
+
+template <class T>
+typename std::enable_if<HasUpdate<T>::value>::type
+GameObject::onSceneUpdate(T * component) {
+    MethodsPool::updatePool.push_front(MethodWrapper(component, &T::update));
+    component->updatePosition = updatePool.begin();  
+}
 
 //template<class T>
 //T * GameObject::addComponent(const T *component) {

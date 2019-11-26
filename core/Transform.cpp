@@ -162,6 +162,9 @@ std::list<Transform *>::iterator Transform::begin() { return children.begin(); }
 std::list<Transform *>::iterator Transform::end() { return children.end(); }
 
 Transform::~Transform() {
+    if (parent) {
+        parent->children.erase(it);
+    }
     //TODO: who should delete children (gameObject or transform)?
     for (auto child : children) {
         delete child->gameObject;

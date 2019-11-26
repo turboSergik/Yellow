@@ -2,11 +2,12 @@
 #define METHODSPOOL_HPP
 
 #include <list>
+#include <vector>
 #include "../utility/methodWrapper.hpp"
 
 class MethodsPool
 {
-    static std::list<MethodWrapper> updatePool;
+    static std::vector<MethodWrapper> updatePool;
     static std::list<MethodWrapper> startPool;
     friend class GameObject;
 public:

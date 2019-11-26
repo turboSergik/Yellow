@@ -7,6 +7,7 @@
 
 #include "Transform.h"
 #include "../utility/methodWrapper.hpp"
+#include <vector>
 
 class Component {
 public:
@@ -15,11 +16,11 @@ public:
     
     std::list<Component *>::iterator componentPosition;
     
-    std::list<MethodWrapper>::iterator updatePosition;
+    std::vector<MethodWrapper>::iterator updatePosition;
+    
+    bool startCalled = false;
     
     virtual ~Component() = default;
-
-    virtual void update();
     //TODO: add start() event (check add to scene and call)
 };
 
