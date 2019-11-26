@@ -1,7 +1,6 @@
-conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan 
-conan install . --build=missing --install-folder=build
+mkdir build
 cd build
-cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-cmake --build .
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . 
 cd ..
 

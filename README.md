@@ -8,22 +8,15 @@
 
 ## Инструкция по установке
 
-Необходимо создать Build директорию, зайти в нее, добавить remote и разрешить зависимости с помощью canon. Если в conan profile используется компилятор g++, то важно чтобы в settings было compiler.libcxx=libstdc++11
+Для сборки необходимы conan и cmake.
+Сборка не отличается от сборки с помощью cmake, за исключением того что cmake вызывает conan чтобы разрешить зависимости, и потому ему нужно явно указать DCMAKE\_BUILD\_TYPE чтобы cmake передал его в build_type canon. Таким образом сборка выглядит так:
 
 ```
-canon remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-conan install . --build=missing --install-folder=build
-```
-
-Далее необходимо собрать проект с помощью cmake
-
-Пример сборки для Unix Makefiles
-
-```
+mkdir build
 cd build
-cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
-cmake --build .
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release
 ```
 
-Для автоматизации этих действий добавлены build.bat и build.sh которые делают то же самое, используя в качестве генератора cmake Mingw Makefiles и Unix Makefiles соответственно
+Параметр --config Release необходим для компилятора Visual Studio и должен совпадать с CMAKE\_BUILD\_TYPE. Для других компиляторов он игнорируется. В репозитории есть build.bat и build.sh которые делают именно так собирают проект.
 
