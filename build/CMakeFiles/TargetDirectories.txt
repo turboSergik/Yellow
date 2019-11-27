@@ -1,0 +1,3 @@
+Z:/codeblocks_projects/cource_work/Yellow/build/CMakeFiles/WG.dir
+Z:/codeblocks_projects/cource_work/Yellow/build/CMakeFiles/edit_cache.dir
+Z:/codeblocks_projects/cource_work/Yellow/build/CMakeFiles/rebuild_cache.dir
