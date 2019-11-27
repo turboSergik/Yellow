@@ -13,8 +13,6 @@ class Connection : protected sf::TcpSocket {
     Connection & operator=(Connection &&) = delete;
 protected:
     static Connection connection;
-    static const sf::IpAddress serverAddress;
-    static const uint16_t serverPort;
     
     // assuming that you first call login, than
     // use instance as much as you want, than call
