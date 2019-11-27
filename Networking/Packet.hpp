@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
-#include "../json/json.hpp"
+#include "../utility/json.hpp"
 
 typedef nlohmann::json json;
 
@@ -20,7 +20,7 @@ protected:
     void process(size_t numberOfProcessed);
     size_t getProcessed();
     uint8_t * getPtr();
-    uint32_t getJsonSize();
+    uint32_t getJsonSize() const;
     friend class PacketQueue;
 public:
     Packet(int code, json j);
@@ -30,10 +30,33 @@ public:
     Packet(Packet &&);
     Packet & operator=(const Packet &) = delete;
     Packet & operator=(Packet &&);
-    json getJson();
+    json getJson() const;
     // return Action or result of server depending
     // on sending or reseiving package it is
-    int32_t getFlag();
+    int32_t getFlag() const;
+};
+
+enum Action
+{
+    LOGIN = 1,
+    LOGOUT = 2,
+    MOVE = 3,
+    UPGRADE = 4,
+    TURN = 5,
+    PLAYER = 6,
+    GAMES = 7,
+    MAP = 10
+};
+
+enum Result
+{
+    OKEY = 0,
+    BAD_COMMAND = 1,
+    RESOURCE_NOT_FOUND = 2,
+    ACCESS_DENIED = 3,
+    INAPPROPRIATE_GAME_STATE = 4,
+    TIMEOUT = 5,
+    INTERNAL_SERVER_ERROR = 500
 };
 
 #endif // PACKAGE_HPP

@@ -12,6 +12,3 @@ void Component::onDraw() {
     
 }
 
-Component::~Component() {
-    
-}

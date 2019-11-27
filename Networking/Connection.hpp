@@ -25,6 +25,7 @@ public:
     static void login();
     static Connection & instance();
     static void logout();
+    ~Connection();
 };
 
 #endif // CONNECTION_HPP
