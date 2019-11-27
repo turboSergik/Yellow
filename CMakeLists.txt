@@ -9,13 +9,7 @@ include(${CMAKE_SOURCE_DIR}/conancommand.cmake)
 set_conan_params()
 
 execute_process(COMMAND conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan)
-if (UNIX)
-    execute_process(COMMAND echo ${CONAN_INSTALL_COMMAND}
-                COMMAND sh)
-elseif(WIN32)
-    execute_process(COMMAND echo ${CONAN_INSTALL_COMMAND}
-                COMMAND cmd)
-endif()
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo ${CONAN_INSTALL_COMMAND} COMMAND cmd)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGET)
