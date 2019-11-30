@@ -11,10 +11,6 @@ void GameObject::update() {
     for (Transform * child : *transform) {
         child->gameObject->update();
     }
-//    for (Component * component : components) {
-//        component->update();
-//    }
-
 }
 
 void GameObject::instantiate() {
@@ -30,16 +26,28 @@ void GameObject::instantiate() {
     onScene = true;
 }
 
-void GameObject::destroy(GameObject * gameObject) {
-    if (gameObject->onScene) {
-        for (UpdateWrapper & method : gameObject->updatePool) {
-            MethodsPool::removeFromUpdate(reinterpret_cast<Component *>(method.getObject())->updatePosition);
-        }
-        for (OnDestroyWrapper & method : gameObject->onDestroyPool) {
-            method();
-        }
+void GameObject::immideateDestroy() {
+    transform->children.erase(transform->it);
+    if (this->onScene) {
+        sceneDestroy();
     }
-    delete gameObject;
+    delete this;
+}
+
+void GameObject::destroy() {
+    MethodsPool::destroyObjectPool.push_front(this);
+}
+
+void GameObject::sceneDestroy() {
+    for (UpdateWrapper & method : this->updatePool) {
+        MethodsPool::removeFromUpdate(reinterpret_cast<Component *>(method.getObject())->updatePosition);
+    }
+    for (OnDestroyWrapper & method : this->onDestroyPool) {
+        method();
+    }
+    for (Transform * child : *transform) {
+        child->gameObject->sceneDestroy();
+    }
 }
 
 GameObject::GameObject() {
@@ -49,7 +57,7 @@ GameObject::GameObject() {
 GameObject::~GameObject() {
     for (Component * component : components) {
         delete component;
-    }        
+    }
     delete transform;
 }
 

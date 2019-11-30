@@ -162,12 +162,8 @@ std::list<Transform *>::iterator Transform::begin() { return children.begin(); }
 std::list<Transform *>::iterator Transform::end() { return children.end(); }
 
 Transform::~Transform() {
-    if (parent) {
-        parent->children.erase(it);
-    }
-    // children destructor will remove itself from list
-    while (!children.empty()) {
-        delete children.front();
+    for (Transform * child : children) {
+        delete child->gameObject;
     }
 }
 

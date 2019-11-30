@@ -7,6 +7,7 @@ std::forward_list<StartWrapper> MethodsPool::startPool;
 void MethodsPool::removeFromUpdate(size_t index) {
     std::swap(updatePool[index], updatePool.back());
     reinterpret_cast<Component *>(updatePool[index].getObject())->updatePosition = index;
+    MethodsPool::updatePool.pop_back();
 }
 
 void MethodsPool::update() {
@@ -14,8 +15,15 @@ void MethodsPool::update() {
         start();
     }
     startPool.clear();
-    // using indexing becouse vector size can change, and may resize
-    for (int i = MethodsPool::updatePool.size() - 1; i > -1; --i) {
-        MethodsPool::updatePool[static_cast<size_t>(i)]();
+    // using indexing becouse vector size can change, and vector may resize
+    size_t oldSize = MethodsPool::updatePool.size();
+    for (size_t i = 0; i < oldSize; ++i) {
+        MethodsPool::updatePool[i]();
+    }
+    for (Component * component : destroyComponentPool) {
+        component->immideateDestroy();
+    }
+    for (GameObject * gameObject : destroyObjectPool) {
+        gameObject->immideateDestroy();
     }
 }

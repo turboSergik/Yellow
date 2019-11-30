@@ -30,6 +30,8 @@ private:
     std::list<Transform*>::iterator it;
 
     void recalculateAccordingToLocals();
+    
+    friend class GameObject;
 public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field
 

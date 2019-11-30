@@ -26,7 +26,6 @@ private:
     template <class T, class... Args>
     T * initComponent(Args &&... args);
     
-
     template <class T>
     typename std::enable_if<HasStart<T>::value>::type
     addStart(T * component);
@@ -67,6 +66,11 @@ private:
     typename std::enable_if<!HasUpdate<T>::value>::type
     onSceneUpdate(T * ) {}
     
+    void sceneDestroy();
+    
+    friend class MethodsPool;
+    friend class GameObject;
+    friend class Component;
 public:
     Transform * transform = nullptr; //TODO: prevent changes of this field
     GameObject();
@@ -83,7 +87,8 @@ public:
     template <class T>
     T * getComponent();
     
-    void destroy(GameObject * gameObject);
+    void immideateDestroy();
+    void destroy();
 };
 
 template <class T, class... Args>

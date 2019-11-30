@@ -14,15 +14,14 @@ class Component {
     std::list<Component *>::iterator componentPosition;
     
     size_t updatePosition = std::numeric_limits<size_t>::max();
+    void immideateDestroy();
     friend class GameObject;
     friend class MethodsPool;
 public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field
     Transform *transform = nullptr;
-    void destroy();
-
     
-    bool startCalled = false;
+    void destroy();
     
     virtual ~Component() = default;
     //TODO: add start() event (check add to scene and call)
