@@ -4,18 +4,18 @@
 
 #include "GameObject.h"
 
-void GameObject::update() {
-    for (UpdateWrapper & method : updatePool) {
-        method();
-    }
-    for (Transform * child : *transform) {
-        child->gameObject->update();
-    }
-}
+//void GameObject::update() {
+//    for (UpdateWrapper & method : updatePool) {
+//        method();
+//    }
+//    for (Transform * child : *transform) {
+//        child->gameObject->update();
+//    }
+//}
 
 void GameObject::instantiate() {
     for (StartWrapper & method : startPool) {
-        MethodsPool::startPool.push_front(std::move(method));
+        MethodsPool::startPool.push_back(std::move(method));
     }
     startPool.clear();
     for (UpdateWrapper & method : updatePool) {
@@ -35,7 +35,7 @@ void GameObject::immideateDestroy() {
 }
 
 void GameObject::destroy() {
-    MethodsPool::destroyObjectPool.push_front(this);
+    MethodsPool::destroyObjectPool.push_back(this);
 }
 
 void GameObject::sceneDestroy() {

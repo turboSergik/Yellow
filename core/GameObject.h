@@ -75,7 +75,7 @@ public:
     Transform * transform = nullptr; //TODO: prevent changes of this field
     GameObject();
     ~GameObject();
-    void update();
+    // void update();
     void instantiate();
 
 //    template <class T>
@@ -126,8 +126,6 @@ T * GameObject::getComponent() {
     }
     return nullptr;
 }
-
-
 
 template <class T>
 typename std::enable_if<HasStart<T>::value>::type 

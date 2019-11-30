@@ -15,5 +15,5 @@ void Component::immideateDestroy() {
 }
 
 void Component::destroy() {
-    MethodsPool::destroyComponentPool.push_front(this);
+    MethodsPool::destroyComponentPool.push_back(this);
 }
