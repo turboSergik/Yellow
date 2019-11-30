@@ -10,6 +10,7 @@
 #include "Component.h"
 #include <utility>
 #include <cstdint>
+#include <forward_list>
 #include "../utility/methodWrapper.hpp"
 #include "../static/MethodsPool.hpp"
 #include "../utility/InterfaceChecker.hpp"
@@ -17,22 +18,14 @@
 class GameObject {
 private:
     std::list<Component*> components;
-    std::list<MethodWrapper> awakePool;
-    std::list<MethodWrapper> startPool;
-    std::list<MethodWrapper> updatePool;
-    std::list<MethodWrapper> onDestroyPool;
+    std::forward_list<StartWrapper> startPool;
+    std::forward_list<UpdateWrapper> updatePool;
+    std::forward_list<OnDestroyWrapper> onDestroyPool;
     bool onScene = false;
     
     template <class T, class... Args>
     T * initComponent(Args &&... args);
     
-    template <class T>
-    typename std::enable_if<HasAwake<T>::value>::type
-    addAwake(T * component);
-    
-    template <class T>
-    typename std::enable_if<!HasAwake<T>::value>::type
-    addAwake(T * ) {}
 
     template <class T>
     typename std::enable_if<HasStart<T>::value>::type
@@ -57,14 +50,6 @@ private:
     template <class T>
     typename std::enable_if<!HasOnDestroy<T>::value>::type
     addOnDestroy(T * ) {}
-    
-    template <class T>
-    typename std::enable_if<HasAwake<T>::value>::type
-    onSceneAwake(T * component);
-    
-    template <class T>
-    typename std::enable_if<!HasAwake<T>::value>::type
-    onSceneAwake(T * ) {}
 
     template <class T>
     typename std::enable_if<HasStart<T>::value>::type
@@ -97,6 +82,8 @@ public:
     
     template <class T>
     T * getComponent();
+    
+    void destroy(GameObject * gameObject);
 };
 
 template <class T, class... Args>
@@ -113,11 +100,9 @@ template <class T, class... Args>
 T * GameObject::addComponent(Args &&... args) {
     T * instance = this->template initComponent<T>(std::forward<Args>(args)...);
     if (onScene) {
-        onSceneAwake(instance);
         onSceneStart(instance);
         onSceneUpdate(instance);
     } else {
-        addAwake(instance);
         addStart(instance);
         addUpdate(instance);
     }
@@ -138,56 +123,36 @@ T * GameObject::getComponent() {
 }
 
 
-template <class T>
-typename std::enable_if<HasAwake<T>::value>::type
-GameObject::addAwake(T * component) {
-    awakePool.push_front(MethodWrapper(component, &T::awake));
-}
 
 template <class T>
 typename std::enable_if<HasStart<T>::value>::type 
 GameObject::addStart(T * component) {
-    startPool.push_front(MethodWrapper(component, &T::start));
+    startPool.push_front(StartWrapper(component));
 }
 
 template <class T>
 typename std::enable_if<HasUpdate<T>::value>::type 
 GameObject::addUpdate(T * component) {
-    updatePool.push_front(MethodWrapper(component, &T::update));
+    updatePool.push_front(UpdateWrapper(component));
 }
 
 template <class T>
 typename std::enable_if<HasOnDestroy<T>::value>::type
 GameObject::addOnDestroy(T * component) {
-    onDestroyPool.push_front(MethodWrapper(component, &T::onDestroy));
-}
-
-template <class T>
-typename std::enable_if<HasAwake<T>::value>::type
-GameObject::onSceneAwake(T * component) {
-    component->awake();
+    onDestroyPool.push_front(OnDestroyWrapper(component));
 }
 
 template <class T>
 typename std::enable_if<HasStart<T>::value>::type
 GameObject::onSceneStart(T * component) {
-    MethodsPool::startPool.push_front(MethodWrapper(component, &T::start));
+    MethodsPool::startPool.push_front(StartWrapper(component));
 }
 
 template <class T>
 typename std::enable_if<HasUpdate<T>::value>::type
 GameObject::onSceneUpdate(T * component) {
-    MethodsPool::updatePool.push_front(MethodWrapper(component, &T::update));
-    component->updatePosition = updatePool.begin();  
+    component->updatePosition = MethodsPool::updatePool.size();    
+    MethodsPool::updatePool.push_back(UpdateWrapper(component));
 }
-
-//template<class T>
-//T * GameObject::addComponent(const T *component) {
-//    components.push_back(component);
-//    component->gameObject = this;
-//    component->transform = GameObject::transform;
-//    return component;
-//}
-
 
 #endif //WG_GAMEOBJECT_H

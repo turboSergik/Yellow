@@ -1,15 +1,16 @@
 #ifndef METHODSPOOL_HPP
 #define METHODSPOOL_HPP
 
-#include <list>
+#include <forward_list>
 #include <vector>
 #include "../utility/methodWrapper.hpp"
 
 class MethodsPool
 {
-    static std::vector<MethodWrapper> updatePool;
-    static std::list<MethodWrapper> startPool;
+    static std::vector<UpdateWrapper> updatePool;
+    static std::forward_list<StartWrapper> startPool;
     friend class GameObject;
+    static void removeFromUpdate(size_t index);
 public:
     static void update();
 };

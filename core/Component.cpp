@@ -4,3 +4,7 @@
 
 #include "Component.h"
 
+
+void Component::destroy() {
+    
+}

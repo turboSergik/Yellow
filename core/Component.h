@@ -8,15 +8,19 @@
 #include "Transform.h"
 #include "../utility/methodWrapper.hpp"
 #include <vector>
+#include <limits>
 
 class Component {
+    std::list<Component *>::iterator componentPosition;
+    
+    size_t updatePosition = std::numeric_limits<size_t>::max();
+    friend class GameObject;
+    friend class MethodsPool;
 public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field
     Transform *transform = nullptr;
-    
-    std::list<Component *>::iterator componentPosition;
-    
-    std::vector<MethodWrapper>::iterator updatePosition;
+    void destroy();
+
     
     bool startCalled = false;
     

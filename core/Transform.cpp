@@ -165,9 +165,9 @@ Transform::~Transform() {
     if (parent) {
         parent->children.erase(it);
     }
-    //TODO: who should delete children (gameObject or transform)?
-    for (auto child : children) {
-        delete child->gameObject;
+    // children destructor will remove itself from list
+    while (!children.empty()) {
+        delete children.front();
     }
 }
 

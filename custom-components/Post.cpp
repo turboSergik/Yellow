@@ -27,14 +27,14 @@ void Town::applyLayer1(const nlohmann::json &json) {
     Post::applyLayer1(json);
     Town::armor = json["armor"];
     Town::armor_capacity = json["armor_capacity"];
-    Town::level = json["level"];
-    Town::next_level_price = json["next_level_price"];
+    //Town::level = json["level"];
+    //Town::next_level_price = json["next_level_price"];
     //this->player_idx = item["player_idx"];
     Town::population = json["population"];
     Town::population_capacity = json["population_capacity"];
     Town::product = json["product"];
     Town::product_capacity = json["product_capacity"];
-    Town::train_cooldown = json["train_cooldown"];
+    //Town::train_cooldown = json["train_cooldown"];
 }
 
 Market::Market(int idx): Post(idx) {

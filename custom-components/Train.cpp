@@ -10,7 +10,7 @@ Train::Train(int idx) : Behaviour(idx) {
 }
 
 void Train::applyLayer1(const nlohmann::json &json) {
-    Train::cooldown = json["cooldown"];
+    //Train::cooldown = json["cooldown"];
     //Train::fuel = utility["fuel"];
     //Train::fuel_capacity = utility["fuel_capacity"];
     //Train::fuel_consumption = utility["fuel_consumption"];
@@ -18,8 +18,8 @@ void Train::applyLayer1(const nlohmann::json &json) {
     Train::goods_capacity = json["goods_capacity"];
     //TODO: ask what this field store
     //"goods_type": null, WTF?
-    Train::level = json["level"];
-    Train::next_level_price = json["next_level_price"];
+    //Train::level = json["level"];
+    //Train::next_level_price = json["next_level_price"];
     //"player_idx": "a33dc107-04ab-4039-9578-1dccd00867d1",
     Train::position = json["position"];
     Train::speed = json["speed"];
