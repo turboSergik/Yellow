@@ -11,7 +11,7 @@ class Post;
 
 class Point : public Behaviour {
 public:
-    Post* post;
+    Post* post = nullptr;
 
     explicit Point(int idx);
     void applyLayer10(const nlohmann::json &json) override;
