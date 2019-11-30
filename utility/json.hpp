@@ -17946,7 +17946,6 @@ class basic_json
 
         JSON_THROW(type_error::create(305, "cannot use operator[] with a string argument with " + std::string(type_name())));
     }
-
     /*!
     @brief access specified object element with default value
 

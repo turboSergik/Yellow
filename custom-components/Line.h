@@ -13,8 +13,8 @@ class Line : public Behaviour {
 private:
     LineRenderer *lineRenderer = nullptr;
 public:
-    int length;
-    Point* points[2];
+    int length = -1;
+    Point* points[2] = {nullptr, nullptr};
 
     explicit Line(int idx);
 
