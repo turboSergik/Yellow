@@ -20,14 +20,11 @@ int main() {
     GameObject *root = PrefabCreator::createRoot()->gameObject;
     //TODO: crate scene class which update will be called and that allow us have multiple root objects
     Camera *mainCamera = PrefabCreator::createCamera(&window);
-    //mainCamera->transform->setParent(root->transform);
-    //mainCamera->setWidth(2000);
 
     sf::Clock clock; // starts the clock
 
-    //Input & input = Input::instance();
     window.setKeyRepeatEnabled(false);
-    
+
     while (window.isOpen()) {
         sf::Event event{};
         Input::reset();
