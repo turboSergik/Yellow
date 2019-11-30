@@ -60,3 +60,4 @@ void Storage::applyLayer1(const nlohmann::json &json) {
     Storage::armor_capacity = json.value("armor_capacity", Storage::armor_capacity);
     Storage::replenishment = json.value("replenishment", Storage::replenishment);
 }
+

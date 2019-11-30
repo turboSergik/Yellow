@@ -28,7 +28,7 @@ public:
     //"goods_type": null, WTF?
 
     void applyLayer1(const nlohmann::json &json) override;
-    void update() override ;
+    void update();
 };
 
 

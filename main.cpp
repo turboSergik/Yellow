@@ -67,8 +67,10 @@ int main() {
         }
         Time::deltaTime = clock.restart().asSeconds();
         window.clear();
-        root->update();
-        mainCamera->gameObject->update();
+        // root->update();
+        
+        
+        // mainCamera->gameObject->update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
         

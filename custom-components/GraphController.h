@@ -24,7 +24,7 @@ public:
     void applyForceMethod();
     void applyForceMethodIteration();
 
-    void update() override;
+    void update();
 };
 
 
