@@ -1,7 +1,8 @@
-conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan 
-conan install . --build=missing --install-folder=build
+mkdir build
 cd build
-cmake .. -G "Mingw Makefiles" --config Release
-cmake --build .
+cmake .. -DCMAKE_BUILD_TYPE=Release
+:: --config for visual studio.  
+:: It don't breaks mingw build
+cmake --build . --config Release
 cd ..
 

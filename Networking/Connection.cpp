@@ -3,10 +3,10 @@
 #include "Packet.hpp"
 
 Connection Connection::connection;
-const sf::IpAddress Connection::serverAddress("wgforge-srv.wargaming.net");
-const uint16_t Connection::serverPort = 443;
 
 void Connection::login() {
+    sf::IpAddress serverAddress("wgforge-srv.wargaming.net");
+    uint16_t serverPort = 443;
     connection.setBlocking(false);
     connection.connect(serverAddress, serverPort);
     // here we can send game request, login request
