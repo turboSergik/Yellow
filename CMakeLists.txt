@@ -31,7 +31,7 @@ set(SOURCES
         core/Transform.cpp
         core/Component.cpp
         core/GameObject.cpp
-        static/PrefabCreator.cpp
+        static/Prefabs.cpp
         core-components/renderers/LineRenderer.cpp
         core-components/renderers/Renderer.cpp
         core-components/renderers/SpriteRenderer.cpp

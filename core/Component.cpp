@@ -2,6 +2,7 @@
 // Created by Олег Бобров on 17.11.2019.
 //
 
+#include "GameObject.h"
 #include "Component.h"
 #include "../static/MethodsPool.hpp"
 

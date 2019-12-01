@@ -76,7 +76,8 @@ public:
     GameObject();
     ~GameObject();
     // void update();
-    void instantiate();
+    GameObject * instantiate();
+    GameObject * instantiate(Transform * parent);
 
 //    template <class T>
 //    T * addComponent(const T *component);
