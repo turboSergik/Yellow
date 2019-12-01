@@ -6,7 +6,7 @@
 #include "core-components/Camera.h"
 #include "core-components/renderers/Renderer.h"
 #include "core-components/renderers/CircleRenderer.h"
-#include "static/PrefabCreator.h"
+#include "static/Prefabs.h"
 #include "static/Time.h"
 #include "Networking/PacketQueue.hpp"
 #include "static/Input.hpp"
@@ -17,15 +17,12 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
 
-    GameObject *root = PrefabCreator::createRoot()->gameObject;
-    //TODO: crate scene class which update will be called and that allow us have multiple root objects
-    Camera *mainCamera = PrefabCreator::createCamera(&window);
-    //mainCamera->transform->setParent(root->transform);
-    //mainCamera->setWidth(2000);
+    GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
+    Camera *mainCamera = Prefabs::camera(&window);
+    mainCamera->gameObject->instantiate();
 
     sf::Clock clock; // starts the clock
 
-    //Input & input = Input::instance();
     window.setKeyRepeatEnabled(false);
 
     while (window.isOpen()) {
@@ -68,8 +65,7 @@ int main() {
 
         Time::deltaTime = clock.restart().asSeconds();
         window.clear();
-        root->update();
-        mainCamera->gameObject->update();
+        MethodsPool::update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
 

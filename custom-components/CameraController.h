@@ -21,7 +21,7 @@ public:
     float scrollFactor = 3.f;
     float moveFactor = 0.3f;
 
-    void update() override;
+    void update();
 };
 
 

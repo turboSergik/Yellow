@@ -2,14 +2,14 @@
 // Created by Олег Бобров on 17.11.2019.
 //
 
-#include "PrefabCreator.h"
+#include "Prefabs.h"
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
 #include "../custom-components/CameraController.h"
 
 
 //TODO: add constants to easy manipulate default values of shapes
-Point *PrefabCreator::createPoint(int idx) {
+Point *Prefabs::point(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(40);
@@ -18,14 +18,14 @@ Point *PrefabCreator::createPoint(int idx) {
     return point;
 }
 
-Line *PrefabCreator::createLine(int idx) {
+Line *Prefabs::line(int idx) {
     GameObject *obj = new GameObject();
     obj->addComponent<LineRenderer>();
     Line *line = obj->addComponent<Line>(idx);
     return line;
 }
 
-Train *PrefabCreator::createTrain(int idx) {
+Train *Prefabs::train(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(30);
@@ -36,7 +36,7 @@ Train *PrefabCreator::createTrain(int idx) {
     return train;
 }
 
-Town *PrefabCreator::createTown(int idx) {
+Town *Prefabs::town(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(30);
@@ -46,7 +46,7 @@ Town *PrefabCreator::createTown(int idx) {
     return town;
 }
 
-Market *PrefabCreator::createMarket(int idx) {
+Market *Prefabs::market(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(30);
@@ -56,7 +56,7 @@ Market *PrefabCreator::createMarket(int idx) {
     return market;
 }
 
-Storage *PrefabCreator::createStorage(int idx) {
+Storage *Prefabs::storage(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(30);
@@ -66,14 +66,14 @@ Storage *PrefabCreator::createStorage(int idx) {
     return storage;
 }
 
-Camera *PrefabCreator::createCamera(sf::RenderTarget *renderTarget) {
+Camera *Prefabs::camera(sf::RenderTarget *renderTarget) {
     GameObject *obj = new GameObject();
     Camera *camera = obj->addComponent<Camera>(renderTarget);
     obj->addComponent<CameraController>();
     return camera;
 }
 
-GraphController *PrefabCreator::createRoot() {
+GraphController *Prefabs::graphRoot() {
     GameObject *obj = new GameObject();
     GraphController *graphController = obj->addComponent<GraphController>();
     return graphController;
