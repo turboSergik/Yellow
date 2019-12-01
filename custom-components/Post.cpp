@@ -11,7 +11,7 @@ void Post::applyLayer1(const nlohmann::json &json) {
         const auto & point_idx = json["point_idx"];
         if (point_idx != nullptr) {
             Post::point = Database::points[point_idx];
-            Post::transform->setParent(Post::point->transform);//TODO: change to Instantiate(original, parent)
+            Post::transform->setParent(Post::point->transform);
         } else {
             //TODO: alert that point_idx = null (exception or smth else)
         }
@@ -60,3 +60,4 @@ void Storage::applyLayer1(const nlohmann::json &json) {
     Storage::armor_capacity = json.value("armor_capacity", Storage::armor_capacity);
     Storage::replenishment = json.value("replenishment", Storage::replenishment);
 }
+

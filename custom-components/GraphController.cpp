@@ -7,7 +7,7 @@
 #include "GraphController.h"
 #include "../static/Database.h"
 #include "Post.h"
-#include "../static/PrefabCreator.h"
+#include "../static/Prefabs.h"
 #include "../Networking/Connection.hpp"
 #include "../Networking/PacketQueue.hpp"
 #include "../Networking/Packet.hpp"
@@ -17,15 +17,14 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
         for (const auto &item : json["coordinates"]) {
             int idx = item.value("idx", -1);
-            if (idx == -1) {
-                continue;
+            if (idx != -1) {
+                auto &point = Database::points[idx];
+                if (!point) {
+                    point = Prefabs::point(idx);
+                    point->gameObject->instantiate(GraphController::transform);
+                }
+                point->applyLayer10(item);
             }
-            auto &point = Database::points[idx];
-            if (!point) {
-                point = PrefabCreator::createPoint(idx);
-                point->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
-            }
-            point->applyLayer10(item);
         }
     }
 }
@@ -34,35 +33,37 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
     if (json.contains("posts")) {
         for (const auto &item : json["posts"]) {
             int idx = item.value("idx", -1);
-            if (idx == -1) {
-                continue;
-            }
-            auto &post = Database::posts[idx];
-            PostType type = item.value("type", PostType::DEFAULT);
-            switch (type) {
-                case PostType::TOWN: {
-                    if (!post) {
-                        post = PrefabCreator::createTown(idx);
+            if (idx != -1) {
+                auto & post = Database::posts[idx];
+                PostType type = item.value("type", PostType::DEFAULT);
+                switch (type) {
+                    case PostType::TOWN: {
+                        if (!post) {
+                            post = Prefabs::town(idx);
+                            post->gameObject->instantiate();
+                        }
+                        post->applyLayer1(item);
+                        break;
                     }
-                    post->applyLayer1(item);
-                    break;
-                }
-                case MARKET: {
-                    if (!post) {
-                        post = PrefabCreator::createMarket(idx);
+                    case MARKET: {
+                        if (!post) {
+                            post = Prefabs::market(idx);
+                            post->gameObject->instantiate();
+                        }
+                        post->applyLayer1(item);
+                        break;
                     }
-                    post->applyLayer1(item);
-                    break;
-                }
-                case STORAGE: {
-                    if (!post) {
-                        post = PrefabCreator::createStorage(idx);
+                    case STORAGE: {
+                        if (!post) {
+                            post = Prefabs::storage(idx);
+                            post->gameObject->instantiate();
+                        }
+                        post->applyLayer1(item);
+                        break;
                     }
-                    post->applyLayer1(item);
-                    break;
-                }
-                default: {
-                    break;
+                    default: {
+                        break;
+                    }
                 }
             }
         }
@@ -73,9 +74,10 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
             if (idx == -1) {
                 continue;
             }
-            auto &train = Database::trains[idx];
+            auto & train = Database::trains[idx];
             if (!train) {
-                train = PrefabCreator::createTrain(idx);
+                train = Prefabs::train(idx);
+                train->gameObject->instantiate();
             }
             train->applyLayer1(item);
         }
@@ -86,35 +88,32 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
     if (json.contains("points")) {
         for (const auto &item : json["points"]) {
             int idx = item.value("idx", -1);
-            if (idx == -1) {
-                continue;
+            if (idx != -1) {
+                auto & point = Database::points[idx];
+                if (!point) {
+                    point = Prefabs::point(idx);
+                    point->gameObject->instantiate(GraphController::transform);
+                }
+                point->applyLayer0(item);
             }
-            auto &point = Database::points[idx];
-            if (!point) {
-                point = PrefabCreator::createPoint(idx);
-                point->transform->setParent(GraphController::transform);
-                //TODO: change to Instantiate(original, parent)
-            }
-            point->applyLayer0(item);
         }
     }
     if (json.contains("lines")) {
         for (const auto &item : json["lines"]) {
             int idx = item.value("idx", -1);
-            if (idx == -1) {
-                continue;
-            }
-            auto &line = Database::lines[idx];
-            if (!line) {
-                line = PrefabCreator::createLine(idx);
-                line->transform->setParent(GraphController::transform);//TODO: change to Instantiate(original, parent)
-            }
-            line->applyLayer0(item);
-            //for graph
-            if (item.contains("points")) {
-                const auto &item_points = item["points"];
-                graph[item_points[0]].push_back(item_points[1]);
-                graph[item_points[1]].push_back(item_points[0]);
+            if (idx != -1) {
+                auto &line = Database::lines[idx];
+                if (!line) {
+                    line = Prefabs::line(idx);
+                    line->gameObject->instantiate(GraphController::transform);
+                }
+                line->applyLayer0(item);
+                //for graph
+                if (item.contains("points")) {
+                    const auto &item_points = item["points"];
+                    graph[item_points[0]].push_back(item_points[1]);
+                    graph[item_points[1]].push_back(item_points[0]);
+                }
             }
         }
     }
@@ -153,51 +152,53 @@ void checkResult(const Packet & received) {
     }
 }
 
+void GraphController::start() {
+    Connection::login();
+
+    PacketQueue & pQueue = PacketQueue::instance();
+    json message;
+    message["name"] = "Pasha";
+    pQueue.sendPacket(Packet(Action::LOGIN, message));
+
+
+    pQueue.wait();
+
+    std::pair<Packet, int32_t> received = pQueue.receivePacket();
+
+    checkResult(received.first);
+
+    playerInfo = received.first.getJson();
+
+    nlohmann::json layer0, layer1;
+
+    message.clear();
+
+    message["layer"] = 0;
+    pQueue.sendPacket(Packet(Action::MAP, message));
+
+    message.clear();
+    message["layer"] = 1;
+    pQueue.sendPacket(Packet(Action::MAP, message));
+
+    pQueue.wait();
+
+    received = pQueue.receivePacket();
+    checkResult(received.first);
+    layer0 = received.first.getJson();
+
+    received = pQueue.receivePacket();
+    checkResult(received.first);
+    layer1 = received.first.getJson();
+
+    GraphController::applyLayer0(layer0);
+    GraphController::applyLayer1(layer1);
+    GraphController::graphVisualizer.setGraph(GraphController::graph);
+}
+
 void GraphController::update() {
     if (!called) {
         //TODO: do all network stuff here
         called = true;
-        
-        Connection::login();
-        
-        PacketQueue & pQueue = PacketQueue::instance();
-        json message;
-        message["name"] = "Pasha";
-        pQueue.sendPacket(Packet(Action::LOGIN, message));
-        
-        
-        pQueue.wait();
-        
-        std::pair<Packet, int32_t> received = pQueue.receivePacket();
-        
-        checkResult(received.first);        
-        
-        playerInfo = received.first.getJson();
-        
-        nlohmann::json layer0, layer1;
-        
-        message.clear();
-        
-        message["layer"] = 0;
-        pQueue.sendPacket(Packet(Action::MAP, message));
-        
-        message.clear();
-        message["layer"] = 1;
-        pQueue.sendPacket(Packet(Action::MAP, message));
-        
-        pQueue.wait();
-        
-        received = pQueue.receivePacket();
-        checkResult(received.first);
-        layer0 = received.first.getJson();
-        
-        received = pQueue.receivePacket();
-        checkResult(received.first);
-        layer1 = received.first.getJson();
-                
-        GraphController::applyLayer0(layer0);
-        GraphController::applyLayer1(layer1);
-        GraphController::graphVisualizer.setGraph(GraphController::graph);
     }
     
     // TODO normal timer for iterations
