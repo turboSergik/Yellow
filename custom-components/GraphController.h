@@ -12,7 +12,6 @@
 
 class GraphController : public Component {
 private:
-    bool called = false;
     GraphVisualizer graphVisualizer;
     nlohmann::json playerInfo;
 public:
