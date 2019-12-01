@@ -11,11 +11,14 @@ Line::Line(int idx) : Behaviour(idx) {
 }
 
 void Line::applyLayer0(const nlohmann::json &json) {
-    Line::length = json["length"];
-    auto & item_points = json["points"];
-    Line::points[0] = Database::points[item_points[0]];
-    Line::points[1] = Database::points[item_points[1]];
-    Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
+    Line::length = json.value("length", Line::length);
+    if (json.contains("points")) {
+        auto &item_points = json["points"];
+        //TODO: check null array
+        Line::points[0] = Database::points[item_points[0]];
+        Line::points[1] = Database::points[item_points[1]];
+        Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
+    }
 }
 
 void Line::update() {

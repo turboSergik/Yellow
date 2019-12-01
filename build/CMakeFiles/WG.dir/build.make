@@ -168,24 +168,10 @@ CMakeFiles/WG.dir/static/Database.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/WG.dir/static/Database.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\codeblocks_projects\cource_work\Yellow\static\Database.cpp -o CMakeFiles\WG.dir\static\Database.cpp.s
 
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: CMakeFiles/WG.dir/flags.make
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: ../static/graphdrawing.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/WG.dir/static/graphdrawing.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\static\graphdrawing.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\static\graphdrawing.cpp
-
-CMakeFiles/WG.dir/static/graphdrawing.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/WG.dir/static/graphdrawing.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E Z:\codeblocks_projects\cource_work\Yellow\static\graphdrawing.cpp > CMakeFiles\WG.dir\static\graphdrawing.cpp.i
-
-CMakeFiles/WG.dir/static/graphdrawing.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/WG.dir/static/graphdrawing.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\codeblocks_projects\cource_work\Yellow\static\graphdrawing.cpp -o CMakeFiles\WG.dir\static\graphdrawing.cpp.s
-
 CMakeFiles/WG.dir/core/Transform.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core/Transform.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core/Transform.cpp.obj: ../core/Transform.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/WG.dir/core/Transform.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/WG.dir/core/Transform.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core\Transform.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core\Transform.cpp
 
 CMakeFiles/WG.dir/core/Transform.cpp.i: cmake_force
@@ -199,7 +185,7 @@ CMakeFiles/WG.dir/core/Transform.cpp.s: cmake_force
 CMakeFiles/WG.dir/core/Component.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core/Component.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core/Component.cpp.obj: ../core/Component.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/WG.dir/core/Component.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/WG.dir/core/Component.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core\Component.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core\Component.cpp
 
 CMakeFiles/WG.dir/core/Component.cpp.i: cmake_force
@@ -213,7 +199,7 @@ CMakeFiles/WG.dir/core/Component.cpp.s: cmake_force
 CMakeFiles/WG.dir/core/GameObject.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core/GameObject.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core/GameObject.cpp.obj: ../core/GameObject.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/WG.dir/core/GameObject.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/WG.dir/core/GameObject.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core\GameObject.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core\GameObject.cpp
 
 CMakeFiles/WG.dir/core/GameObject.cpp.i: cmake_force
@@ -227,7 +213,7 @@ CMakeFiles/WG.dir/core/GameObject.cpp.s: cmake_force
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../static/PrefabCreator.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\static\PrefabCreator.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\static\PrefabCreator.cpp
 
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.i: cmake_force
@@ -241,7 +227,7 @@ CMakeFiles/WG.dir/static/PrefabCreator.cpp.s: cmake_force
 CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.obj: ../core-components/renderers/LineRenderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core-components\renderers\LineRenderer.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core-components\renderers\LineRenderer.cpp
 
 CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.i: cmake_force
@@ -255,7 +241,7 @@ CMakeFiles/WG.dir/core-components/renderers/LineRenderer.cpp.s: cmake_force
 CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.obj: ../core-components/renderers/Renderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core-components\renderers\Renderer.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core-components\renderers\Renderer.cpp
 
 CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.i: cmake_force
@@ -269,7 +255,7 @@ CMakeFiles/WG.dir/core-components/renderers/Renderer.cpp.s: cmake_force
 CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.obj: ../core-components/renderers/SpriteRenderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core-components\renderers\SpriteRenderer.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core-components\renderers\SpriteRenderer.cpp
 
 CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.i: cmake_force
@@ -283,7 +269,7 @@ CMakeFiles/WG.dir/core-components/renderers/SpriteRenderer.cpp.s: cmake_force
 CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.obj: ../core-components/renderers/CircleRenderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\core-components\renderers\CircleRenderer.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\core-components\renderers\CircleRenderer.cpp
 
 CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.i: cmake_force
@@ -297,7 +283,7 @@ CMakeFiles/WG.dir/core-components/renderers/CircleRenderer.cpp.s: cmake_force
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../custom-components/CameraController.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\custom-components\CameraController.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\custom-components\CameraController.cpp
 
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.i: cmake_force
@@ -311,7 +297,7 @@ CMakeFiles/WG.dir/custom-components/CameraController.cpp.s: cmake_force
 CMakeFiles/WG.dir/static/Time.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/static/Time.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/static/Time.cpp.obj: ../static/Time.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/WG.dir/static/Time.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/WG.dir/static/Time.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\static\Time.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\static\Time.cpp
 
 CMakeFiles/WG.dir/static/Time.cpp.i: cmake_force
@@ -325,7 +311,7 @@ CMakeFiles/WG.dir/static/Time.cpp.s: cmake_force
 CMakeFiles/WG.dir/Networking/Connection.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/Networking/Connection.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/Networking/Connection.cpp.obj: ../Networking/Connection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/WG.dir/Networking/Connection.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/WG.dir/Networking/Connection.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\Networking\Connection.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\Networking\Connection.cpp
 
 CMakeFiles/WG.dir/Networking/Connection.cpp.i: cmake_force
@@ -339,7 +325,7 @@ CMakeFiles/WG.dir/Networking/Connection.cpp.s: cmake_force
 CMakeFiles/WG.dir/Networking/Packet.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/Networking/Packet.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/Networking/Packet.cpp.obj: ../Networking/Packet.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/WG.dir/Networking/Packet.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/WG.dir/Networking/Packet.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\Networking\Packet.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\Networking\Packet.cpp
 
 CMakeFiles/WG.dir/Networking/Packet.cpp.i: cmake_force
@@ -353,7 +339,7 @@ CMakeFiles/WG.dir/Networking/Packet.cpp.s: cmake_force
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../Networking/PacketQueue.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\Networking\PacketQueue.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\Networking\PacketQueue.cpp
 
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.i: cmake_force
@@ -367,7 +353,7 @@ CMakeFiles/WG.dir/Networking/PacketQueue.cpp.s: cmake_force
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: CMakeFiles/WG.dir/flags.make
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../custom-components/GraphController.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\custom-components\GraphController.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\custom-components\GraphController.cpp
 
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.i: cmake_force
@@ -377,6 +363,48 @@ CMakeFiles/WG.dir/custom-components/GraphController.cpp.i: cmake_force
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/WG.dir/custom-components/GraphController.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\codeblocks_projects\cource_work\Yellow\custom-components\GraphController.cpp -o CMakeFiles\WG.dir\custom-components\GraphController.cpp.s
+
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: CMakeFiles/WG.dir/flags.make
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: ../utility/GraphVisualizer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\utility\GraphVisualizer.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\utility\GraphVisualizer.cpp
+
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E Z:\codeblocks_projects\cource_work\Yellow\utility\GraphVisualizer.cpp > CMakeFiles\WG.dir\utility\GraphVisualizer.cpp.i
+
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\codeblocks_projects\cource_work\Yellow\utility\GraphVisualizer.cpp -o CMakeFiles\WG.dir\utility\GraphVisualizer.cpp.s
+
+CMakeFiles/WG.dir/static/Input.cpp.obj: CMakeFiles/WG.dir/flags.make
+CMakeFiles/WG.dir/static/Input.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
+CMakeFiles/WG.dir/static/Input.cpp.obj: ../static/Input.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/WG.dir/static/Input.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\static\Input.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\static\Input.cpp
+
+CMakeFiles/WG.dir/static/Input.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/WG.dir/static/Input.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E Z:\codeblocks_projects\cource_work\Yellow\static\Input.cpp > CMakeFiles\WG.dir\static\Input.cpp.i
+
+CMakeFiles/WG.dir/static/Input.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/WG.dir/static/Input.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\codeblocks_projects\cource_work\Yellow\static\Input.cpp -o CMakeFiles\WG.dir\static\Input.cpp.s
+
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj: CMakeFiles/WG.dir/flags.make
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj: CMakeFiles/WG.dir/includes_CXX.rsp
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj: ../utility/methodWrapper.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\WG.dir\utility\methodWrapper.cpp.obj -c Z:\codeblocks_projects\cource_work\Yellow\utility\methodWrapper.cpp
+
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/WG.dir/utility/methodWrapper.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E Z:\codeblocks_projects\cource_work\Yellow\utility\methodWrapper.cpp > CMakeFiles\WG.dir\utility\methodWrapper.cpp.i
+
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/WG.dir/utility/methodWrapper.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\codeblocks_projects\cource_work\Yellow\utility\methodWrapper.cpp -o CMakeFiles\WG.dir\utility\methodWrapper.cpp.s
 
 # Object files for target WG
 WG_OBJECTS = \
@@ -388,7 +416,6 @@ WG_OBJECTS = \
 "CMakeFiles/WG.dir/custom-components/Post.cpp.obj" \
 "CMakeFiles/WG.dir/custom-components/Train.cpp.obj" \
 "CMakeFiles/WG.dir/static/Database.cpp.obj" \
-"CMakeFiles/WG.dir/static/graphdrawing.cpp.obj" \
 "CMakeFiles/WG.dir/core/Transform.cpp.obj" \
 "CMakeFiles/WG.dir/core/Component.cpp.obj" \
 "CMakeFiles/WG.dir/core/GameObject.cpp.obj" \
@@ -402,7 +429,10 @@ WG_OBJECTS = \
 "CMakeFiles/WG.dir/Networking/Connection.cpp.obj" \
 "CMakeFiles/WG.dir/Networking/Packet.cpp.obj" \
 "CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj" \
-"CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj"
+"CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj" \
+"CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj" \
+"CMakeFiles/WG.dir/static/Input.cpp.obj" \
+"CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj"
 
 # External object files for target WG
 WG_EXTERNAL_OBJECTS =
@@ -415,7 +445,6 @@ bin/WG.exe: CMakeFiles/WG.dir/custom-components/Line.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/custom-components/Post.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/custom-components/Train.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/static/Database.cpp.obj
-bin/WG.exe: CMakeFiles/WG.dir/static/graphdrawing.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/core/Transform.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/core/Component.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/core/GameObject.cpp.obj
@@ -430,11 +459,14 @@ bin/WG.exe: CMakeFiles/WG.dir/Networking/Connection.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/Networking/Packet.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj
+bin/WG.exe: CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj
+bin/WG.exe: CMakeFiles/WG.dir/static/Input.cpp.obj
+bin/WG.exe: CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj
 bin/WG.exe: CMakeFiles/WG.dir/build.make
 bin/WG.exe: CMakeFiles/WG.dir/linklibs.rsp
 bin/WG.exe: CMakeFiles/WG.dir/objects1.rsp
 bin/WG.exe: CMakeFiles/WG.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Linking CXX executable bin\WG.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=Z:\codeblocks_projects\cource_work\Yellow\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Linking CXX executable bin\WG.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\WG.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

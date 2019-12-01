@@ -12,10 +12,13 @@ CMakeFiles/WG.dir/Networking/Connection.cpp.obj: C:/Users/Sergey/.conan/data/sfm
 CMakeFiles/WG.dir/Networking/Connection.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Time.hpp
 CMakeFiles/WG.dir/Networking/Connection.cpp.obj: ../Networking/Connection.cpp
 CMakeFiles/WG.dir/Networking/Connection.cpp.obj: ../Networking/Connection.hpp
+CMakeFiles/WG.dir/Networking/Connection.cpp.obj: ../Networking/Packet.hpp
+CMakeFiles/WG.dir/Networking/Connection.cpp.obj: ../Networking/PacketQueue.hpp
+CMakeFiles/WG.dir/Networking/Connection.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/Networking/Packet.cpp.obj: ../Networking/Packet.cpp
 CMakeFiles/WG.dir/Networking/Packet.cpp.obj: ../Networking/Packet.hpp
-CMakeFiles/WG.dir/Networking/Packet.cpp.obj: ../json/json.hpp
+CMakeFiles/WG.dir/Networking/Packet.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/Export.hpp
@@ -30,7 +33,7 @@ CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../Networking/Connection.hpp
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../Networking/Packet.hpp
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../Networking/PacketQueue.cpp
 CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../Networking/PacketQueue.hpp
-CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../json/json.hpp
+CMakeFiles/WG.dir/Networking/PacketQueue.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/core-components/Camera.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/core-components/Camera.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/BlendMode.hpp
@@ -479,21 +482,69 @@ CMakeFiles/WG.dir/custom-components/Behaviour.cpp.obj: ../core/Component.h
 CMakeFiles/WG.dir/custom-components/Behaviour.cpp.obj: ../core/Transform.h
 CMakeFiles/WG.dir/custom-components/Behaviour.cpp.obj: ../custom-components/Behaviour.cpp
 CMakeFiles/WG.dir/custom-components/Behaviour.cpp.obj: ../custom-components/Behaviour.h
-CMakeFiles/WG.dir/custom-components/Behaviour.cpp.obj: ../json/json.hpp
+CMakeFiles/WG.dir/custom-components/Behaviour.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/BlendMode.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/Color.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/Export.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/PrimitiveType.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/Rect.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/Rect.inl
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/RenderStates.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/RenderTarget.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/Transform.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/Vertex.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/View.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Clock.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Err.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Export.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/FileInputStream.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/InputStream.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Lock.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/MemoryInputStream.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Mutex.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/NonCopyable.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Sleep.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/String.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/String.inl
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Thread.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Thread.inl
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/ThreadLocal.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/ThreadLocalPtr.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/ThreadLocalPtr.inl
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Time.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Utf.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Utf.inl
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.inl
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector3.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector3.inl
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Clipboard.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Context.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/ContextSettings.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Cursor.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Event.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Export.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/GlResource.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Joystick.hpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Keyboard.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Mouse.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Sensor.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Touch.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/VideoMode.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Window.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/WindowHandle.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/WindowStyle.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../core-components/Camera.h
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../core/Component.h
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../core/Transform.h
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../custom-components/CameraController.cpp
 CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../custom-components/CameraController.h
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../static/Input.hpp
+CMakeFiles/WG.dir/custom-components/CameraController.cpp.obj: ../static/Time.h
 
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -527,6 +578,11 @@ CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.co
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/VertexArray.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/VertexBuffer.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/View.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/Export.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/IpAddress.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/Socket.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/SocketHandle.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/TcpSocket.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Clock.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Err.hpp
@@ -569,6 +625,9 @@ CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.co
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Window.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/WindowHandle.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/WindowStyle.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../Networking/Connection.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../Networking/Packet.hpp
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../Networking/PacketQueue.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../core-components/Camera.h
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../core-components/renderers/LineRenderer.h
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../core-components/renderers/Renderer.h
@@ -582,10 +641,10 @@ CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../custom-component
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../static/Database.h
 CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../static/PrefabCreator.h
-CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../static/graphdrawing.h
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../utility/GraphVisualizer.h
+CMakeFiles/WG.dir/custom-components/GraphController.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/custom-components/Line.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/custom-components/Line.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -672,8 +731,8 @@ CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../custom-components/Line.h
 CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../static/Database.h
+CMakeFiles/WG.dir/custom-components/Line.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/custom-components/Point.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/custom-components/Point.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -759,8 +818,8 @@ CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../custom-components/Point.cp
 CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../static/Database.h
+CMakeFiles/WG.dir/custom-components/Point.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/custom-components/Post.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/custom-components/Post.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -846,8 +905,8 @@ CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../custom-components/Post.cpp
 CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../static/Database.h
+CMakeFiles/WG.dir/custom-components/Post.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/custom-components/Train.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/custom-components/Train.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -933,8 +992,8 @@ CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../custom-components/Train.cpp
 CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../static/Database.h
+CMakeFiles/WG.dir/custom-components/Train.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -968,6 +1027,11 @@ CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafte
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/VertexArray.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/VertexBuffer.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics/View.hpp
+CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/Export.hpp
+CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/IpAddress.hpp
+CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/Socket.hpp
+CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/SocketHandle.hpp
+CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Network/TcpSocket.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Clock.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Err.hpp
@@ -1010,6 +1074,9 @@ CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafte
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Window.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/WindowHandle.hpp
 CMakeFiles/WG.dir/main.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/WindowStyle.hpp
+CMakeFiles/WG.dir/main.cpp.obj: ../Networking/Connection.hpp
+CMakeFiles/WG.dir/main.cpp.obj: ../Networking/Packet.hpp
+CMakeFiles/WG.dir/main.cpp.obj: ../Networking/PacketQueue.hpp
 CMakeFiles/WG.dir/main.cpp.obj: ../core-components/Camera.h
 CMakeFiles/WG.dir/main.cpp.obj: ../core-components/renderers/CircleRenderer.h
 CMakeFiles/WG.dir/main.cpp.obj: ../core-components/renderers/LineRenderer.h
@@ -1023,11 +1090,13 @@ CMakeFiles/WG.dir/main.cpp.obj: ../custom-components/Line.h
 CMakeFiles/WG.dir/main.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/main.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/main.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/main.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/main.cpp.obj: ../main.cpp
 CMakeFiles/WG.dir/main.cpp.obj: ../static/Database.h
+CMakeFiles/WG.dir/main.cpp.obj: ../static/Input.hpp
 CMakeFiles/WG.dir/main.cpp.obj: ../static/PrefabCreator.h
 CMakeFiles/WG.dir/main.cpp.obj: ../static/Time.h
+CMakeFiles/WG.dir/main.cpp.obj: ../utility/GraphVisualizer.h
+CMakeFiles/WG.dir/main.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/static/Database.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/static/Database.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -1112,9 +1181,29 @@ CMakeFiles/WG.dir/static/Database.cpp.obj: ../custom-components/Line.h
 CMakeFiles/WG.dir/static/Database.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/static/Database.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/static/Database.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/static/Database.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/static/Database.cpp.obj: ../static/Database.cpp
 CMakeFiles/WG.dir/static/Database.cpp.obj: ../static/Database.h
+CMakeFiles/WG.dir/static/Database.cpp.obj: ../utility/json.hpp
+
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Export.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/String.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/String.inl
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Time.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Utf.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Utf.inl
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.inl
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector3.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector3.inl
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Event.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Export.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Joystick.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Keyboard.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Mouse.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Window/Sensor.hpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: ../static/Input.cpp
+CMakeFiles/WG.dir/static/Input.cpp.obj: ../static/Input.hpp
 
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Config.hpp
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/Graphics.hpp
@@ -1198,20 +1287,25 @@ CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../core/Component.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../core/GameObject.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../core/Transform.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/Behaviour.h
+CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/CameraController.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/GraphController.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/Line.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/Point.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/Post.h
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../custom-components/Train.h
-CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../json/json.hpp
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../static/PrefabCreator.cpp
 CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../static/PrefabCreator.h
+CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../utility/GraphVisualizer.h
+CMakeFiles/WG.dir/static/PrefabCreator.cpp.obj: ../utility/json.hpp
 
 CMakeFiles/WG.dir/static/Time.cpp.obj: ../static/Time.cpp
 CMakeFiles/WG.dir/static/Time.cpp.obj: ../static/Time.h
 
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.hpp
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.inl
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: ../static/graphdrawing.cpp
-CMakeFiles/WG.dir/static/graphdrawing.cpp.obj: ../static/graphdrawing.h
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.hpp
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: C:/Users/Sergey/.conan/data/sfml/2.5.1/bincrafters/stable/package/e18484b3e0893b80ae82e6045f0cb2799a577e78/include/SFML/System/Vector2.inl
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: ../utility/GraphVisualizer.cpp
+CMakeFiles/WG.dir/utility/GraphVisualizer.cpp.obj: ../utility/GraphVisualizer.h
+
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj: ../utility/methodWrapper.cpp
+CMakeFiles/WG.dir/utility/methodWrapper.cpp.obj: ../utility/methodWrapper.hpp
 

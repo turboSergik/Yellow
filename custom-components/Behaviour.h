@@ -7,7 +7,7 @@
 
 
 #include <SFML/System.hpp>
-#include "../json/json.hpp"
+#include "../utility/json.hpp"
 #include "../core/Component.h"
 
 class Behaviour : public Component {
