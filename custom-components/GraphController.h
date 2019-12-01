@@ -24,6 +24,7 @@ public:
     void applyForceMethod();
     void applyForceMethodIteration();
 
+    void start();
     void update();
 };
 
