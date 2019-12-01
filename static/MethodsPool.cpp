@@ -1,5 +1,6 @@
 #include "MethodsPool.hpp"
 #include "../core/Component.h"
+#include "../core/GameObject.h"
 
 std::vector<UpdateWrapper> MethodsPool::updatePool;
 std::list<StartWrapper> MethodsPool::startPool;

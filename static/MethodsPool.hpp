@@ -4,16 +4,18 @@
 #include <list>
 #include <vector>
 #include "../utility/methodWrapper.hpp"
-#include "../core/GameObject.h"
+
+class GameObject;
+class Component;
 
 class MethodsPool
 {
+    friend class GameObject;
+    friend class Component;
     static std::vector<UpdateWrapper> updatePool;
     static std::list<StartWrapper> startPool;
     static std::list<GameObject *> destroyObjectPool;
     static std::list<Component *> destroyComponentPool;
-    friend class GameObject;
-    friend class Component;
     static void removeFromUpdate(size_t index);
 public:
     static void update();
