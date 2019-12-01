@@ -145,7 +145,7 @@ void GraphController::applyForceMethodIteration() {
 
 void checkResult(const Packet & received) {
     if (received.getFlag() != Result::OKEY) {
-        std::cout << "something went wrong. Returned code: " << 
+        std::cout << "something went wrong. Returned code: " <<
                      received.getFlag() << std::endl;
         std::cout << received.getJson();
         exit(1);
@@ -193,6 +193,9 @@ void GraphController::start() {
     GraphController::applyLayer0(layer0);
     GraphController::applyLayer1(layer1);
     GraphController::graphVisualizer.setGraph(GraphController::graph);
+
+    std::cout << "22832212" << std::endl;
+    std::cout << Database << std::endl;
 }
 
 void GraphController::update() {
@@ -200,7 +203,7 @@ void GraphController::update() {
         //TODO: do all network stuff here
         called = true;
     }
-    
+
     // TODO normal timer for iterations
     for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();
