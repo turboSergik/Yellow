@@ -13,7 +13,7 @@
 //    }
 //}
 
-void GameObject::instantiate() {
+GameObject * GameObject::instantiate() {
     for (StartWrapper & method : startPool) {
         MethodsPool::startPool.push_back(std::move(method));
     }
@@ -24,7 +24,15 @@ void GameObject::instantiate() {
         MethodsPool::updatePool.push_back(method);
     }
     onScene = true;
+    return this;
 }
+
+GameObject * GameObject::instantiate(Transform * parent) {
+    GameObject::instantiate();
+    GameObject::transform->setParent(parent);
+    return this;
+}
+
 
 void GameObject::immideateDestroy() {
     transform->children.erase(transform->it);
