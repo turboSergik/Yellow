@@ -60,7 +60,7 @@ void PacketQueue::update() {
 
 void PacketQueue::sendPacket(Packet packet) {
     int32_t code = *reinterpret_cast<int32_t *>(packet.message.get());
-     sendQueue.push(std::move(packet));
+    sendQueue.push(std::move(packet));
     codesQueue.push(code);
 }
 
