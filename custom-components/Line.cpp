@@ -18,6 +18,8 @@ void Line::applyLayer0(const nlohmann::json &json) {
         Line::points[0] = Database::points[item_points[0]];
         Line::points[1] = Database::points[item_points[1]];
         Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
+        Line::points[0]->adjacent.emplace_back(Line::points[1], this);
+        Line::points[1]->adjacent.emplace_back(Line::points[0], this);
     }
 }
 
