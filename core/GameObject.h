@@ -88,7 +88,7 @@ public:
     template <class T>
     T * getComponent();
     
-    void immideateDestroy();
+    void destroyImmediate();
     void destroy();
 };
 
