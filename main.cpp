@@ -33,8 +33,8 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
+                root->destroyImmediate();
                 window.close();
-                delete root;
                 return 0;
             case sf::Event::Resized:
                 // update the view to the new size of the window

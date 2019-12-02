@@ -27,6 +27,6 @@ void MethodsPool::update() {
         component->immideateDestroy();
     }
     for (GameObject * gameObject : destroyObjectPool) {
-        gameObject->immideateDestroy();
+        gameObject->destroyImmediate();
     }
 }
