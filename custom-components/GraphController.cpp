@@ -12,6 +12,11 @@
 #include "../Networking/PacketQueue.hpp"
 #include "../Networking/Packet.hpp"
 
+#include "windows.h"
+
+
+void main_strategy();
+void refresh_map();
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
@@ -195,7 +200,9 @@ void GraphController::start() {
     GraphController::graphVisualizer.setGraph(GraphController::graph);
 
     std::cout << "22832212" << std::endl;
-    std::cout << Database << std::endl;
+
+    main_strategy();
+
 }
 
 void GraphController::update() {
@@ -204,3 +211,47 @@ void GraphController::update() {
         GraphController::applyForceMethodIteration();
     }
 }
+
+
+void main_strategy(){
+
+    PacketQueue & pQueue = PacketQueue::instance();
+    std::pair<Packet, int32_t> received = pQueue.receivePacket();
+
+    json message;
+    nlohmann::json layer1;
+
+    auto train = Database::trains[1] -> position;
+    auto train_line_ixd = Database::trains[1] -> line -> idx;
+
+    std::cout << "Train pos:=" << train << " line idx=" << train_line_ixd << std::endl;
+
+    nlohmann::json train_move;
+    train_move["line_idx"] = 1;
+    train_move["speed"] = 1;
+    train_move["train_idx"] = 1;
+
+    pQueue.sendPacket(Packet(Action::MOVE, train_move));
+
+    while(1) {
+
+        /// refreshing map
+
+        message.clear();
+        message["layer"] = 1;
+        pQueue.sendPacket(Packet(Action::MAP, message));
+
+        pQueue.wait();
+        received = pQueue.receivePacket();
+        checkResult(received.first);
+        layer1 = received.first.getJson();
+
+        GraphController::applyLayer1(layer1)
+
+        Sleep(500);
+
+
+
+    }
+}
+
