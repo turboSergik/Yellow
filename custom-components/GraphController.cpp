@@ -31,6 +31,7 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
 }
 
 void GraphController::applyLayer1(const nlohmann::json &json) {
+    GraphController::layer1 = json;
     if (json.contains("posts")) {
         for (const auto &item : json["posts"]) {
             int idx = item.value("idx", -1);
@@ -86,6 +87,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
 }
 
 void GraphController::applyLayer0(const nlohmann::json &json) {
+    GraphController::layer0 = json;
     if (json.contains("points")) {
         for (const auto &item : json["points"]) {
             int idx = item.value("idx", -1);
@@ -180,13 +182,21 @@ void GraphController::onDestroy() {
 
 void GraphController::onLogin(const nlohmann::json & json) {
     //TODO: handle when login received
+    playerInfo = json;
 }
 
 void GraphController::onMapLayer0(const nlohmann::json & json) {
     //TODO: handle when layer0 received
+    if (GraphController::layer0 != json) {
+        GraphController::applyLayer0(json);
+        GraphController::graphVisualizer.setGraph(graph);
+    }
 }
 
 void GraphController::onMapLayer1(const nlohmann::json & json) {
     //TODO: handle when layer1 received
+    if (GraphController::layer1 != json) {
+        GraphController::applyLayer1(json);
+    }
 }
 
