@@ -7,23 +7,30 @@
 
 Event<const nlohmann::json &> Network::onMap0Response;
 Event<const nlohmann::json &> Network::onMap1Response;
-Event<const nlohmann::json &> onLoginResponse;
-Event<const nlohmann::json &> onPlayerResponse;
-Event<const nlohmann::json &> onGamesResponse;
+Event<const nlohmann::json &> Network::onLoginResponse;
+Event<const nlohmann::json &> Network::onPlayerResponse;
+Event<const nlohmann::json &> Network::onGamesResponse;
+
+
+void Network::connect(const sf::IpAddress &address, unsigned short port) {
+    Connection::instance().connect(address, port);
+    Connection::instance().setBlocking(false);
+}
 
 void Network::update() {
     auto & packetQueue = PacketQueue::instance();
     packetQueue.update();
+    //TODO: pop from  queue while not empty
     if (packetQueue.anyReceived()) {
         auto pair = packetQueue.receivePacket();
         nlohmann::json receivedJson = pair.second.getJson();
-        nlohmann::json sendedJson = pair.first.getJson();
+        nlohmann::json sentJson = pair.first.getJson();
         Action actionCode = static_cast<Action>(pair.first.getFlag());
         switch (actionCode) {
             case Action::MAP:
-                if (sendedJson["layer"] == 0) {
+                if (sentJson["layer"] == 0) {
                     onMap0Response.invoke(receivedJson);                    
-                } else if (sendedJson["layer"] == 1) {
+                } else if (sentJson["layer"] == 1) {
                     onMap1Response.invoke(receivedJson);
                 }
                 break;
@@ -37,12 +44,15 @@ void Network::update() {
                 onGamesResponse.invoke(receivedJson);
             default: 
                 break;
-            
         }
     }
 }
 
-void Network::send(Action action, nlohmann::json & json) {
+void Network::send(Action action, nlohmann::json json) {
     auto & packetQueue = PacketQueue::instance();
-    packetQueue.sendPacket(Packet(action, json));
+    packetQueue.sendPacket(Packet(action, std::move(json)));
+}
+
+void Network::disconnect() {
+    Connection::instance().disconnect();
 }
