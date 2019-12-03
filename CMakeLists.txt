@@ -45,7 +45,7 @@ set(SOURCES
         utility/GraphVisualizer.cpp
         static/Input.cpp
         static/MethodsPool.cpp
-        utility/methodWrapper.cpp network/Network.cpp network/Network.hpp)
+        utility/methodWrapper.cpp network/Network.cpp)
 
 add_executable(WG ${SOURCES})
 
