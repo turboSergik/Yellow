@@ -11,47 +11,47 @@
 #include "../utility/json.hpp"
 #include "Packet.hpp"
 
-template <class T0>
+template <class... Args>
 class Event {
 private:
-    std::list <std::pair<void *, void (*)(void *, const T0)>> listeners;
+    std::list <std::pair<void *, void (*)(void *, Args...)>> listeners;
 
-    template<class TClass, void (TClass::*Method)(const T0)>
-    static void getMethod(void * objPtr, const T0 arg);
+    template<class TClass, void (TClass::*Method)(Args...)>
+    static void getMethod(void * objPtr, Args... args);
 public:
-    template<class TClass, void (TClass::*Method)(const T0)>
+    template<class TClass, void (TClass::*Method)(Args...)>
     void addListener(TClass *objPtr);
-    template<class TClass, void (TClass::*Method)(const T0)>
+    template<class TClass, void (TClass::*Method)(Args...)>
     void removeListener(TClass *objPtr);
-    void invoke(const T0 arg);
+    void invoke(Args... arg);
 };
 
-template<class T0>
-template<class TClass, void (TClass::*Method)(const T0)>
-void Event<T0>::getMethod(void * objPtr, const T0 arg) {
-    return (static_cast<TClass*>(objPtr)->*Method)(arg);
+template<class... Args>
+template<class TClass, void (TClass::*Method)(Args...)>
+void Event<Args...>::getMethod(void * objPtr, Args... args) {
+    return (static_cast<TClass*>(objPtr)->*Method)(std::forward(args)...);
 }
 
-template<class T0>
-template<class TClass, void (TClass::*Method)(const T0)>
-void Event<T0>::addListener(TClass *objPtr) {
-    listeners.emplace_back(objPtr, &Event<T0>::getMethod<TClass, Method>);
+template<class... Args>
+template<class TClass, void (TClass::*Method)(Args...)>
+void Event<Args...>::addListener(TClass *objPtr) {
+    listeners.emplace_back(objPtr, &Event<Args...>::getMethod<TClass, Method>);
 }
 
-template<class T0>
-template<class TClass, void (TClass::*Method)(const T0)>
-void Event<T0>::removeListener(TClass *objPtr) {
+template<class... Args>
+template<class TClass, void (TClass::*Method)(Args...)>
+void Event<Args...>::removeListener(TClass *objPtr) {
     listeners.erase(std::find_if(listeners.begin(), listeners.end(),
-                                 [&objPtr](std::pair<void *, void (*)(void *, const T0)> &pair) {
+                                 [&objPtr](std::pair<void *, void (*)(void *, Args...)> &pair) {
                                      return pair.first == objPtr &&
-                                            pair.second == &Event<T0>::getMethod<TClass, Method>;
+                                            pair.second == &Event<Args...>::getMethod<TClass, Method>;
                                  }));
 }
 
-template<class T0>
-void Event<T0>::invoke(const T0 arg) {
+template<class... Args>
+void Event<Args...>::invoke(Args... args) {
     for (auto & listener : listeners) {
-        listener.second(listener.first, arg);
+        listener.second(listener.first, std::forward<Args>(args)...);
     }
 }
 

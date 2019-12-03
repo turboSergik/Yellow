@@ -28,5 +28,5 @@ void Network::update() {
 
 void Network::send(Action action, nlohmann::json & json) {
     auto & packetQueue = PacketQueue::instance();
-    packetQueue.sendPacket(Packet(action, json);
+    packetQueue.sendPacket(Packet(action, json));
 }
