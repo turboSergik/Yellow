@@ -58,8 +58,12 @@ void Event<Args...>::invoke(Args... args) {
 class Network {
 private:
 public:
-    static Event<nlohmann::json &> onMapResponse;
-
+    static Event<const nlohmann::json &> onMap0Response;
+    static Event<const nlohmann::json &> onMap1Response;
+    static Event<const nlohmann::json &> onLoginResponse;
+    static Event<const nlohmann::json &> onPlayerResponse;
+    static Event<const nlohmann::json &> onGamesResponse;
+    
     static void update();
     static void send(Action action, nlohmann::json &);
 };
