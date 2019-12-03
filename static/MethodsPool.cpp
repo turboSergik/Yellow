@@ -18,13 +18,13 @@ void MethodsPool::update() {
         start();
     }
     startPool.clear();
-    // using indexing becouse vector size can change, and vector may resize
+    // using indexing because vector size can change, and vector may resize
     size_t oldSize = MethodsPool::updatePool.size();
     for (size_t i = 0; i < oldSize; ++i) {
         MethodsPool::updatePool[i]();
     }
     for (Component * component : destroyComponentPool) {
-        component->immideateDestroy();
+        component->destroyImmediate();
     }
     for (GameObject * gameObject : destroyObjectPool) {
         gameObject->destroyImmediate();

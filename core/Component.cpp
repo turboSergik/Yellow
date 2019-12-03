@@ -7,7 +7,7 @@
 #include "../static/MethodsPool.hpp"
 
 
-void Component::immideateDestroy() {
+void Component::destroyImmediate() {
     if (this->updatePosition != std::numeric_limits<size_t>::max()) {
         MethodsPool::removeFromUpdate(this->updatePosition);        
     }
