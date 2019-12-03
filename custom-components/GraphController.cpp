@@ -196,11 +196,6 @@ void GraphController::start() {
 }
 
 void GraphController::update() {
-    if (!called) {
-        //TODO: do all network stuff here
-        called = true;
-    }
-    
     // TODO normal timer for iterations
     for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();

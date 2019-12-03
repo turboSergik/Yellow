@@ -8,8 +8,9 @@
 #include "core-components/renderers/CircleRenderer.h"
 #include "static/Prefabs.h"
 #include "static/Time.h"
-#include "Networking/PacketQueue.hpp"
+#include "network/PacketQueue.hpp"
 #include "static/Input.hpp"
+#include "network/Network.hpp"
 
 int main() {
     srand(time(nullptr));
@@ -33,8 +34,8 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
+                root->destroyImmediate();
                 window.close();
-                delete root;
                 return 0;
             case sf::Event::Resized:
                 // update the view to the new size of the window
