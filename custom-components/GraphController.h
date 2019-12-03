@@ -14,6 +14,7 @@ class GraphController : public Component {
 private:
     GraphVisualizer graphVisualizer;
     nlohmann::json playerInfo;
+    bool is_mapInit = false;
 public:
     std::unordered_map<int, std::list<int>> graph;
 
@@ -25,6 +26,10 @@ public:
 
     void start();
     void update();
+    void onDestroy();
+    void onLogin(const nlohmann::json & json);
+    void onMapLayer0(const nlohmann::json & json);
+    void onMapLayer1(const nlohmann::json & json);
 };
 
 
