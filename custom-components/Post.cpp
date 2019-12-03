@@ -11,7 +11,10 @@ void Post::applyLayer1(const nlohmann::json &json) {
         const auto & point_idx = json["point_idx"];
         if (point_idx != nullptr) {
             Post::point = Database::points[point_idx];
-            Post::transform->setParent(Post::point->transform);
+            if (Post::point) {
+                Post::transform->setParent(Post::point->transform);
+                Post::point->post = this;
+            }
         } else {
             //TODO: alert that point_idx = null (exception or smth else)
         }
