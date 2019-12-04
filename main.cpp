@@ -68,8 +68,8 @@ int main() {
         MethodsPool::update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
-        
-        PacketQueue::instance().update();
+        Network::update();
+        //PacketQueue::instance().update();
     }
     
     return 0;
