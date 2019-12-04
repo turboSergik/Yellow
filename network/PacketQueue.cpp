@@ -59,13 +59,12 @@ void PacketQueue::update() {
 }
 
 void PacketQueue::sendPacket(Packet packet) {
-    int32_t code = *reinterpret_cast<int32_t *>(packet.message.get());
-    sendQueue.push(std::move(packet));
-    codesQueue.push(code);
+    sendQueue.push(packet);
+    sendedQueue.push(std::move(packet));
 }
 
-bool PacketQueue::anyReceived() {
-    return !receiveQueue.empty();
+bool PacketQueue::is_empty() {
+    return receiveQueue.empty();
 }
 
 PacketQueue & PacketQueue::instance() {
@@ -73,16 +72,16 @@ PacketQueue & PacketQueue::instance() {
     return singleton;
 }
 
-std::pair<Packet, int32_t> PacketQueue::receivePacket() {
-    Packet frontPacket = std::move(receiveQueue.front());
+std::pair<Packet, Packet> PacketQueue::receivePacket() {
+    Packet receivedPacket = std::move(receiveQueue.front());
     receiveQueue.pop();
-    int32_t code = codesQueue.front();
-    codesQueue.pop();
-    return std::make_pair(std::move(frontPacket), code);
+    Packet sendedPacket = std::move(sendedQueue.front());
+    sendedQueue.pop();
+    return std::make_pair(std::move(sendedPacket), std::move(receivedPacket));
 }
 
 void PacketQueue::wait() {
-    while (codesQueue.size() != receiveQueue.size()) {
+    while (sendedQueue.size() != receiveQueue.size()) {
         update();
     }
 }

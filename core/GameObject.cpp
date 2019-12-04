@@ -34,8 +34,10 @@ GameObject * GameObject::instantiate(Transform * parent) {
 }
 
 
-void GameObject::immideateDestroy() {
-    transform->children.erase(transform->it);
+void GameObject::destroyImmediate() {
+    if (transform->parent) {
+        transform->parent->children.erase(transform->it);
+    }
     if (this->onScene) {
         sceneDestroy();
     }
