@@ -61,16 +61,16 @@ int main() {
             default:
                 break;
             }
-            
+
         }
+
         Time::deltaTime = clock.restart().asSeconds();
         window.clear();
         MethodsPool::update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
         Network::update();
-        //PacketQueue::instance().update();
     }
-    
+
     return 0;
 }

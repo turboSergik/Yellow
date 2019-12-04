@@ -37,4 +37,7 @@
 # Project folders
 build-*
 .idea
+/build/*
+
+build.bat
 

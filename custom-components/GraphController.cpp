@@ -13,6 +13,8 @@
 #include "../network/Packet.hpp"
 #include "../network/Network.hpp"
 
+void main_strategy();
+void refresh_map();
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
@@ -148,7 +150,7 @@ void GraphController::applyForceMethodIteration() {
 
 void checkResult(const Packet & received) {
     if (received.getFlag() != Result::OKEY) {
-        std::cout << "something went wrong. Returned code: " << 
+        std::cout << "something went wrong. Returned code: " <<
                      received.getFlag() << std::endl;
         std::cout << received.getJson();
         exit(1);
@@ -167,7 +169,7 @@ void GraphController::start() {
 }
 
 void GraphController::update() {
-    // TODO normal timer for iterations
+
     for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();
     }
@@ -200,3 +202,16 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     }
 }
 
+void main_strategy() {
+    auto train = Database::trains[1] -> position;
+    auto train_line_ixd = Database::trains[1] -> line -> idx;
+
+    std::cout << "Train pos:=" << train << " line idx=" << train_line_ixd << std::endl;
+
+    nlohmann::json train_move;
+    train_move["line_idx"] = 1;
+    train_move["speed"] = 1;
+    train_move["train_idx"] = 1;
+
+    Network::send(Action::MOVE, train_move);
+}
