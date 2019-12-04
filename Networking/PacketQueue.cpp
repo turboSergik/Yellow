@@ -28,7 +28,7 @@ bool PacketQueue::tryReceive() {
                 receivingPacket = Packet();
                 return true;
             } else {
-                receivingPacket = Packet(receivingPacket.message.get());                
+                receivingPacket = Packet(receivingPacket.message.get());
             }
         } else {
             receivingPacket.process(received);
@@ -52,7 +52,7 @@ bool PacketQueue::tryReceive() {
 void PacketQueue::update() {
     if (sending) {
         // this means if not empty return !trySend()
-        sending = sendQueue.empty() || !trySend();        
+        sending = sendQueue.empty() || !trySend();
     } else {
         sending = tryReceive();
     }
@@ -75,6 +75,7 @@ PacketQueue & PacketQueue::instance() {
 
 std::pair<Packet, int32_t> PacketQueue::receivePacket() {
     Packet frontPacket = std::move(receiveQueue.front());
+
     receiveQueue.pop();
     int32_t code = codesQueue.front();
     codesQueue.pop();
@@ -85,4 +86,8 @@ void PacketQueue::wait() {
     while (codesQueue.size() != receiveQueue.size()) {
         update();
     }
+}
+
+int PacketQueue::getSize() {
+    return receiveQueue.size();
 }

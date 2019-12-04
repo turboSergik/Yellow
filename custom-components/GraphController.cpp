@@ -18,6 +18,8 @@
 void main_strategy();
 void refresh_map();
 
+int do_strategy = 0;
+
 void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
         for (const auto &item : json["coordinates"]) {
@@ -199,17 +201,80 @@ void GraphController::start() {
     GraphController::applyLayer1(layer1);
     GraphController::graphVisualizer.setGraph(GraphController::graph);
 
-    std::cout << "22832212" << std::endl;
+    // main_strategy();
 
-    main_strategy();
+    return;
 
 }
 
 void GraphController::update() {
 
+    /// std::cout << "322" << std::endl;
+
+    int mapUpdated = true;
+
     for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();
     }
+
+
+    PacketQueue &pQueue = PacketQueue::instance();
+    json message, layer1;
+
+
+    // std::cout << "queue size=" << pQueue.getSize() << std::endl;
+    if (pQueue.anyReceived()) {
+
+        std::cout << "will get packet!" << std::endl;
+
+        std::pair<Packet, int32_t> received = pQueue.receivePacket();
+        checkResult(received.first);
+        layer1 = received.first.getJson();
+
+        GraphController::applyLayer1(layer1);
+        mapUpdated = true;
+
+    }
+
+
+    if (mapUpdated) {
+
+        if (do_strategy) {
+
+            auto train = Database::trains[1] -> position;
+            auto train_line_ixd = Database::trains[1] -> line -> idx;
+
+            // std::cout << "Train pos:=" << train << " line idx=" << train_line_ixd << std::endl;
+
+            nlohmann::json train_move;
+            train_move["line_idx"] = 1;
+            train_move["speed"] = 1;
+            train_move["train_idx"] = 1;
+
+            pQueue.sendPacket(Packet(Action::MOVE, train_move));
+            pQueue.wait();
+
+            std::pair<Packet, int32_t> received = pQueue.receivePacket();
+            checkResult(received.first);
+
+            do_strategy = 1;
+            mapUpdated = false;
+        }
+
+        if (pQueue.anyReceived() == 0) {
+
+            message.clear();
+            message["layer"] = 1;
+            pQueue.sendPacket(Packet(Action::MAP, message));
+
+            // std::cout << "Will send packet!" << std::endl;
+            // pQueue.wait();
+
+            message.clear();
+            pQueue.sendPacket(Packet(Action::TURN, message));
+        }
+    }
+
 }
 
 
@@ -221,37 +286,6 @@ void main_strategy(){
     json message;
     nlohmann::json layer1;
 
-    auto train = Database::trains[1] -> position;
-    auto train_line_ixd = Database::trains[1] -> line -> idx;
 
-    std::cout << "Train pos:=" << train << " line idx=" << train_line_ixd << std::endl;
-
-    nlohmann::json train_move;
-    train_move["line_idx"] = 1;
-    train_move["speed"] = 1;
-    train_move["train_idx"] = 1;
-
-    pQueue.sendPacket(Packet(Action::MOVE, train_move));
-
-    while(1) {
-
-        /// refreshing map
-
-        message.clear();
-        message["layer"] = 1;
-        pQueue.sendPacket(Packet(Action::MAP, message));
-
-        pQueue.wait();
-        received = pQueue.receivePacket();
-        checkResult(received.first);
-        layer1 = received.first.getJson();
-
-        GraphController::applyLayer1(layer1)
-
-        Sleep(500);
-
-
-
-    }
 }
 
