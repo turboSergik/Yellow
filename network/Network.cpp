@@ -20,8 +20,7 @@ void Network::connect(const sf::IpAddress &address, unsigned short port) {
 void Network::update() {
     auto & packetQueue = PacketQueue::instance();
     packetQueue.update();
-    //TODO: pop from  queue while not empty
-    while (packetQueue.anyReceived()) {
+    while (!packetQueue.is_empty()) {
         auto pair = packetQueue.receivePacket();
         nlohmann::json receivedJson = pair.second.getJson();
         nlohmann::json sentJson = pair.first.getJson();
