@@ -8,9 +8,10 @@
 #include "../static/Database.h"
 #include "Post.h"
 #include "../static/Prefabs.h"
-#include "../Networking/Connection.hpp"
-#include "../Networking/PacketQueue.hpp"
-#include "../Networking/Packet.hpp"
+#include "../network/Connection.hpp"
+#include "../network/PacketQueue.hpp"
+#include "../network/Packet.hpp"
+#include "../network/Network.hpp"
 
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
@@ -30,6 +31,7 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
 }
 
 void GraphController::applyLayer1(const nlohmann::json &json) {
+    GraphController::layer1 = json;
     if (json.contains("posts")) {
         for (const auto &item : json["posts"]) {
             int idx = item.value("idx", -1);
@@ -85,6 +87,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
 }
 
 void GraphController::applyLayer0(const nlohmann::json &json) {
+    GraphController::layer0 = json;
     if (json.contains("points")) {
         for (const auto &item : json["points"]) {
             int idx = item.value("idx", -1);
@@ -153,46 +156,14 @@ void checkResult(const Packet & received) {
 }
 
 void GraphController::start() {
-    Connection::login();
+    Network::onLoginResponse.addListener<GraphController, &GraphController::onLogin>(this);
+    Network::onMap0Response.addListener<GraphController, &GraphController::onMapLayer0>(this);
+    Network::onMap1Response.addListener<GraphController, &GraphController::onMapLayer1>(this);
 
-    PacketQueue & pQueue = PacketQueue::instance();
-    json message;
-    message["name"] = "Pasha";
-    pQueue.sendPacket(Packet(Action::LOGIN, message));
-
-
-    pQueue.wait();
-
-    std::pair<Packet, int32_t> received = pQueue.receivePacket();
-
-    checkResult(received.first);
-
-    playerInfo = received.first.getJson();
-
-    nlohmann::json layer0, layer1;
-
-    message.clear();
-
-    message["layer"] = 0;
-    pQueue.sendPacket(Packet(Action::MAP, message));
-
-    message.clear();
-    message["layer"] = 1;
-    pQueue.sendPacket(Packet(Action::MAP, message));
-
-    pQueue.wait();
-
-    received = pQueue.receivePacket();
-    checkResult(received.first);
-    layer0 = received.first.getJson();
-
-    received = pQueue.receivePacket();
-    checkResult(received.first);
-    layer1 = received.first.getJson();
-
-    GraphController::applyLayer0(layer0);
-    GraphController::applyLayer1(layer1);
-    GraphController::graphVisualizer.setGraph(GraphController::graph);
+    Network::connect("wgforge-srv.wargaming.net", 443);
+    Network::send(Action::LOGIN, {{"name", "Yellow"}});
+    Network::send(Action::MAP, {{"layer", 0}});
+    Network::send(Action::MAP, {{"layer", 1}});
 }
 
 void GraphController::update() {
@@ -200,4 +171,32 @@ void GraphController::update() {
     for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();
     }
+    //TODO: most of gameLogic
 }
+
+void GraphController::onDestroy() {
+    Network::onLoginResponse.removeListener<GraphController, &GraphController::onLogin>(this);
+    Network::onMap0Response.removeListener<GraphController, &GraphController::onMapLayer0>(this);
+    Network::onMap1Response.removeListener<GraphController, &GraphController::onMapLayer1>(this);
+}
+
+void GraphController::onLogin(const nlohmann::json & json) {
+    //TODO: handle when login received
+    playerInfo = json;
+}
+
+void GraphController::onMapLayer0(const nlohmann::json & json) {
+    //TODO: handle when layer0 received
+    if (GraphController::layer0 != json) {
+        GraphController::applyLayer0(json);
+        GraphController::graphVisualizer.setGraph(graph);
+    }
+}
+
+void GraphController::onMapLayer1(const nlohmann::json & json) {
+    //TODO: handle when layer1 received
+    if (GraphController::layer1 != json) {
+        GraphController::applyLayer1(json);
+    }
+}
+

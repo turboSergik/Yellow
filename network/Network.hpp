@@ -8,6 +8,7 @@
 
 #include <utility>
 #include <list>
+#include <SFML/Network/IpAddress.hpp>
 #include "../utility/json.hpp"
 #include "Packet.hpp"
 
@@ -63,9 +64,12 @@ public:
     static Event<const nlohmann::json &> onLoginResponse;
     static Event<const nlohmann::json &> onPlayerResponse;
     static Event<const nlohmann::json &> onGamesResponse;
-    
+
+    static void connect(const sf::IpAddress & address, unsigned short port);
+    static void disconnect();
     static void update();
-    static void send(Action action, nlohmann::json &);
+    //TODO: optimaze this function parameters
+    static void send(Action action, nlohmann::json);
 };
 
 

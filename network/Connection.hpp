@@ -5,7 +5,7 @@
 #include <SFML/Network/IpAddress.hpp>
 #include <cstdint>
 
-class Connection : protected sf::TcpSocket {
+class Connection : public sf::TcpSocket {
     Connection() {}
     Connection(const Connection &) = delete;
     Connection(Connection &&) = delete;
@@ -20,9 +20,8 @@ protected:
     
     friend class PacketQueue;
 public:
-    static void login();
     static Connection & instance();
-    static void logout();
+    void disconnect();
     ~Connection();
 };
 
