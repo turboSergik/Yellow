@@ -21,7 +21,7 @@ void Network::update() {
     auto & packetQueue = PacketQueue::instance();
     packetQueue.update();
     //TODO: pop from  queue while not empty
-    if (packetQueue.anyReceived()) {
+    while (packetQueue.anyReceived()) {
         auto pair = packetQueue.receivePacket();
         nlohmann::json receivedJson = pair.second.getJson();
         nlohmann::json sentJson = pair.first.getJson();

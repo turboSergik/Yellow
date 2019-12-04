@@ -30,7 +30,7 @@ public:
 template<class... Args>
 template<class TClass, void (TClass::*Method)(Args...)>
 void Event<Args...>::getMethod(void * objPtr, Args... args) {
-    return (static_cast<TClass*>(objPtr)->*Method)(std::forward(args)...);
+    return (static_cast<TClass*>(objPtr)->*Method)(std::forward<Args>(args)...);
 }
 
 template<class... Args>
