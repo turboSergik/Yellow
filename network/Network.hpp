@@ -70,6 +70,7 @@ public:
     static void update();
     //TODO: optimaze this function parameters
     static void send(Action action, nlohmann::json);
+    static void send(Action action);
 };
 
 

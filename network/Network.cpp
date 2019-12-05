@@ -42,6 +42,7 @@ void Network::update() {
                 break;
             case Action::GAMES:
                 onGamesResponse.invoke(receivedJson);
+                break;
             default: 
                 break;
         }
@@ -51,6 +52,11 @@ void Network::update() {
 void Network::send(Action action, nlohmann::json json) {
     auto & packetQueue = PacketQueue::instance();
     packetQueue.sendPacket(Packet(action, std::move(json)));
+}
+
+void Network::send(Action action) {
+    auto & packetQueue = PacketQueue::instance();
+    packetQueue.sendPacket(Packet(action));
 }
 
 void Network::disconnect() {
