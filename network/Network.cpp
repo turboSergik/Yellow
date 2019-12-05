@@ -10,6 +10,7 @@ Event<const nlohmann::json &> Network::onMap1Response;
 Event<const nlohmann::json &> Network::onLoginResponse;
 Event<const nlohmann::json &> Network::onPlayerResponse;
 Event<const nlohmann::json &> Network::onGamesResponse;
+Event<> Network::onTurn;
 
 
 void Network::connect(const sf::IpAddress &address, unsigned short port) {
@@ -41,6 +42,8 @@ void Network::update() {
                 break;
             case Action::GAMES:
                 onGamesResponse.invoke(receivedJson);
+            case Action::TURN:
+                onTurn.invoke();
             default: 
                 break;
         }
