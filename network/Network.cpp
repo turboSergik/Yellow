@@ -10,6 +10,7 @@ Event<const nlohmann::json &> Network::onMap1Response;
 Event<const nlohmann::json &> Network::onLoginResponse;
 Event<const nlohmann::json &> Network::onPlayerResponse;
 Event<const nlohmann::json &> Network::onGamesResponse;
+Event<> Network::onTurn;
 
 
 void Network::connect(const sf::IpAddress &address, unsigned short port) {
@@ -20,8 +21,7 @@ void Network::connect(const sf::IpAddress &address, unsigned short port) {
 void Network::update() {
     auto & packetQueue = PacketQueue::instance();
     packetQueue.update();
-    //TODO: pop from  queue while not empty
-    while (packetQueue.anyReceived()) {
+    while (!packetQueue.is_empty()) {
         auto pair = packetQueue.receivePacket();
         nlohmann::json receivedJson = pair.second.getJson();
         nlohmann::json sentJson = pair.first.getJson();
@@ -42,6 +42,8 @@ void Network::update() {
                 break;
             case Action::GAMES:
                 onGamesResponse.invoke(receivedJson);
+            case Action::TURN:
+                onTurn.invoke();
             default: 
                 break;
         }
