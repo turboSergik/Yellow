@@ -64,6 +64,7 @@ public:
     static Event<const nlohmann::json &> onLoginResponse;
     static Event<const nlohmann::json &> onPlayerResponse;
     static Event<const nlohmann::json &> onGamesResponse;
+    static Event<> onTurn;
 
     static void connect(const sf::IpAddress & address, unsigned short port);
     static void disconnect();

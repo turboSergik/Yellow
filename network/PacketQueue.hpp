@@ -31,7 +31,7 @@ class PacketQueue {
 public:
     void update();
     void sendPacket(Packet);
-    bool anyReceived();
+    bool is_empty();
     
     static PacketQueue & instance();
     
