@@ -63,8 +63,8 @@ void PacketQueue::sendPacket(Packet packet) {
     sendedQueue.push(std::move(packet));
 }
 
-bool PacketQueue::is_empty() {
-    return receiveQueue.empty();
+bool PacketQueue::hasReceived() {
+    return !receiveQueue.empty();
 }
 
 PacketQueue & PacketQueue::instance() {
