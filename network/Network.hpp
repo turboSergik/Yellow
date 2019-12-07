@@ -58,6 +58,7 @@ void Event<Args...>::invoke(Args... args) {
 
 class Network {
 private:
+    static bool validatePacket(const Packet & packet);
 public:
     static Event<const nlohmann::json &> onMap0Response;
     static Event<const nlohmann::json &> onMap1Response;
@@ -71,6 +72,7 @@ public:
     static void update();
     //TODO: optimaze this function parameters
     static void send(Action action, nlohmann::json);
+    static void send(Action action);
 };
 
 
