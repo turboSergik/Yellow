@@ -192,6 +192,8 @@ void GraphController::onMapLayer0(const nlohmann::json & json) {
     if (GraphController::layer0 != json) {
         GraphController::applyLayer0(json);
         GraphController::graphVisualizer.setGraph(graph);
+    } else {
+        Network::send(Action::MAP, {{"layer", 0}});
     }
 }
 
@@ -199,6 +201,8 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     //TODO: handle when layer1 received
     if (GraphController::layer1 != json) {
         GraphController::applyLayer1(json);
+    } else {
+        Network::send(Action::MAP, {{"layer", 1}});
     }
 }
 
