@@ -9,5 +9,3 @@ std::unordered_map<int, Line*> Database::lines;
 std::unordered_map<int, Post*> Database::posts;
 std::unordered_map<int, Train*> Database::trains;
 
-bool Database::is_map_updated = false;
-
