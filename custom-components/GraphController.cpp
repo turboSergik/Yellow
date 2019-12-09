@@ -285,11 +285,11 @@ void GraphController::update() {
 
     //TODO: most of gameLogic
 
-   main_strategy();
+    main_strategy();
 
 
 
-    sf::sleep(sf::milliseconds(100));
+    /// sf::sleep(sf::milliseconds(100));
 
 }
 

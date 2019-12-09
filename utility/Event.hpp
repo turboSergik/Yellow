@@ -38,7 +38,7 @@ void Event<Args...>::addListener(TClass *objPtr) {
 template<class... Args>
 template<class TClass, void (TClass::*Method)(Args...)>
 void Event<Args...>::removeListener(TClass *objPtr) {
-    listeners.erase(std::find_if(listeners.begin(), listeners.end(),
+    listeners.erase(find_if(listeners.begin(), listeners.end(),
                                  [&objPtr](std::pair<void *, void (*)(void *, Args...)> &pair) {
                                      return pair.first == objPtr &&
                                             pair.second == &Event<Args...>::getMethod<TClass, Method>;
