@@ -69,18 +69,13 @@ private:
     void sceneDestroy();
     
     friend class MethodsPool;
-    friend class GameObject;
     friend class Component;
 public:
     Transform * transform = nullptr; //TODO: prevent changes of this field
     GameObject();
     ~GameObject();
-    // void update();
     GameObject * instantiate();
     GameObject * instantiate(Transform * parent);
-
-//    template <class T>
-//    T * addComponent(const T *component);
 
     template <class T, class... Args>
     T * addComponent(Args &&... args);
@@ -88,7 +83,7 @@ public:
     template <class T>
     T * getComponent();
     
-    void immideateDestroy();
+    void destroyImmediate();
     void destroy();
 };
 

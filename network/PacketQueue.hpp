@@ -12,15 +12,12 @@ class PacketQueue {
     // queue of packets
     typedef std::queue<Packet, std::list<Packet>> PQueue;
 
-    // queue of sended codes
-    typedef std::queue<int32_t, std::list<int32_t>> CQueue;
-
     bool sending = true;
 
     PQueue sendQueue;
     PQueue receiveQueue;
 
-    CQueue codesQueue;
+    PQueue sendedQueue;
     Packet receivingPacket;
 
     PacketQueue() = default;
@@ -31,21 +28,18 @@ class PacketQueue {
 
     bool trySend();
     bool tryReceive();
-
-
 public:
     void update();
     void sendPacket(Packet);
-    bool anyReceived();
+    bool is_empty();
 
     static PacketQueue & instance();
-    int getSize();
 
     // receivePackets valid if only anyReceived
     // is true. If anyReceived returns false
     // behaviour is undefined
 
-    std::pair<Packet, int32_t> receivePacket();
+    std::pair<Packet, Packet> receivePacket();
 
     // wait answers
     void wait();

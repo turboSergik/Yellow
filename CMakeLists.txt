@@ -38,14 +38,14 @@ set(SOURCES
         core-components/renderers/CircleRenderer.cpp
         custom-components/CameraController.cpp
         static/Time.cpp
-        Networking/Connection.cpp
-        Networking/Packet.cpp
-        Networking/PacketQueue.cpp
+        network/Connection.cpp
+        network/Packet.cpp
+        network/PacketQueue.cpp
         custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
         static/Input.cpp
         static/MethodsPool.cpp
-        utility/methodWrapper.cpp)
+        utility/methodWrapper.cpp network/Network.cpp)
 
 add_executable(WG ${SOURCES})
 

@@ -21,6 +21,8 @@ public:
     static std::unordered_map<int, Line*> lines;
     static std::unordered_map<int, Post*> posts;
     static std::unordered_map<int, Train*> trains;
+
+    static bool is_map_updated;
 };
 
 

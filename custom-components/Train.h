@@ -27,6 +27,10 @@ public:
     //TODO: ask what this field store
     //"goods_type": null, WTF?
 
+    int move_type = 0;
+    int destiny = 0;
+    std::vector<int> need_way;
+
     void applyLayer1(const nlohmann::json &json) override;
     void update();
 };

@@ -14,7 +14,7 @@ class Component {
     std::list<Component *>::iterator componentPosition;
     
     size_t updatePosition = std::numeric_limits<size_t>::max();
-    void immideateDestroy();
+    void destroyImmediate();
     friend class GameObject;
     friend class MethodsPool;
 public:
