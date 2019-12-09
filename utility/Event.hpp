@@ -6,6 +6,7 @@
 #define WG_EVENT_HPP
 
 #include <list>
+#include <algorithm>
 
 
 template <class... Args>
