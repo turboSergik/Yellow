@@ -9,6 +9,11 @@
 
 
 class Train : public Behaviour {
+private:
+    sf::Vector2f lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t);
+    float cross(const sf::Vector2f & a, const sf::Vector2f & b);
+    float dot(const sf::Vector2f & a, const sf::Vector2f & b);
+    float magnitude(const sf::Vector2f & v);
 public:
     explicit Train(int idx);
 

@@ -18,6 +18,7 @@ public:
 
     explicit Line(int idx);
 
+    void start();
     void update();
     void applyLayer0(const nlohmann::json &json) override;
 };
