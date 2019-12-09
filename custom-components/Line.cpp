@@ -23,10 +23,11 @@ void Line::applyLayer0(const nlohmann::json &json) {
     }
 }
 
+void Line::start() {
+    lineRenderer = gameObject->getComponent<LineRenderer>();
+}
+
 void Line::update() {
-    if (!lineRenderer) {
-        lineRenderer = gameObject->getComponent<LineRenderer>();
-    }
     Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
     lineRenderer->setVertices({0, 0},
             transform->toLocalPosition(points[1]->transform->getPosition()));
