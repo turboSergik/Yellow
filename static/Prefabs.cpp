@@ -32,6 +32,7 @@ Train *Prefabs::train(int idx) {
     circleRenderer->circle.setOrigin(30, 30);
     circleRenderer->circle.setFillColor(sf::Color::Green);
     circleRenderer->circle.setPointCount(3);
+    circleRenderer->circle.setRotation(90);
     Train *train = obj->addComponent<Train>(idx);
     return train;
 }
