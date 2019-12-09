@@ -15,6 +15,12 @@ Packet::Packet(int code, json j) {
     processed = 0;
 }
 
+Packet::Packet(int code) : message(new uint8_t[8]) {
+    *reinterpret_cast<int32_t *>(message.get()) = code;
+    reinterpret_cast<uint32_t *>(message.get())[1] = 0;
+    processed = 0;
+}
+
 Packet::Packet(const Packet & p) : message(new uint8_t[p.getJsonSize() + 8]) {
     memcpy(message.get(), p.message.get(), p.getJsonSize() + 8);
     this->processed = p.processed;

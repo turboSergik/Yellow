@@ -24,6 +24,7 @@ protected:
     friend class PacketQueue;
 public:
     Packet(int code, json j);
+    Packet(int code);
     // you don't realy want to copy packets
     // so you should move them
     Packet(const Packet &);
