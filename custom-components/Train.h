@@ -9,6 +9,11 @@
 
 
 class Train : public Behaviour {
+private:
+    sf::Vector2f lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t);
+    float cross(const sf::Vector2f & a, const sf::Vector2f & b);
+    float dot(const sf::Vector2f & a, const sf::Vector2f & b);
+    float magnitude(const sf::Vector2f & v);
 public:
     explicit Train(int idx);
 
@@ -26,6 +31,10 @@ public:
     Line *line = nullptr;
     //TODO: ask what this field store
     //"goods_type": null, WTF?
+
+    int move_type = 0;
+    int destiny = 0;
+    std::vector<int> need_way;
 
     void applyLayer1(const nlohmann::json &json) override;
     void update();

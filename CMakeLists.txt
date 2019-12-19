@@ -45,7 +45,10 @@ set(SOURCES
         utility/GraphVisualizer.cpp
         static/Input.cpp
         static/MethodsPool.cpp
-        utility/methodWrapper.cpp network/Network.cpp)
+        utility/methodWrapper.cpp
+        network/Network.cpp
+        utility/Event.cpp
+        custom-components/PlayerController.cpp)
 
 add_executable(WG ${SOURCES})
 

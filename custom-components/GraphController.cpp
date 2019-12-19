@@ -12,9 +12,7 @@
 #include "../network/PacketQueue.hpp"
 #include "../network/Packet.hpp"
 #include "../network/Network.hpp"
-
-void main_strategy();
-void refresh_map();
+#include "../static/Time.h"
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
@@ -33,6 +31,9 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
 }
 
 void GraphController::applyLayer1(const nlohmann::json &json) {
+    //TODO: find difference between jsons
+    playerController->markets.clear();
+    playerController->storages.clear();
     GraphController::layer1 = json;
     if (json.contains("posts")) {
         for (const auto &item : json["posts"]) {
@@ -54,6 +55,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
                             post = Prefabs::market(idx);
                             post->gameObject->instantiate();
                         }
+                        playerController->markets.push_back(static_cast<Market*>(post));
                         post->applyLayer1(item);
                         break;
                     }
@@ -62,6 +64,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
                             post = Prefabs::storage(idx);
                             post->gameObject->instantiate();
                         }
+                        playerController->storages.push_back(static_cast<Storage*>(post));
                         post->applyLayer1(item);
                         break;
                     }
@@ -73,7 +76,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
         }
     }
     if (json.contains("trains")) {
-        for (const auto &item : json["trains"]) {
+        for (const auto & item : json["trains"]) {
             int idx = item.value("idx", -1);
             if (idx == -1) {
                 continue;
@@ -86,12 +89,26 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
             train->applyLayer1(item);
         }
     }
+    playerController->playerTown = static_cast<Town*>(Database::posts[playerInfo["home"]["post_idx"]]);
+    if (playerInfo.contains("trains")) {
+        playerController->playerTrains.clear();
+        for (const auto & item : playerInfo["trains"]) {
+            int idx = item.value("idx", -1);
+            if (idx == -1) {
+                continue;
+            }
+            auto & train = Database::trains[idx];
+            if (train) {
+                playerController->playerTrains.push_back(train);
+            }
+        }
+    }
 }
 
 void GraphController::applyLayer0(const nlohmann::json &json) {
     GraphController::layer0 = json;
     if (json.contains("points")) {
-        for (const auto &item : json["points"]) {
+        for (const auto & item : json["points"]) {
             int idx = item.value("idx", -1);
             if (idx != -1) {
                 auto & point = Database::points[idx];
@@ -122,6 +139,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
             }
         }
     }
+    playerController->playerPoint = Database::points[playerInfo["home"]["idx"]];
 }
 
 void GraphController::applyForceMethod() {
@@ -133,7 +151,6 @@ void GraphController::applyForceMethod() {
     }
     center /= static_cast<float>(Database::points.size());
     GraphController::transform->setPosition(-center);
-    //Camera::mainCamera->transform->setLocalPosition(center);
 }
 
 void GraphController::applyForceMethodIteration() {
@@ -145,35 +162,24 @@ void GraphController::applyForceMethodIteration() {
     }
     center /= static_cast<float>(Database::points.size());
     GraphController::transform->setPosition(-center);
-    //Camera::mainCamera->transform->setLocalPosition(center);
-}
-
-void checkResult(const Packet & received) {
-    if (received.getFlag() != Result::OKEY) {
-        std::cout << "something went wrong. Returned code: " <<
-                     received.getFlag() << std::endl;
-        std::cout << received.getJson();
-        exit(1);
-    }
 }
 
 void GraphController::start() {
+    GraphController::playerController = gameObject->addComponent<PlayerController>();
     Network::onLoginResponse.addListener<GraphController, &GraphController::onLogin>(this);
     Network::onMap0Response.addListener<GraphController, &GraphController::onMapLayer0>(this);
     Network::onMap1Response.addListener<GraphController, &GraphController::onMapLayer1>(this);
 
     Network::connect("wgforge-srv.wargaming.net", 443);
-    Network::send(Action::LOGIN, {{"name", "Yellow"}});
+    Network::send(Action::LOGIN, {{"name", "Yellow2"}, {"game", "Yellow"}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
 }
 
 void GraphController::update() {
-
     for (int i = 0; i < 40; i++) {
         GraphController::applyForceMethodIteration();
     }
-    //TODO: most of gameLogic
 }
 
 void GraphController::onDestroy() {
@@ -192,6 +198,8 @@ void GraphController::onMapLayer0(const nlohmann::json & json) {
     if (GraphController::layer0 != json) {
         GraphController::applyLayer0(json);
         GraphController::graphVisualizer.setGraph(graph);
+    } else {
+        Network::send(Action::MAP, {{"layer", 0}});
     }
 }
 
@@ -199,19 +207,8 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     //TODO: handle when layer1 received
     if (GraphController::layer1 != json) {
         GraphController::applyLayer1(json);
+        playerController->isMapUpdated = true;
+    } else {
+        Network::send(Action::MAP, {{"layer", 1}});
     }
-}
-
-void main_strategy() {
-    auto train = Database::trains[1] -> position;
-    auto train_line_ixd = Database::trains[1] -> line -> idx;
-
-    std::cout << "Train pos:=" << train << " line idx=" << train_line_ixd << std::endl;
-
-    nlohmann::json train_move;
-    train_move["line_idx"] = 1;
-    train_move["speed"] = 1;
-    train_move["train_idx"] = 1;
-
-    Network::send(Action::MOVE, train_move);
 }

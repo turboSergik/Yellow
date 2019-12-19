@@ -13,18 +13,7 @@ Event<const nlohmann::json &> Network::onPlayerResponse;
 Event<const nlohmann::json &> Network::onGamesResponse;
 Event<> Network::onTurn;
 
-
-//enum Result
-//{
-//    OKEY = 0,
-//    BAD_COMMAND = 1,
-//    RESOURCE_NOT_FOUND = 2,
-//    ACCESS_DENIED = 3,
-//    INAPPROPRIATE_GAME_STATE = 4,
-//    TIMEOUT = 5,
-//    INTERNAL_SERVER_ERROR = 500
-//};
-
+//TODO: packetQueue should do this
 bool Network::validatePacket(const Packet & packet) {
     Result code = static_cast<Result>(packet.getFlag());
     switch (code) {
@@ -39,15 +28,15 @@ bool Network::validatePacket(const Packet & packet) {
             std::cerr << packet.getJson() << std::endl;
             return false;
         case ACCESS_DENIED:
-            std::cerr << "access denied" << std::endl;
+            std::cerr << "Access denied" << std::endl;
             std::cerr << packet.getJson() << std::endl;
             return false;
         case INAPPROPRIATE_GAME_STATE:
-            std::cerr << "Inappopriate game state" << std::endl;
+            std::cerr << "Inappropriate game state" << std::endl;
             std::cerr << packet.getJson() << std::endl;
             return false;
         case TIMEOUT:
-            std::cerr << "timeout" << std::endl;
+            std::cerr << "Timeout" << std::endl;
             std::cerr << packet.getJson() << std::endl;
             return false;
         case INTERNAL_SERVER_ERROR:
@@ -64,7 +53,7 @@ void Network::connect(const sf::IpAddress &address, unsigned short port) {
 void Network::update() {
     auto & packetQueue = PacketQueue::instance();
     packetQueue.update();
-    while (!packetQueue.is_empty()) {
+    while (packetQueue.hasReceived()) {
         auto pair = packetQueue.receivePacket();
         if (!validatePacket(pair.second)) {
             continue;
