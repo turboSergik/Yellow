@@ -19,8 +19,8 @@ enum PostType
 
 class Post : public Behaviour {
 public:
-    Point* point;
-    PostType type;
+    Point* point = nullptr;
+    PostType type = PostType::DEFAULT;
     std::string name;
 
     explicit Post(int idx);
@@ -29,15 +29,15 @@ public:
 
 class Town : public Post {
 public:
-    int armor;
-    int armor_capacity;
-    int level;
-    int next_level_price;
-    int population;
-    int population_capacity;
-    int product;
-    int product_capacity;
-    int train_cooldown;
+    int armor = 0;
+    int armor_capacity = 0;
+    int level = 0;
+    int next_level_price = 0;
+    int population = 0;
+    int population_capacity = 0;
+    int product = 0;
+    int product_capacity = 0;
+    int train_cooldown = 0;
     std::string player_idx;
 
     explicit Town(int idx);
@@ -46,9 +46,9 @@ public:
 
 class Market : public Post {
 public:
-    int product;
-    int product_capacity;
-    int replenishment;
+    int product = 0;
+    int product_capacity = 0;
+    int replenishment = 0;
 
     explicit Market(int idx);
     void applyLayer1(const nlohmann::json &json) override;
@@ -56,9 +56,9 @@ public:
 
 class Storage : public Post {
 public:
-    int armor;
-    int armor_capacity;
-    int replenishment;
+    int armor = 0;
+    int armor_capacity = 0;
+    int replenishment = 0;
 
     explicit Storage(int idx);
     void applyLayer1(const nlohmann::json &json) override;

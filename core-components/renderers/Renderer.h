@@ -17,9 +17,8 @@ private:
 public:
     static void draw(sf::RenderTarget &target, sf::RenderStates states);
 
-    Renderer();
-    ~Renderer();
-
+    void start();
+    void onDestroy();
     virtual void onDraw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 };
 

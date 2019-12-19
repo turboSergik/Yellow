@@ -24,11 +24,12 @@ protected:
     friend class PacketQueue;
 public:
     Packet(int code, json j);
+    Packet(int code);
     // you don't realy want to copy packets
     // so you should move them
-    Packet(const Packet &) = delete;
+    Packet(const Packet &);
     Packet(Packet &&);
-    Packet & operator=(const Packet &) = delete;
+    Packet & operator=(const Packet &);
     Packet & operator=(Packet &&);
     json getJson() const;
     // return Action or result of server depending

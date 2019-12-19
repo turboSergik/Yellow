@@ -31,20 +31,24 @@ set(SOURCES
         core/Transform.cpp
         core/Component.cpp
         core/GameObject.cpp
-        static/PrefabCreator.cpp
+        static/Prefabs.cpp
         core-components/renderers/LineRenderer.cpp
         core-components/renderers/Renderer.cpp
         core-components/renderers/SpriteRenderer.cpp
         core-components/renderers/CircleRenderer.cpp
         custom-components/CameraController.cpp
         static/Time.cpp
-        Networking/Connection.cpp
-        Networking/Packet.cpp
-        Networking/PacketQueue.cpp
+        network/Connection.cpp
+        network/Packet.cpp
+        network/PacketQueue.cpp
         custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
         static/Input.cpp
-        utility/methodWrapper.cpp)
+        static/MethodsPool.cpp
+        utility/methodWrapper.cpp
+        network/Network.cpp
+        utility/Event.cpp
+        custom-components/PlayerController.cpp)
 
 add_executable(WG ${SOURCES})
 

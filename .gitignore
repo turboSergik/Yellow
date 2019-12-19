@@ -37,4 +37,4 @@
 # Project folders
 build-*
 .idea
-
+/build/*

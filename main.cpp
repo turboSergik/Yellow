@@ -6,10 +6,11 @@
 #include "core-components/Camera.h"
 #include "core-components/renderers/Renderer.h"
 #include "core-components/renderers/CircleRenderer.h"
-#include "static/PrefabCreator.h"
+#include "static/Prefabs.h"
 #include "static/Time.h"
-#include "Networking/PacketQueue.hpp"
+#include "network/PacketQueue.hpp"
 #include "static/Input.hpp"
+#include "network/Network.hpp"
 
 int main() {
     srand(time(nullptr));
@@ -17,17 +18,14 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
     window.setFramerateLimit(60);
 
-    GameObject *root = PrefabCreator::createRoot()->gameObject;
-    //TODO: crate scene class which update will be called and that allow us have multiple root objects
-    Camera *mainCamera = PrefabCreator::createCamera(&window);
-    //mainCamera->transform->setParent(root->transform);
-    //mainCamera->setWidth(2000);
+    GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
+    Camera *mainCamera = Prefabs::camera(&window);
+    mainCamera->gameObject->instantiate();
 
     sf::Clock clock; // starts the clock
 
-    //Input & input = Input::instance();
     window.setKeyRepeatEnabled(false);
-    
+
     while (window.isOpen()) {
         sf::Event event{};
         Input::reset();
@@ -36,8 +34,8 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
+                root->destroyImmediate();
                 window.close();
-                delete root;
                 return 0;
             case sf::Event::Resized:
                 // update the view to the new size of the window
@@ -63,17 +61,16 @@ int main() {
             default:
                 break;
             }
-            
+
         }
+
         Time::deltaTime = clock.restart().asSeconds();
         window.clear();
-        root->update();
-        mainCamera->gameObject->update();
+        MethodsPool::update();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
-        
-        PacketQueue::instance().update();
+        Network::update();
     }
-    
+
     return 0;
 }

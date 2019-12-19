@@ -28,7 +28,7 @@ bool PacketQueue::tryReceive() {
                 receivingPacket = Packet();
                 return true;
             } else {
-                receivingPacket = Packet(receivingPacket.message.get());                
+                receivingPacket = Packet(receivingPacket.message.get());
             }
         } else {
             receivingPacket.process(received);
@@ -52,19 +52,19 @@ bool PacketQueue::tryReceive() {
 void PacketQueue::update() {
     if (sending) {
         // this means if not empty return !trySend()
-        sending = sendQueue.empty() || !trySend();        
+        sending = sendQueue.empty() || !trySend();
     } else {
         sending = tryReceive();
     }
 }
 
 void PacketQueue::sendPacket(Packet packet) {
-    int32_t code = *reinterpret_cast<int32_t *>(packet.message.get());
-     sendQueue.push(std::move(packet));
-    codesQueue.push(code);
+    sendQueue.push(packet);
+    sendedQueue.push(std::move(packet));
+
 }
 
-bool PacketQueue::anyReceived() {
+bool PacketQueue::hasReceived() {
     return !receiveQueue.empty();
 }
 
@@ -73,16 +73,16 @@ PacketQueue & PacketQueue::instance() {
     return singleton;
 }
 
-std::pair<Packet, int32_t> PacketQueue::receivePacket() {
-    Packet frontPacket = std::move(receiveQueue.front());
+std::pair<Packet, Packet> PacketQueue::receivePacket() {
+    Packet receivedPacket = std::move(receiveQueue.front());
     receiveQueue.pop();
-    int32_t code = codesQueue.front();
-    codesQueue.pop();
-    return std::make_pair(std::move(frontPacket), code);
+    Packet sendedPacket = std::move(sendedQueue.front());
+    sendedQueue.pop();
+    return std::make_pair(std::move(sendedPacket), std::move(receivedPacket));
 }
 
 void PacketQueue::wait() {
-    while (codesQueue.size() != receiveQueue.size()) {
+    while (sendedQueue.size() != receiveQueue.size()) {
         update();
     }
 }

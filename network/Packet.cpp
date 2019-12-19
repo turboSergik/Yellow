@@ -15,9 +15,26 @@ Packet::Packet(int code, json j) {
     processed = 0;
 }
 
+Packet::Packet(int code) : message(new uint8_t[8]) {
+    *reinterpret_cast<int32_t *>(message.get()) = code;
+    reinterpret_cast<uint32_t *>(message.get())[1] = 0;
+    processed = 0;
+}
+
+Packet::Packet(const Packet & p) : message(new uint8_t[p.getJsonSize() + 8]) {
+    memcpy(message.get(), p.message.get(), p.getJsonSize() + 8);
+    this->processed = p.processed;
+}
+
 Packet::Packet(Packet && rPacket) : 
     message(std::move(rPacket.message)),
     processed(rPacket.processed) {}
+
+Packet & Packet::operator=(const Packet & p) {
+    this->~Packet();
+    new (this) Packet(p);
+    return *this;
+}
 
 Packet & Packet::operator=(Packet && rPacket) {
     message = std::move(rPacket.message);

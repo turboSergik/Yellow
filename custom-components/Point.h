@@ -11,7 +11,8 @@ class Post;
 
 class Point : public Behaviour {
 public:
-    Post* post;
+    Post* post = nullptr;
+    std::list<std::pair<Point*, Line*>> adjacent;
 
     explicit Point(int idx);
     void applyLayer10(const nlohmann::json &json) override;
