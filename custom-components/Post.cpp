@@ -41,7 +41,10 @@ void Town::applyLayer1(const nlohmann::json &json) {
     Town::product = json.value("product", Town::product);
     Town::product_capacity = json.value("product_capacity", Town::product_capacity);
     Town::train_cooldown = json.value("train_cooldown", Town::train_cooldown);
-    Town::player_idx = json.value("player_idx", Town::player_idx);
+    if (json.contains("player_idx")) {
+        auto & player_idx = json["player_idx"];
+        Town::player_idx = player_idx == nullptr ? "" : player_idx;
+    }
 }
 
 Market::Market(int idx): Post(idx) {
