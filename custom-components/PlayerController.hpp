@@ -23,6 +23,9 @@ public:
 
     void update();
     void strategyIteration();
+    std::pair<std::vector<int>, int> trainWayToProducts(Train*);
+    std::pair<std::vector<int>, int> trainWayToStorage(Train*);
+
 };
 
 

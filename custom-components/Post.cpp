@@ -33,7 +33,9 @@ void Town::applyLayer1(const nlohmann::json &json) {
     Town::armor = json.value("armor", Town::armor);
     Town::armor_capacity = json.value("armor_capacity", Town::armor_capacity);
     Town::level = json.value("level", Town::level);
-    Town::next_level_price = json.value("next_level_price", Town::next_level_price);
+    /// Town::next_level_price = json.value("next_level_price", Town::next_level_price);
+    Town::next_level_price = 1488;
+
     Town::population = json.value("population", Town::population);
     Town::population_capacity = json.value("population_capacity", Town::population_capacity);
     Town::product = json.value("product", Town::product);

@@ -11,7 +11,7 @@
 const float PI = 3.14159265358f;
 
 Train::Train(int idx) : Behaviour(idx) {
-    
+
 }
 
 void Train::applyLayer1(const nlohmann::json &json) {
@@ -21,8 +21,16 @@ void Train::applyLayer1(const nlohmann::json &json) {
     Train::fuel_consumption = json.value("fuel_consumption", Train::fuel_consumption);
     Train::goods = json.value("goods", Train::goods);
     Train::goods_capacity = json.value("goods_capacity", Train::goods_capacity);
+
     Train::level = json.value("level", Train::level);
-    Train::next_level_price = json.value("next_level_price", Train::next_level_price);
+
+    /// Train::next_level_price = json.value("next_level_price", Train::next_level_price);
+    if (json.contains("next_level_price")){
+        auto &next_level_price = json["next_level_price"];
+        Train::next_level_price = next_level_price == nullptr ? 0 : next_level_price.get<int>();
+    }
+
+
     //applying order important
     if (json.contains("line_idx")) {
         auto & line_idx = json["line_idx"];
