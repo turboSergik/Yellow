@@ -34,7 +34,7 @@ public:
 
     int move_type = 0;
     int destiny = 0;
-    std::vector<int> need_way;
+    std::vector<int> needWay;
 
     void applyLayer1(const nlohmann::json &json) override;
     void update();

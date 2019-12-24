@@ -13,6 +13,8 @@
 #include <iostream>
 
 int f[300000];
+bool blockedEdges[300000];
+bool blockedVertex[300000];
 // std::vector<int> globalWays[300000];
 
 class El {
@@ -93,9 +95,6 @@ int storageProduct(int vertex) {
 
 
 std::vector<int> showWay(std::vector<int> &finalWay) {
-   // std::cout << "Way: ";
-   // for (auto ver : finalWay) std::cout << ver << " ";
-   // std::cout << std::endl;
     return finalWay;
 }
 
@@ -104,92 +103,70 @@ int getTrainVertex(Train* train) {
     else return train->line->points[1]->idx;
 }
 
-//TODO: move to class methods
-/// void calcTrainWay(Train*);
+
+void clearEdges() {
+    for (auto line : Database::lines) blockedEdges[line.second -> idx] = false;
+    for (auto train : Database::trains) {
+        if (train.second -> position != 0 &&
+             train.second -> position != train.second -> line -> length) blockedEdges[train.second -> line -> idx] = true;
+    }
+}
+
+
+void clearVertex() {
+    for (auto point : Database::points) blockedVertex[point.second -> idx] = false;
+    for (auto train : Database::trains) {
+        if (train.second -> position != 0 &&
+             train.second -> position != train.second -> line -> length) {
+                 if (train.second -> speed == 1) blockedVertex[train.second -> line -> points[1] -> idx] = true;
+                 else blockedVertex[train.second -> line -> points[0] -> idx] = true;
+             }
+    }
+}
+
+
 void trainIteration(Train*);
+void tryTrainUpdate(Train*);
 
 void PlayerController::update() {
+
+    int _count = 0;
+    for (auto train : PlayerController::playerTrains) {
+        if (_count < 2) train -> move_type = 1;
+        else  train -> move_type = 2;
+
+        _count += 1;
+    }
+
+    clearEdges();
+    clearVertex();
     PlayerController::timeFromLastTurn += Time::deltaTime;
     if (PlayerController::isMapUpdated && PlayerController::timeFromLastTurn > PlayerController::waitingTime) {
         //TODO: most of gameLogic
         strategyIteration();
         PlayerController::timeFromLastTurn = 0;
     }
+
 }
 
 void PlayerController::strategyIteration() {
+
     std::cout << "=====================================" << std::endl;
     std::cout << "Product=" << playerTown->product <<  " Armor=" << playerTown->armor  <<  " Population=" << playerTown->population << std::endl;
-
-    Train* mainTrain = playerTrains[0];
-    std::cout << "Train goods=" << mainTrain->goods << " level=" << mainTrain->level << " City_level=" << playerTown->level << std::endl;
-
-    if (playerTown->armor >= 40 && mainTrain->level == 1) {
-
-        json message;
-
-        std::vector<int> a{};
-        std::vector<int> b{mainTrain->idx};
-
-        message["posts"] = a;
-        message["trains"] = b;
-
-        mainTrain->level += 1;
-        std::cout << "UPGRADE TO LEVEL 2, MESSAGE=" << message << std::endl;
-        Network::send(Action::UPGRADE, message);
-    }
-
-    if (playerTown->armor >= 80 && mainTrain->level == 2) {
-
-        json message;
-
-        std::vector<int> a{};
-        std::vector<int> b{mainTrain->idx};
-
-        message["posts"] = a;
-        message["trains"] = b;
-
-        mainTrain->level += 1;
-        std::cout << "UPGRADE TO LEVEL 3, MESSAGE=" << message << std::endl;
-
-        Network::send(Action::UPGRADE, message);
-    }
-
-    if (mainTrain->level == 3) {
-        if (playerTown->armor >= 100 && playerTown->level == 1) {
-            json message;
-
-            std::vector<int> a{playerTown->idx};
-            std::vector<int> b{};
-
-            message["posts"] = a;
-            message["trains"] = b;
-
-            std::cout << "UPGRADE TOWN TO LEVEL 2, MESSAGE=" << message << std::endl;
-
-            playerTown->level += 1;
-            Network::send(Action::UPGRADE, message);
-        }
-        if (playerTown->armor >= 200 && playerTown->level == 2) {
-            json message;
-
-            std::vector<int> a{playerTown->idx};
-            std::vector<int> b{};
-
-            message["posts"] = a;
-            message["trains"] = b;
-
-            std::cout << "UPGRADE TOWN TO LEVEL 3, MESSAGE=" << message << std::endl;
-
-            playerTown->level += 1;
-            Network::send(Action::UPGRADE, message);
-        }
-    }
-
 
 
     //TODO: iterate over PlayerController::playerTrains
     for (auto train_now : PlayerController::playerTrains) {
+
+        tryTrainUpdate(train_now);
+        if (train_now -> cooldown != 0) {
+            std::cout << "Train idx=" << train_now -> idx << " lvl=" << train_now -> level << " IN COLL DOWN!" << std::endl;
+            train_now -> needWay.clear();
+            continue;
+        }
+
+        std::cout << "Train idx=" << train_now -> idx << " lvl=" << train_now -> level << " move type=" << train_now -> move_type << " point=" << train_now -> line -> points[0] -> idx << std::endl;
+
         if (train_now->move_type == 0) {
             train_now->move_type = 1;
             //TODO: move_type of trains + destiny;
@@ -197,16 +174,27 @@ void PlayerController::strategyIteration() {
         int train_pos = train_now->position;
         if (train_pos == 0 || train_pos == train_now->line->length) {
 
-            if (train_now->need_way.size() == 0) {
+            if (train_now->needWay.size() == 0) {
 
-                if (train_now->level <= 2 || playerTown->level <= 2) train_now->need_way = PlayerController::trainWayToStorage(train_now).first;
-                else train_now->need_way = PlayerController::trainWayToProducts(train_now).first;
+                if (train_now -> move_type == 1) train_now -> needWay = PlayerController::trainWayToProducts(train_now).first;
+                else if (train_now -> move_type == 2) {
+
+                    if (train_now->level <= 2 || playerTown->level <= 2) train_now->needWay = PlayerController::trainWayToStorage(train_now).first;
+                    else train_now->needWay = PlayerController::trainWayToProducts(train_now).first;
+                }
             }
-            trainIteration(train_now);
-            train_now->need_way.pop_back();
         }
-
     }
+
+    /// first for trains, which go to Town
+    for (auto train_now : PlayerController::playerTrains) {
+        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() == PlayerController::playerTown -> point -> idx) trainIteration(train_now);
+    }
+    /// then for other
+    for (auto train_now : PlayerController::playerTrains) {
+        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() != PlayerController::playerTown -> point -> idx) trainIteration(train_now);
+    }
+
     PlayerController::isMapUpdated = false;
     Network::send(Action::TURN);
     Network::send(Action::MAP, {{"layer", 1}});
@@ -345,7 +333,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
 
     std::cout << "Need way: " << std::endl;
     for (auto i : resultWay) {
-        std::cout << i - 332 << " ";
+        std::cout << i << " ";
     }
     std::cout << std::endl;
     /// std::cout << "Summary=" << summary1 + summary2 << std::endl;
@@ -497,43 +485,149 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
 
 void trainIteration(Train* train) {
     json message;
+
     message["train_idx"] = train->idx;
 
     if (train->position == 0 &&
-        train->line->points[1]->idx == train->need_way.back()) {
+        train->line->points[1]->idx == train->needWay.back()) {
+
+        if (blockedEdges[train->line->idx] == true) return;
+        if (blockedVertex[train->needWay.back()]) return;
+
+        blockedEdges[train->line->idx] = true;
+        blockedVertex[train->needWay.back()] = true;
 
         message["speed"] = 1;
         message["line_idx"] = train->line->idx;
         Network::send(Action::MOVE, message);
 
+        train->needWay.pop_back();
         return;
     }
     if (train->position != 0 &&
-        train->line->points[0]->idx == train->need_way.back()) {
+        train->line->points[0]->idx == train->needWay.back()) {
+
+        if (blockedEdges[train->line->idx] == true) return;
+        if (blockedVertex[train->needWay.back()]) return;
+
+        blockedEdges[train->line->idx] = true;
+        blockedVertex[train->needWay.back()] = true;
+
         message["speed"] = -1;
         message["line_idx"] = train->line->idx;
         Network::send(Action::MOVE, message);
 
+        train->needWay.pop_back();
         return;
     }
     //TODO: store way as array of lines
     for (auto line : Database::lines) {
         if (line.second->points[0]->idx == getTrainVertex(train) &&
-            line.second->points[1]->idx == train->need_way.back()) {
+            line.second->points[1]->idx == train->needWay.back()) {
+
+            if (blockedEdges[line.second->idx] == true) return;
+            if (blockedVertex[train->needWay.back()]) return;
+
+            blockedEdges[line.second->idx] = true;
+            blockedVertex[train->needWay.back()] = true;
+
             message["speed"] = 1;
             message["line_idx"] = line.second->idx;
             Network::send(Action::MOVE, message);
 
+            train->needWay.pop_back();
             return;
         }
 
         if (line.second->points[1]->idx == getTrainVertex(train) &&
-            line.second->points[0]->idx == train->need_way.back()) {
+            line.second->points[0]->idx == train->needWay.back()) {
+
+            if (blockedEdges[line.second->idx] == true) return;
+            if (blockedVertex[train->needWay.back()]) return;
+
+            blockedEdges[line.second->idx] = true;
+            blockedVertex[train->needWay.back()] = true;
+
             message["speed"] = -1;
             message["line_idx"] = line.second->idx;
             Network::send(Action::MOVE, message);
 
+
+            train->needWay.pop_back();
             return;
         }
     }
+}
+
+void PlayerController::tryTrainUpdate(Train* mainTrain) {
+
+    if (playerTown->armor >= 70 && mainTrain->level == 1) {
+
+        json message;
+
+        std::vector<int> a{};
+        std::vector<int> b{mainTrain->idx};
+
+        message["posts"] = a;
+        message["trains"] = b;
+
+        mainTrain->level += 1;
+        playerTown->armor -= 40;
+
+        std::cout << "UPGRADE TO LEVEL 2, MESSAGE=" << message << std::endl;
+        Network::send(Action::UPGRADE, message);
+    }
+
+    if (playerTown->armor >= 110 && mainTrain->level == 2) {
+
+        json message;
+
+        std::vector<int> a{};
+        std::vector<int> b{mainTrain->idx};
+
+        message["posts"] = a;
+        message["trains"] = b;
+
+        mainTrain->level += 1;
+        playerTown->armor -= 80;
+
+        std::cout << "UPGRADE TO LEVEL 3, MESSAGE=" << message << std::endl;
+
+        Network::send(Action::UPGRADE, message);
+    }
+
+    if (mainTrain->level == 3) {
+        if (playerTown->armor >= 130 && playerTown->level == 1) {
+            json message;
+
+            std::vector<int> a{playerTown->idx};
+            std::vector<int> b{};
+
+            message["posts"] = a;
+            message["trains"] = b;
+
+            std::cout << "UPGRADE TOWN TO LEVEL 2, MESSAGE=" << message << std::endl;
+
+            playerTown->level += 1;
+            playerTown->armor -= 100;
+
+            Network::send(Action::UPGRADE, message);
+        }
+        if (playerTown->armor >= 230 && playerTown->level == 2) {
+            json message;
+
+            std::vector<int> a{playerTown->idx};
+            std::vector<int> b{};
+
+            message["posts"] = a;
+            message["trains"] = b;
+
+            std::cout << "UPGRADE TOWN TO LEVEL 3, MESSAGE=" << message << std::endl;
+
+            playerTown->level += 1;
+            playerTown->armor -= 200;
+            Network::send(Action::UPGRADE, message);
+        }
+    }
+
 }

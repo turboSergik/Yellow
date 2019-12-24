@@ -22,9 +22,11 @@ public:
     bool isMapUpdated = false;
 
     void update();
+    void tryTrainUpdate(Train*);
     void strategyIteration();
     std::pair<std::vector<int>, int> trainWayToProducts(Train*);
     std::pair<std::vector<int>, int> trainWayToStorage(Train*);
+
 
 };
 
