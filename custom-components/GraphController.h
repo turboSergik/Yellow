@@ -18,14 +18,15 @@ private:
     nlohmann::json playerInfo;
     nlohmann::json layer0;
     nlohmann::json layer1;
+
+    void applyForceMethod();
+    void applyForceMethodIteration();
 public:
     std::unordered_map<int, std::list<int>> graph;
 
     void applyLayer0(const nlohmann::json& json);
     void applyLayer1(const nlohmann::json& json);
     void applyLayer10(const nlohmann::json& json);
-    void applyForceMethod();
-    void applyForceMethodIteration();
 
     void start();
     void update();
@@ -33,6 +34,7 @@ public:
     void onLogin(const nlohmann::json & json);
     void onMapLayer0(const nlohmann::json & json);
     void onMapLayer1(const nlohmann::json & json);
+    void onMapLayer10(const nlohmann::json & json);
 };
 
 

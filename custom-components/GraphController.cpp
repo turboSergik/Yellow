@@ -12,7 +12,6 @@
 #include "../network/PacketQueue.hpp"
 #include "../network/Packet.hpp"
 #include "../network/Network.hpp"
-#include "../static/Time.h"
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
@@ -143,7 +142,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
 }
 
 void GraphController::applyForceMethod() {
-    auto positions = graphVisualizer.forceMethod();
+    auto positions = graphVisualizer.getPositions();
     sf::Vector2f center = {0, 0};
     for (auto & pair : Database::points) {
         pair.second->transform->setLocalPosition(positions[pair.second->idx]);
@@ -154,61 +153,67 @@ void GraphController::applyForceMethod() {
 }
 
 void GraphController::applyForceMethodIteration() {
-    auto positions = graphVisualizer.forceMethodIteration();
+    GraphController::graphVisualizer.lock();
+    const auto & positions = GraphController::graphVisualizer.getPositions();
     sf::Vector2f center = {0, 0};
     for (auto & pair : Database::points) {
-        pair.second->transform->setLocalPosition(positions[pair.second->idx]);
-        center += positions[pair.second->idx];
+        pair.second->transform->setLocalPosition(positions.at(pair.second->idx));
+        center += positions.at(pair.second->idx);
     }
     center /= static_cast<float>(Database::points.size());
     GraphController::transform->setPosition(-center);
+    GraphController::graphVisualizer.unlock();
 }
 
 void GraphController::start() {
     GraphController::playerController = gameObject->addComponent<PlayerController>();
     Network::onLoginResponse.addListener<GraphController, &GraphController::onLogin>(this);
-    Network::onMap0Response.addListener<GraphController, &GraphController::onMapLayer0>(this);
-    Network::onMap1Response.addListener<GraphController, &GraphController::onMapLayer1>(this);
+    Network::onMapResponse0.addListener<GraphController, &GraphController::onMapLayer0>(this);
+    Network::onMapResponse1.addListener<GraphController, &GraphController::onMapLayer1>(this);
+    //Network::onMapResponse10.addListener<GraphController, &GraphController::onMapLayer10>(this);
 
     Network::connect("wgforge-srv.wargaming.net", 443);
     Network::send(Action::LOGIN, {{"name", "Yellow2"}, {"game", "Yellow"}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
+    //Network::send(Action::MAP, {{"layer", 10}});
 }
 
 void GraphController::update() {
-    for (int i = 0; i < 10; i++) {
-        GraphController::applyForceMethodIteration();
-    }
+    GraphController::applyForceMethodIteration();
 }
 
 void GraphController::onDestroy() {
     Network::onLoginResponse.removeListener<GraphController, &GraphController::onLogin>(this);
-    Network::onMap0Response.removeListener<GraphController, &GraphController::onMapLayer0>(this);
-    Network::onMap1Response.removeListener<GraphController, &GraphController::onMapLayer1>(this);
+    Network::onMapResponse0.removeListener<GraphController, &GraphController::onMapLayer0>(this);
+    Network::onMapResponse1.removeListener<GraphController, &GraphController::onMapLayer1>(this);
+    //Network::onMapResponse10.removeListener<GraphController, &GraphController::onMapLayer10>(this);
 }
 
 void GraphController::onLogin(const nlohmann::json & json) {
-    //TODO: handle when login received
     playerInfo = json;
 }
 
 void GraphController::onMapLayer0(const nlohmann::json & json) {
-    //TODO: handle when layer0 received
     if (GraphController::layer0 != json) {
         GraphController::applyLayer0(json);
-        GraphController::graphVisualizer.setGraph(graph);
+        //start ForceMethod
+        GraphController::graphVisualizer.setGraph(GraphController::graph);
+        GraphController::graphVisualizer.startForceMethodThread();
     } else {
         Network::send(Action::MAP, {{"layer", 0}});
     }
 }
 
 void GraphController::onMapLayer1(const nlohmann::json & json) {
-    //TODO: handle when layer1 received
     if (GraphController::layer1 != json) {
         GraphController::applyLayer1(json);
         playerController->isMapUpdated = true;
     } else {
         Network::send(Action::MAP, {{"layer", 1}});
     }
+}
+
+void GraphController::onMapLayer10(const nlohmann::json & json) {
+    std::cout << "Layer 10 exists" << std::endl;
 }
