@@ -10,46 +10,40 @@
 #include <list>
 #include <vector>
 #include <SFML/System/Vector2.hpp>
+#include <thread>
 
 class GraphVisualizer {
 private:
+    std::thread forceMethodThread;
+    std::mutex mutex;
     std::unordered_map<int, std::list<int>> graph;
     std::unordered_map<int, sf::Vector2f> positions;
     std::unordered_map<int, sf::Vector2f> velocities;
-    std::unordered_map<int, sf::Vector2f> fv;
+    std::unordered_map<int, sf::Vector2f> deltaVelocities;
     //TODO: optimize code
 
-    void add(
-            std::unordered_map<int, sf::Vector2f> &x,
-            const std::unordered_map<int, sf::Vector2f> &dx);
+    void increase(std::unordered_map<int, sf::Vector2f> & value,
+            const std::unordered_map<int, sf::Vector2f> & delta);
+    void forceMethodThreadFunction();
     float randFloat();
-    std::unordered_map<int, sf::Vector2f> randomPosition(
-            const std::unordered_map<int,
-                    std::list<int>> & graph, float max);
-    std::unordered_map<int, sf::Vector2f> randomVelocity(
-            const std::unordered_map<int,
-                    std::list<int>> & graph,
-            float max);
-    float forceSum(const std::unordered_map<int, sf::Vector2f> & forces);
+    std::unordered_map<int, sf::Vector2f> randomizePositions(float maxValue);
+    std::unordered_map<int, sf::Vector2f> randomizeVelocities(float maxValue);
+    float deltaVelocitiesSquaredSum();
     float friction(float v);
     float edge(float dl);
-    float noedge(float dl);
-    bool hasEdge(
-            const std::unordered_map<int,
-                    std::list<int>> & graph,
-            int from,
-            int to);
-    std::unordered_map<int, sf::Vector2f> force(
-            const std::unordered_map<int, std::list<int>> & graph,
-            const std::unordered_map<int, sf::Vector2f> & positions);
-    std::unordered_map<int, sf::Vector2f> ForceFrictionModel(
-            const std::unordered_map<int, std::list<int>> & graph,
-            std::unordered_map<int, sf::Vector2f> & positions,
-            std::unordered_map<int, sf::Vector2f> & velocities);
+    float notEdge(float dl);
+    bool isEdgeExists(int from, int to);
+    std::unordered_map<int, sf::Vector2f> calculateForces();
+    std::unordered_map<int, sf::Vector2f> forceFrictionModel();
 public:
+    ~GraphVisualizer();
     void setGraph(const std::unordered_map<int, std::list<int>> & graph);
+    const std::unordered_map<int, sf::Vector2f> & getPositions() const;
     const std::unordered_map<int, sf::Vector2<float>> & forceMethodIteration();
-    const std::unordered_map<int, sf::Vector2<float>> & forceMethod();
+    void startForceMethodThread();
+    bool isForceMethodFinished();
+    void lock();
+    void unlock();
 };
 
 
