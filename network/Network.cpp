@@ -6,8 +6,9 @@
 #include "PacketQueue.hpp"
 #include <iostream>
 
-Event<const nlohmann::json &> Network::onMap0Response;
-Event<const nlohmann::json &> Network::onMap1Response;
+Event<const nlohmann::json &> Network::onMapResponse0;
+Event<const nlohmann::json &> Network::onMapResponse1;
+Event<const nlohmann::json &> Network::onMapResponse10;
 Event<const nlohmann::json &> Network::onLoginResponse;
 Event<const nlohmann::json &> Network::onPlayerResponse;
 Event<const nlohmann::json &> Network::onGamesResponse;
@@ -64,9 +65,11 @@ void Network::update() {
         switch (actionCode) {
             case Action::MAP:
                 if (sentJson["layer"] == 0) {
-                    onMap0Response.invoke(receivedJson);                    
+                    onMapResponse0.invoke(receivedJson);
                 } else if (sentJson["layer"] == 1) {
-                    onMap1Response.invoke(receivedJson);
+                    onMapResponse1.invoke(receivedJson);
+                } else if (sentJson["layer"] == 10) {
+                    onMapResponse10.invoke(receivedJson);
                 }
                 break;
             case Action::LOGIN:
