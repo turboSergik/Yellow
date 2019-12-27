@@ -68,7 +68,7 @@ void Train::update() {
         float angle = k * acos(dot(direction, {1, 0})/magnitude)*180/PI;
         Train::transform->setRotation(angle);
     }
-    Train::transform->setPosition(Train::lerp(currentPosition, targetPosition, 0.1f));
+    Train::transform->setPosition(Train::lerp(currentPosition, targetPosition, 0.3f));
 }
 
 sf::Vector2f Train::lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t) {
