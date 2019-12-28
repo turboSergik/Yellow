@@ -127,6 +127,10 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::forceFrictionModel() {
     return forces;
 }
 
+GraphVisualizer::GraphVisualizer() {
+    stopThread.store(false, std::memory_order_relaxed);
+}
+
 const std::unordered_map<int, sf::Vector2<float>> & GraphVisualizer::forceMethodIteration() {
 
     GraphVisualizer::deltaVelocities = forceFrictionModel();
@@ -146,7 +150,7 @@ const std::unordered_map<int, sf::Vector2<float>> & GraphVisualizer::forceMethod
 void GraphVisualizer::forceMethodThreadFunction() {
     do {
         forceMethodIteration();
-    } while (!GraphVisualizer::isForceMethodFinished());
+    } while (!stopThread && !GraphVisualizer::isForceMethodFinished());
 }
 
 bool GraphVisualizer::isForceMethodFinished() {
@@ -171,5 +175,6 @@ void GraphVisualizer::unlock() {
 }
 
 GraphVisualizer::~GraphVisualizer() {
-    GraphVisualizer::forceMethodThread.std::thread::~thread();
+    stopThread = true;
+    GraphVisualizer::forceMethodThread.join();
 }

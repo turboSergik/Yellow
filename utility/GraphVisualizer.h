@@ -12,11 +12,13 @@
 #include <SFML/System/Vector2.hpp>
 #include <thread>
 #include <mutex>
+#include <atomic>
 
 class GraphVisualizer {
 private:
     std::thread forceMethodThread;
     std::mutex mutex;
+    std::atomic<bool> stopThread;
     std::unordered_map<int, std::list<int>> graph;
     std::unordered_map<int, sf::Vector2f> positions;
     std::unordered_map<int, sf::Vector2f> velocities;
@@ -37,6 +39,7 @@ private:
     std::unordered_map<int, sf::Vector2f> calculateForces();
     std::unordered_map<int, sf::Vector2f> forceFrictionModel();
 public:
+    GraphVisualizer();
     ~GraphVisualizer();
     void setGraph(const std::unordered_map<int, std::list<int>> & graph);
     const std::unordered_map<int, sf::Vector2f> & getPositions() const;
