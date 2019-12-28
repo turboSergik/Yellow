@@ -7,13 +7,14 @@
 
 
 #include "Renderer.h"
+#include "../../linalg/Vector2.hpp"
 
 class LineRenderer : public Renderer {
 private:
     sf::Vertex vertices[2];
 public:
     const sf::Vertex *getVertices() const;
-    void setVertices(const sf::Vector2f &v1, const sf::Vector2f &v2);
+    void setVertices(const lng::Vector2 &v1, const lng::Vector2 &v2);
     //TODO: add color change ability
     void onDraw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
