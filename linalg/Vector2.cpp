@@ -25,7 +25,7 @@ lng::Vector2 & lng::Vector2::operator+=(const sf::Vector2f & operand) {
 }
 
 lng::Vector2 lng::Vector2::operator-(const sf::Vector2f & operand) {
-    return lng::Vector2(this->x + operand.x, this->y + operand.y);
+    return lng::Vector2(this->x - operand.x, this->y - operand.y);
 }
 
 lng::Vector2 & lng::Vector2::operator-=(const sf::Vector2f & operand) {
@@ -35,7 +35,7 @@ lng::Vector2 & lng::Vector2::operator-=(const sf::Vector2f & operand) {
 }
 
 lng::Vector2 lng::Vector2::operator*(const sf::Vector2f & operand) {
-    return lng::Vector2(this->x + operand.x, this->y + operand.y);
+    return lng::Vector2(this->x * operand.x, this->y * operand.y);
 }
 
 lng::Vector2 & lng::Vector2::operator*=(const sf::Vector2f & operand) {
@@ -45,7 +45,7 @@ lng::Vector2 & lng::Vector2::operator*=(const sf::Vector2f & operand) {
 }
 
 lng::Vector2 lng::Vector2::operator/(const sf::Vector2f & operand) {
-    return lng::Vector2(this->x + operand.x, this->y + operand.y);
+    return lng::Vector2(this->x / operand.x, this->y / operand.y);
 }
 
 lng::Vector2 & lng::Vector2::operator/=(const sf::Vector2f & operand) {
