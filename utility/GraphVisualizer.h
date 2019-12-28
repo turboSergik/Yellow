@@ -11,6 +11,7 @@
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 #include <thread>
+#include <mutex>
 
 class GraphVisualizer {
 private:

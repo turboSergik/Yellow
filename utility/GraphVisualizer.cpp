@@ -14,9 +14,9 @@ const float dt = 0.01f;
 const float init_size = 200.f;
 const float maxVelocity = 50.f;
 
-const float k = 0.1f;
+const float k = 0.5f;
 const float q2 = 2000.f;
-const float gamma_s = 1.f;
+const float gamma_s = 0.05f;
 const float l0 = 100.f;
 
 
@@ -94,7 +94,7 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::calculateForces() {
         for (const auto & pairJ : GraphVisualizer::positions) {
             sf::Vector2f dv = pairI.second - pairJ.second;
             float dl = sqrtf(dv.x * dv.x + dv.y * dv.y);
-            if (dl == 0) {
+            if (dl == 0.f) {
                 continue;
             }
             float fs = isEdgeExists(pairI.first, pairJ.first)
@@ -117,7 +117,7 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::forceFrictionModel() {
         sf::Vector2f & vec = pair.second;
         float dl = sqrtf(vec.x * vec.x + vec.y * vec.y);
 
-        if (dl == 0) {
+        if (dl == 0.f) {
             continue;
         }
 
@@ -132,6 +132,10 @@ const std::unordered_map<int, sf::Vector2<float>> & GraphVisualizer::forceMethod
     GraphVisualizer::deltaVelocities = forceFrictionModel();
 
     increase(GraphVisualizer::velocities, deltaVelocities);
+    // dumpfer in case you need flexible system
+//    for (auto & vel : GraphVisualizer::velocities) {
+//        vel.second *= 0.977f;
+//    }
     GraphVisualizer::mutex.lock();
     increase(GraphVisualizer::positions, GraphVisualizer::velocities);
     GraphVisualizer::mutex.unlock();
