@@ -75,10 +75,10 @@ float lng::Vector2::magnitude() {
     return hypotf(this->x, this->y);
 }
 
-float lng::Vector2::dot(const sf::Vector2f & operand) {
-    return this->x * operand.x + this->y * operand.y;
+float lng::Vector2::dot(const sf::Vector2f & v1, const sf::Vector2f & v2) {
+    return v1.x * v2.x + v1.y * v2.y;
 }
 
-float lng::Vector2::cross(const sf::Vector2f & operand) {
-    return this->x * operand.y - operand.x * this->y;
+float lng::Vector2::cross(const sf::Vector2f & v1, const sf::Vector2f & v2) {
+    return v1.x * v2.y - v2.x * v1.y;
 }

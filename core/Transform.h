@@ -7,22 +7,23 @@
 
 #include <SFML/Graphics/Transform.hpp>
 #include <list>
+#include "../linalg/Vector2.hpp"
 
 class GameObject;
 
 class Transform {
 private:
-    sf::Vector2f position;
-    sf::Vector2f localPosition;
+    lng::Vector2 position;
+    lng::Vector2 localPosition;
     float rotation = 0;
     float localRotation = 0;
-    sf::Vector2f scale = {1, 1};
-    sf::Vector2f localScale = {1, 1};
+    lng::Vector2 scale = {1, 1};
+    lng::Vector2 localScale = {1, 1};
     sf::Transform localToWorld;
     sf::Transform worldToLocal;
 
-    sf::Vector2f up = {0, 1};
-    sf::Vector2f right = {1, 0};
+    lng::Vector2 up = {0, 1};
+    lng::Vector2 right = {1, 0};
 
     Transform *parent = nullptr;
     std::list<Transform*> children;
@@ -38,17 +39,17 @@ public:
     explicit Transform(GameObject *gameObject);
     ~Transform();
 
-    const sf::Vector2f &getUp() const;
+    const lng::Vector2 &getUp() const;
 
-    const sf::Vector2f &getRight() const;
+    const lng::Vector2 &getRight() const;
 
-    const sf::Vector2f &getPosition() const;
+    const lng::Vector2 &getPosition() const;
 
-    void setPosition(const sf::Vector2f &position);
+    void setPosition(const lng::Vector2 &position);
 
-    const sf::Vector2f &getLocalPosition() const;
+    const lng::Vector2 &getLocalPosition() const;
 
-    void setLocalPosition(const sf::Vector2f &localPosition);
+    void setLocalPosition(const lng::Vector2 &localPosition);
 
     float getRotation() const;
 
@@ -58,15 +59,15 @@ public:
 
     void setLocalRotation(float localRotation);
 
-    const sf::Vector2f &getScale() const;
+    const lng::Vector2 &getScale() const;
 
-    void setScale(const sf::Vector2f &scale);
+    void setScale(const lng::Vector2 &scale);
 
-    const sf::Vector2f &getLocalScale() const;
+    const lng::Vector2 &getLocalScale() const;
 
-    void setLocalScale(const sf::Vector2f &localScale);
+    void setLocalScale(const lng::Vector2 &localScale);
 
-    void setPositionAndRotation(const sf::Vector2f &position, float rotation);
+    void setPositionAndRotation(const lng::Vector2 &position, float rotation);
 
     Transform *getParent() const;
 
@@ -76,10 +77,10 @@ public:
 
     const sf::Transform &getWorldToLocalTransform() const;
 
-    sf::Vector2f toLocalPosition (const sf::Vector2f &position) const;
-    sf::Vector2f toLocalDirection (const sf::Vector2f &direction) const;
-    sf::Vector2f toGlobalPosition (const sf::Vector2f &position) const;
-    sf::Vector2f toGlobalDirection (const sf::Vector2f &direction) const;
+    lng::Vector2 toLocalPosition (const lng::Vector2 &position) const;
+    lng::Vector2 toLocalDirection (const lng::Vector2 &direction) const;
+    lng::Vector2 toGlobalPosition (const lng::Vector2 &position) const;
+    lng::Vector2 toGlobalDirection (const lng::Vector2 &direction) const;
     std::list<Transform*>::iterator begin();
     std::list<Transform*>::iterator end();
 };

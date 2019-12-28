@@ -143,7 +143,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
 
 void GraphController::applyForceMethod() {
     auto positions = graphVisualizer.getPositions();
-    sf::Vector2f center = {0, 0};
+    lng::Vector2 center = {0, 0};
     for (auto & pair : Database::points) {
         pair.second->transform->setLocalPosition(positions[pair.second->idx]);
         center += positions[pair.second->idx];
@@ -154,7 +154,7 @@ void GraphController::applyForceMethod() {
 
 void GraphController::applyForceMethodIteration() {    
     const auto & positions = GraphController::graphVisualizer.getPositions();
-    sf::Vector2f center = {0, 0};
+    lng::Vector2 center = {0, 0};
     GraphController::graphVisualizer.lock();
     for (auto & pair : Database::points) {
         pair.second->transform->setLocalPosition(positions.at(pair.second->idx));

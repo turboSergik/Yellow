@@ -57,8 +57,8 @@ public:
     Vector2 normalized();
     float sqrMagnitude();
     float magnitude();
-    float dot(const sf::Vector2f &);
-    float cross(const sf::Vector2f &);
+    static float dot(const sf::Vector2f &, const sf::Vector2f &);
+    static float cross(const sf::Vector2f &, const sf::Vector2f &);
     
 };
 

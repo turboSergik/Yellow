@@ -36,10 +36,10 @@ void Train::applyLayer1(const nlohmann::json &json) {
         auto & line_idx = json["line_idx"];
         if (line_idx != nullptr) {
 //            if (Train::line) {
-//                const sf::Vector2f &startPosition = Train::line->points[0]->transform->getPosition();
-//                const sf::Vector2f &endPosition = Train::line->points[1]->transform->getPosition();
-//                sf::Vector2f step = (endPosition - startPosition) / static_cast<float>(Train::line->length);
-//                sf::Vector2f targetPosition = startPosition + step * static_cast<float>(Train::position);
+//                const lng::Vector2 &startPosition = Train::line->points[0]->transform->getPosition();
+//                const lng::Vector2 &endPosition = Train::line->points[1]->transform->getPosition();
+//                lng::Vector2 step = (endPosition - startPosition) / static_cast<float>(Train::line->length);
+//                lng::Vector2 targetPosition = startPosition + step * static_cast<float>(Train::position);
 //                Train::transform->setPosition(targetPosition);
 //            }
             Train::line = Database::lines[line_idx];
@@ -56,12 +56,12 @@ void Train::applyLayer1(const nlohmann::json &json) {
 }
 
 void Train::update() {
-    const sf::Vector2f & startPosition = Train::line->points[0]->transform->getPosition();
-    const sf::Vector2f & endPosition = Train::line->points[1]->transform->getPosition();
-    sf::Vector2f step = (endPosition - startPosition) / static_cast<float>(Train::line->length);
-    sf::Vector2f targetPosition = startPosition + step * static_cast<float>(Train::position);
-    const sf::Vector2f & currentPosition = Train::transform->getPosition();
-    sf::Vector2f direction = targetPosition - currentPosition;
+    const lng::Vector2 & startPosition = Train::line->points[0]->transform->getPosition();
+    const lng::Vector2 & endPosition = Train::line->points[1]->transform->getPosition();
+    lng::Vector2 step = (endPosition - startPosition) / static_cast<float>(Train::line->length);
+    lng::Vector2 targetPosition = startPosition + step * static_cast<float>(Train::position);
+    const lng::Vector2 & currentPosition = Train::transform->getPosition();
+    lng::Vector2 direction = targetPosition - currentPosition;
     float magnitude = Train::magnitude(direction);
     if (magnitude != 0) {
         float k = cross( {1, 0}, direction) >= 0 ? 1 : -1;
@@ -71,18 +71,18 @@ void Train::update() {
     Train::transform->setPosition(Train::lerp(currentPosition, targetPosition, 0.3f));
 }
 
-sf::Vector2f Train::lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t) {
+lng::Vector2 Train::lerp(const lng::Vector2 & a, const lng::Vector2 & b, float t) {
     return a + (b-a)*t;
 }
 
-float Train::cross(const sf::Vector2f &a, const sf::Vector2f &b) {
+float Train::cross(const lng::Vector2 &a, const lng::Vector2 &b) {
     return a.x*b.y - a.y*b.x;
 }
 
-float Train::dot(const sf::Vector2f &a, const sf::Vector2f &b) {
+float Train::dot(const lng::Vector2 &a, const lng::Vector2 &b) {
     return a.x*b.x + a.y*b.y;
 }
 
-float Train::magnitude(const sf::Vector2f &v) {
+float Train::magnitude(const lng::Vector2 &v) {
     return sqrt(v.x*v.x + v.y*v.y);
 }

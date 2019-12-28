@@ -24,7 +24,7 @@ void Camera::setWindowSize(float width, float height) {
     Camera::renderTarget->setView(view);
 }
 
-void Camera::setWindowSize(const sf::Vector2f &size) {
+void Camera::setWindowSize(const lng::Vector2 &size) {
     Camera::view.setSize(2 * Camera::width, 2 * Camera::width * size.y / size.x);
     Camera::renderTarget->setView(view);
 }

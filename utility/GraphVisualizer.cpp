@@ -16,7 +16,7 @@ const float maxVelocity = 50.f;
 
 const float k = 0.5f;
 const float q2 = 2000.f;
-const float gamma_s = 0.05f;
+const float gamma_s = 0.1f;
 const float l0 = 100.f;
 
 
@@ -26,8 +26,8 @@ void GraphVisualizer::setGraph(const std::unordered_map<int, std::list<int>> & g
     GraphVisualizer::velocities = GraphVisualizer::randomizeVelocities(maxVelocity);
 }
 
-void GraphVisualizer::increase(std::unordered_map<int, sf::Vector2f> & value,
-        const std::unordered_map<int, sf::Vector2f> & delta) {
+void GraphVisualizer::increase(std::unordered_map<int, lng::Vector2> & value,
+        const std::unordered_map<int, lng::Vector2> & delta) {
     for (auto & pair : value) {
         pair.second += delta.at(pair.first) * dt;
     }
@@ -37,18 +37,18 @@ float GraphVisualizer::randFloat() {
     return static_cast<float>(rand())/static_cast<float>(RAND_MAX);
 }
 
-std::unordered_map<int, sf::Vector2f> GraphVisualizer::randomizePositions(float maxValue) {
-    std::unordered_map<int, sf::Vector2f> r;
+std::unordered_map<int, lng::Vector2> GraphVisualizer::randomizePositions(float maxValue) {
+    std::unordered_map<int, lng::Vector2> r;
     for (auto & pair : GraphVisualizer::graph) {
-        r[pair.first] = sf::Vector2f{randFloat(), randFloat()} * maxValue;
+        r[pair.first] = lng::Vector2{randFloat(), randFloat()} * maxValue;
     }
     return r;
 }
 
-std::unordered_map<int, sf::Vector2f> GraphVisualizer::randomizeVelocities(float maxValue) {
-    std::unordered_map<int, sf::Vector2f> r;
+std::unordered_map<int, lng::Vector2> GraphVisualizer::randomizeVelocities(float maxValue) {
+    std::unordered_map<int, lng::Vector2> r;
     for (auto & pair : GraphVisualizer::graph) {
-        r[pair.first] = sf::Vector2f{randFloat() - 1, randFloat() - 1} * maxValue;
+        r[pair.first] = lng::Vector2{randFloat() - 1, randFloat() - 1} * maxValue;
     }
     return r;
 }
@@ -56,7 +56,7 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::randomizeVelocities(float
 float GraphVisualizer::deltaVelocitiesSquaredSum() {
     return std::accumulate(
             GraphVisualizer::deltaVelocities.begin(), GraphVisualizer::deltaVelocities.end(), 0.f,
-            [](float first, const std::pair<int, sf::Vector2f> &pair) {
+            [](float first, const std::pair<int, lng::Vector2> &pair) {
                 return first + sqrtf(pair.second.x * pair.second.x +
                                      pair.second.y * pair.second.y);
             });
@@ -84,15 +84,15 @@ bool GraphVisualizer::isEdgeExists(int from, int to) {
     return false;
 }
 
-std::unordered_map<int, sf::Vector2f> GraphVisualizer::calculateForces() {
-    std::unordered_map<int, sf::Vector2f> forces;
+std::unordered_map<int, lng::Vector2> GraphVisualizer::calculateForces() {
+    std::unordered_map<int, lng::Vector2> forces;
     for (const auto & pair : GraphVisualizer::positions) {
         forces[pair.first] = {0.f, 0.f};
     }
 
     for (const auto & pairI : GraphVisualizer::positions) {
         for (const auto & pairJ : GraphVisualizer::positions) {
-            sf::Vector2f dv = pairI.second - pairJ.second;
+            lng::Vector2 dv = pairI.second - pairJ.second;
             float dl = sqrtf(dv.x * dv.x + dv.y * dv.y);
             if (dl == 0.f) {
                 continue;
@@ -100,7 +100,7 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::calculateForces() {
             float fs = isEdgeExists(pairI.first, pairJ.first)
                        ? edge(dl) : notEdge(dl);
 
-            sf::Vector2f f = fs * dv;
+            lng::Vector2 f = fs * dv;
 
             forces[pairI.first] += f;
             forces[pairJ.first] -= f;
@@ -110,11 +110,11 @@ std::unordered_map<int, sf::Vector2f> GraphVisualizer::calculateForces() {
     return forces;
 }
 
-std::unordered_map<int, sf::Vector2f> GraphVisualizer::forceFrictionModel() {
-    std::unordered_map<int, sf::Vector2f> forces = calculateForces();
+std::unordered_map<int, lng::Vector2> GraphVisualizer::forceFrictionModel() {
+    std::unordered_map<int, lng::Vector2> forces = calculateForces();
 
     for (auto & pair : GraphVisualizer::velocities) {
-        sf::Vector2f & vec = pair.second;
+        lng::Vector2 & vec = pair.second;
         float dl = sqrtf(vec.x * vec.x + vec.y * vec.y);
 
         if (dl == 0.f) {
@@ -131,7 +131,7 @@ GraphVisualizer::GraphVisualizer() {
     stopThread.store(false, std::memory_order_relaxed);
 }
 
-const std::unordered_map<int, sf::Vector2<float>> & GraphVisualizer::forceMethodIteration() {
+const std::unordered_map<int, lng::Vector2> & GraphVisualizer::forceMethodIteration() {
 
     GraphVisualizer::deltaVelocities = forceFrictionModel();
 
@@ -157,7 +157,7 @@ bool GraphVisualizer::isForceMethodFinished() {
     return deltaVelocitiesSquaredSum() < eps * GraphVisualizer::graph.size();
 }
 
-const std::unordered_map<int, sf::Vector2f> & GraphVisualizer::getPositions() const {
+const std::unordered_map<int, lng::Vector2> & GraphVisualizer::getPositions() const {
     return GraphVisualizer::positions;
 }
 

@@ -6,14 +6,14 @@
 #define WG_TRAIN_H
 
 #include "Behaviour.h"
-
+#include "../linalg/Vector2.hpp"
 
 class Train : public Behaviour {
 private:
-    sf::Vector2f lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t);
-    float cross(const sf::Vector2f & a, const sf::Vector2f & b);
-    float dot(const sf::Vector2f & a, const sf::Vector2f & b);
-    float magnitude(const sf::Vector2f & v);
+    lng::Vector2 lerp(const lng::Vector2 & a, const lng::Vector2 & b, float t);
+    float cross(const lng::Vector2 & a, const lng::Vector2 & b);
+    float dot(const lng::Vector2 & a, const lng::Vector2 & b);
+    float magnitude(const lng::Vector2 & v);
 public:
     explicit Train(int idx);
 
