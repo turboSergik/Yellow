@@ -20,8 +20,6 @@ public:
     float angularVelocity = 0;
     float angularAcceleration = 0;
 
-    lng::Vector2 normalized(const lng::Vector2 & v);
-    float dot (const lng::Vector2 & v1, const lng::Vector2 & v2);
     void update();
     void addForce(lng::Vector2 force);
     void addForceAtPosition(lng::Vector2 force, lng::Vector2 position);
