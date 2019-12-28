@@ -152,18 +152,17 @@ void GraphController::applyForceMethod() {
     GraphController::transform->setPosition(-center);
 }
 
-void GraphController::applyForceMethodIteration() {
-    GraphController::graphVisualizer.lock();
+void GraphController::applyForceMethodIteration() {    
     const auto & positions = GraphController::graphVisualizer.getPositions();
-    GraphController::graphVisualizer.unlock();
     sf::Vector2f center = {0, 0};
+    GraphController::graphVisualizer.lock();
     for (auto & pair : Database::points) {
         pair.second->transform->setLocalPosition(positions.at(pair.second->idx));
         center += positions.at(pair.second->idx);
     }
+    GraphController::graphVisualizer.unlock();
     center /= static_cast<float>(Database::points.size());
     GraphController::transform->setPosition(-center);
-    
 }
 
 void GraphController::start() {
