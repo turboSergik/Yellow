@@ -116,6 +116,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
                     point->gameObject->instantiate(GraphController::transform);
                 }
                 point->applyLayer0(item);
+                point->transform->setPosition(randomVector());
             }
         }
     }
@@ -138,7 +139,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
             }
         }
     }
-    playerController->playerPoint = Database::points[playerInfo["home"]["idx"]];
+    //playerController->playerPoint = Database::points[playerInfo["home"]["idx"]];
 }
 
 void GraphController::applyForceMethod() {
@@ -177,10 +178,28 @@ void GraphController::start() {
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
     //Network::send(Action::MAP, {{"layer", 10}});
+
+    //Test mode
+//    std::ifstream fin("graphs/graph3.json");
+//    fin >> GraphController::layer0;
+//    fin.close();
+//    applyLayer0(GraphController::layer0);
 }
 
 void GraphController::update() {
-    GraphController::applyForceMethodIteration();
+    //GraphController::applyForceMethodIteration();
+    for (const auto & pair1 : Database::points) {
+        const auto & point1 = pair1.second;
+        for (const auto & pair2 : Database::points) {
+            const auto &point2 = pair2.second;
+            if (point1 == point2) continue;
+            sf::Vector2f direction = point2->transform->getPosition() - point1->transform->getPosition();
+            float magnitude = sqrtf(direction.x * direction.x + direction.y * direction.y);
+            direction /= magnitude;
+            point2->rigidBody->addForce(
+                    GraphController::sqrCharge / magnitude  * direction);
+        }
+    }
 }
 
 void GraphController::onDestroy() {
@@ -198,8 +217,8 @@ void GraphController::onMapLayer0(const nlohmann::json & json) {
     if (GraphController::layer0 != json) {
         GraphController::applyLayer0(json);
         //start ForceMethod
-        GraphController::graphVisualizer.setGraph(GraphController::graph);
-        GraphController::graphVisualizer.startForceMethodThread();
+        //GraphController::graphVisualizer.setGraph(GraphController::graph);
+        //GraphController::graphVisualizer.startForceMethodThread();
     } else {
         Network::send(Action::MAP, {{"layer", 0}});
     }
@@ -216,4 +235,9 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
 
 void GraphController::onMapLayer10(const nlohmann::json & json) {
     std::cout << "Layer 10 exists" << std::endl;
+}
+
+sf::Vector2f GraphController::randomVector() {
+    return {static_cast<float>(rand())/static_cast<float>(RAND_MAX)* 1000.f,
+            static_cast<float>(rand())/static_cast<float>(RAND_MAX)* 1000.f};
 }

@@ -13,6 +13,7 @@
 
 class GraphController : public Component {
 private:
+    float sqrCharge = 10.f;
     GraphVisualizer graphVisualizer;
     PlayerController * playerController;
     nlohmann::json playerInfo;
@@ -21,6 +22,7 @@ private:
 
     void applyForceMethod();
     void applyForceMethodIteration();
+    sf::Vector2f randomVector();
 public:
     std::unordered_map<int, std::list<int>> graph;
 
