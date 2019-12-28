@@ -4,7 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Event.hpp>
-#include <bitset>
+#include "../utility/ThreadSafeBitset.hpp"
 #include <array>
 
 class Input
@@ -12,19 +12,19 @@ class Input
     // sf::Keyboard::Return is last in int
     // enum, so it it + 1 is equal to numbers
     // of keys in enum
-    static std::bitset<sf::Keyboard::KeyCount> pressedKeys;
-    static std::bitset<sf::Keyboard::KeyCount> heldKeys;
-    static std::bitset<sf::Keyboard::KeyCount> releasedKeys;
+    static ThreadSafeBitset<sf::Keyboard::KeyCount> pressedKeys;
+    static ThreadSafeBitset<sf::Keyboard::KeyCount> heldKeys;
+    static ThreadSafeBitset<sf::Keyboard::KeyCount> releasedKeys;
 
-    static std::bitset<sf::Mouse::ButtonCount> pressedMouseButtons;
-    static std::bitset<sf::Mouse::ButtonCount> releasedMouseButtons;
-
-    static std::array<sf::Event::MouseButtonEvent,
+    static ThreadSafeBitset<sf::Mouse::ButtonCount> pressedMouseButtons;
+    static ThreadSafeBitset<sf::Mouse::ButtonCount> releasedMouseButtons;
+    
+    static std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
                sf::Mouse::ButtonCount> pressedMouseEvents;
 
-    static std::array<sf::Event::MouseButtonEvent,
+    static std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
                sf::Mouse::ButtonCount> releasedMouseEvents;
-
+    
     static sf::Event::MouseWheelScrollEvent wheelScrollEvent;
     static bool wheelScrolled;
 

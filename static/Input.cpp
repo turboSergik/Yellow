@@ -1,16 +1,16 @@
 #include "Input.hpp"
 
 //for keys
-std::bitset<sf::Keyboard::KeyCount> Input::pressedKeys;
-std::bitset<sf::Keyboard::KeyCount> Input::heldKeys;
-std::bitset<sf::Keyboard::KeyCount> Input::releasedKeys;
+ThreadSafeBitset<sf::Keyboard::KeyCount> Input::pressedKeys;
+ThreadSafeBitset<sf::Keyboard::KeyCount> Input::heldKeys;
+ThreadSafeBitset<sf::Keyboard::KeyCount> Input::releasedKeys;
 
 //for mouse buttons
-std::bitset<sf::Mouse::ButtonCount> Input::pressedMouseButtons;
-std::bitset<sf::Mouse::ButtonCount> Input::releasedMouseButtons;
-std::array<sf::Event::MouseButtonEvent,
+ThreadSafeBitset<sf::Mouse::ButtonCount> Input::pressedMouseButtons;
+ThreadSafeBitset<sf::Mouse::ButtonCount> Input::releasedMouseButtons;
+std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
         sf::Mouse::ButtonCount> Input::pressedMouseEvents;
-std::array<sf::Event::MouseButtonEvent,
+std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
         sf::Mouse::ButtonCount> Input::releasedMouseEvents;
 
 sf::Event::MouseWheelScrollEvent Input::wheelScrollEvent;
@@ -39,41 +39,47 @@ void Input::addKeyReleased(sf::Event::KeyEvent keyEvent) {
 
 bool Input::isKeyDown(sf::Keyboard::Key key) {
     // assume you will not ask sf::Keybord::Unknown
-    return pressedKeys[static_cast<size_t>(key)];
+    return pressedKeys.get(static_cast<size_t>(key));
 }
 
 bool Input::isKeyUp(sf::Keyboard::Key key) {
-    return releasedKeys[static_cast<size_t>(key)];
+    return releasedKeys.get(static_cast<size_t>(key));
 }
 
 bool Input::isKey(sf::Keyboard::Key key) {
-    return heldKeys[static_cast<size_t>(key)];
+    return heldKeys.get(static_cast<size_t>(key));
 }
 
 void Input::addMouseButtonPressed(sf::Event::MouseButtonEvent buttonEvent) {
     pressedMouseButtons.set(buttonEvent.button);
-    pressedMouseEvents[buttonEvent.button] = buttonEvent;
+    pressedMouseEvents[buttonEvent.button].second.lock();
+    pressedMouseEvents[buttonEvent.button].first = buttonEvent;
+    pressedMouseEvents[buttonEvent.button].second.unlock();
 }
 
 void Input::addMouseButtonReleased(sf::Event::MouseButtonEvent buttonEvent) {
     releasedMouseButtons.set(buttonEvent.button);
-    releasedMouseEvents[buttonEvent.button] = buttonEvent;
+    releasedMouseEvents[buttonEvent.button].second.lock();
+    releasedMouseEvents[buttonEvent.button].first = buttonEvent;
+    releasedMouseEvents[buttonEvent.button].second.unlock();
 }
 
 bool Input::getMouseButtonPressed(sf::Mouse::Button button) {
-    return releasedMouseButtons[button];
+    return pressedMouseButtons.get(button);
 }
 
 bool Input::getMouseButtonReleased(sf::Mouse::Button button) {
-    return releasedMouseButtons[button];
+    return releasedMouseButtons.get(button);
 }
 
 sf::Event::MouseButtonEvent Input::getMBPressedEvent(sf::Mouse::Button button) {
-    return releasedMouseEvents[button];
+    std::lock_guard<std::mutex> lock(pressedMouseEvents[button].second);
+    return pressedMouseEvents[button].first;
 }
 
 sf::Event::MouseButtonEvent Input::getMBReleasedEvent(sf::Mouse::Button button) {
-    return releasedMouseEvents[button];
+    std::lock_guard<std::mutex> lock(releasedMouseEvents[button].second);
+    return releasedMouseEvents[button].first;
 }
 
 void Input::addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEvent) {
