@@ -31,6 +31,13 @@ void Line::update() {
     Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
     lineRenderer->setVertices({0, 0},
             transform->toLocalPosition(points[1]->transform->getPosition()));
+
+    sf::Vector2f direction = points[1]->transform->getPosition() - points[0]->transform->getPosition();
+    float magnitude = sqrtf(direction.x*direction.x + direction.y*direction.y);
+    direction /= magnitude;
+    float deltaLength = magnitude - Line::springLength;
+    points[0]->rigidBody->addForce(stiffnessK*deltaLength*direction);
+    points[1]->rigidBody->addForce(-stiffnessK*deltaLength*direction);
 }
 
 
