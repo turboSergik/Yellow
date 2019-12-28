@@ -28,10 +28,7 @@ void Point::start() {
 }
 
 void Point::update() {
-    float sqrMagnitude = rigidBody->velocity.x * rigidBody->velocity.x +
-            rigidBody->velocity.y*rigidBody->velocity.y;
-    float magnitude = sqrtf(sqrMagnitude);
-    lng::Vector2 direction = -rigidBody->velocity / magnitude;
-    rigidBody->addForce(direction * (frictionK * sqrMagnitude + dampK * magnitude));
-    //rigidBody->addForce(direction * (frictionK * sqrMagnitude));
+    lng::Vector2 direction = -rigidBody->velocity;
+    rigidBody->addForce(direction.normalized() *
+    (frictionK * direction.sqrMagnitude() + dampK * direction.magnitude()));
 }
