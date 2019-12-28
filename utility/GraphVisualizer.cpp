@@ -150,7 +150,7 @@ const std::unordered_map<int, sf::Vector2<float>> & GraphVisualizer::forceMethod
 void GraphVisualizer::forceMethodThreadFunction() {
     do {
         forceMethodIteration();
-    } while (!stopThread && !GraphVisualizer::isForceMethodFinished());
+    } while (!stopThread.load(std::memory_order_acquire) && !GraphVisualizer::isForceMethodFinished());
 }
 
 bool GraphVisualizer::isForceMethodFinished() {
@@ -175,6 +175,6 @@ void GraphVisualizer::unlock() {
 }
 
 GraphVisualizer::~GraphVisualizer() {
-    stopThread = true;
+    stopThread.store(true, std::memory_order_release);
     GraphVisualizer::forceMethodThread.join();
 }
