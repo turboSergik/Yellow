@@ -8,7 +8,6 @@ namespace lng {
 
 class Vector2 : public sf::Vector2f
 {
-    
 public:
     
     Vector2() = default;
@@ -17,7 +16,9 @@ public:
     typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     explicit Vector2(T);
     
-    template <typename T1, typename T2>
+    template <typename T1, typename T2,
+    typename = typename std::enable_if<std::is_arithmetic<T1>::value>::type,
+    typename = typename std::enable_if<std::is_arithmetic<T2>::value>::type>
     Vector2(T1, T2);
     
     Vector2(const Vector2 &) = default;
@@ -68,7 +69,7 @@ Vector2::Vector2(T initVal) {
     this->y = static_cast<float>(initVal);
 }
 
-template <typename T1, typename T2>
+template <typename T1, typename T2, typename, typename>
 Vector2::Vector2(T1 x, T2 y) {    
     this->x = static_cast<float>(x);
     this->y = static_cast<float>(y);
@@ -118,15 +119,15 @@ Vector2 operator*(const Vector2 & vector, T value) {
 template <typename T, 
 typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator/(T value, const Vector2 & vector) {
-    return Vector2(vector.x / static_cast<float>(value), 
-                   vector.y / static_cast<float>(value));
+    return Vector2(static_cast<float>(value) / vector.x, 
+                   static_cast<float>(value) / vector.y);
 }
 
 template <typename T, 
 typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator/(const Vector2 & vector, T value) {
-    return Vector2(static_cast<float>(value) / vector.x, 
-                   static_cast<float>(value) / vector.y);
+    return Vector2(vector.x / static_cast<float>(value), 
+                   vector.y / static_cast<float>(value));
 }
 
 template <typename T, typename>

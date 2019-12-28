@@ -4,10 +4,10 @@
 
 #include "RigidBody.hpp"
 
-void RigidBody::addForceAtPosition(sf::Vector2f force, sf::Vector2f position) {
-    sf::Vector2f rVector = worldCenterOfMass - position;
-    sf::Vector2f rForce = normalized(rVector) * dot(normalized(rVector), force);
-    sf::Vector2f iForce = force - rForce;
+void RigidBody::addForceAtPosition(lng::Vector2 force, lng::Vector2 position) {
+    lng::Vector2 rVector = worldCenterOfMass - position;
+    lng::Vector2 rForce = normalized(rVector) * dot(normalized(rVector), force);
+    lng::Vector2 iForce = force - rForce;
     addForce(rForce);
 
     //TODO: apply moment of inertia
@@ -16,17 +16,18 @@ void RigidBody::addForceAtPosition(sf::Vector2f force, sf::Vector2f position) {
 
 }
 
-sf::Vector2f RigidBody::normalized(const sf::Vector2f &v) {
+lng::Vector2 RigidBody::normalized(const lng::Vector2 &v) {
     float m = v.x*v.x + v.y*v.y;
     return v/m;
 }
 
-float RigidBody::dot(const sf::Vector2f &v1, const sf::Vector2f &v2) {
+float RigidBody::dot(const lng::Vector2 &v1, const lng::Vector2 &v2) {
     return v1.x*v2.x + v1.y*v2.y;
 }
 
 void RigidBody::update() {
     worldCenterOfMass = transform->toGlobalPosition(centerOfMass);
+    
     //translate
     transform->setPosition(transform->getPosition() + velocity * Time::deltaTime +
                            acceleration * Time::deltaTime * Time::deltaTime / 2.f);
@@ -40,6 +41,6 @@ void RigidBody::update() {
     angularAcceleration = 0;
 }
 
-void RigidBody::addForce(sf::Vector2f force) {
+void RigidBody::addForce(lng::Vector2 force) {
     acceleration += force/mass;
 }

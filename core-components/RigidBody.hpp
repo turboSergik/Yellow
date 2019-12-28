@@ -13,19 +13,19 @@
 class RigidBody : public Component {
 public:
     float mass = 1;
-    sf::Vector2f centerOfMass = {0, 0};
-    sf::Vector2f worldCenterOfMass = {0, 0};
-    sf::Vector2f velocity = {0, 0};
-    sf::Vector2f acceleration = {0, 0};
+    lng::Vector2 centerOfMass = {0, 0};
+    lng::Vector2 worldCenterOfMass = {0, 0};
+    lng::Vector2 velocity = {0, 0};
+    lng::Vector2 acceleration = {0, 0};
     float angularVelocity = 0;
     float angularAcceleration = 0;
 
-    sf::Vector2f normalized(const sf::Vector2f & v);
-    float dot (const sf::Vector2f & v1, const sf::Vector2f & v2);
+    lng::Vector2 normalized(const lng::Vector2 & v);
+    float dot (const lng::Vector2 & v1, const lng::Vector2 & v2);
     void update();
-    void addForce(sf::Vector2f force);
-    void addForceAtPosition(sf::Vector2f force, sf::Vector2f position);
-//    sf::Vector2f getRelativePointVelocity(const sf::Vector2f & point) {
+    void addForce(lng::Vector2 force);
+    void addForceAtPosition(lng::Vector2 force, lng::Vector2 position);
+//    lng::Vector2 getRelativePointVelocity(const lng::Vector2 & point) {
 //        return velocity + transform.transformDirection(
 //                Matrix3x3.Rotate(90).dot(point).mul(Math.toRadians(angularVelocity))));
 //    }

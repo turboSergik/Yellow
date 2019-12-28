@@ -22,7 +22,7 @@ private:
 
     void applyForceMethod();
     void applyForceMethodIteration();
-    sf::Vector2f randomVector();
+    lng::Vector2 randomVector();
 public:
     std::unordered_map<int, std::list<int>> graph;
 

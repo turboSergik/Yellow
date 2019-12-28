@@ -193,7 +193,7 @@ void GraphController::update() {
         for (const auto & pair2 : Database::points) {
             const auto &point2 = pair2.second;
             if (point1 == point2) continue;
-            sf::Vector2f direction = point2->transform->getPosition() - point1->transform->getPosition();
+            lng::Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
             float magnitude = sqrtf(direction.x * direction.x + direction.y * direction.y);
             direction /= magnitude;
             point2->rigidBody->addForce(
@@ -237,7 +237,7 @@ void GraphController::onMapLayer10(const nlohmann::json & json) {
     std::cout << "Layer 10 exists" << std::endl;
 }
 
-sf::Vector2f GraphController::randomVector() {
+lng::Vector2 GraphController::randomVector() {
     return {static_cast<float>(rand())/static_cast<float>(RAND_MAX)* 1000.f,
             static_cast<float>(rand())/static_cast<float>(RAND_MAX)* 1000.f};
 }

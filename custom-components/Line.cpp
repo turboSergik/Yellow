@@ -32,7 +32,7 @@ void Line::update() {
     lineRenderer->setVertices({0, 0},
             transform->toLocalPosition(points[1]->transform->getPosition()));
 
-    sf::Vector2f direction = points[1]->transform->getPosition() - points[0]->transform->getPosition();
+    lng::Vector2 direction = points[1]->transform->getPosition() - points[0]->transform->getPosition();
     float magnitude = sqrtf(direction.x*direction.x + direction.y*direction.y);
     direction /= magnitude;
     float deltaLength = magnitude - Line::springLength;
