@@ -176,5 +176,7 @@ void GraphVisualizer::unlock() {
 
 GraphVisualizer::~GraphVisualizer() {
     stopThread = true;
-    GraphVisualizer::forceMethodThread.join();
+    if (GraphVisualizer::forceMethodThread.joinable()) {
+        GraphVisualizer::forceMethodThread.join();
+    }
 }
