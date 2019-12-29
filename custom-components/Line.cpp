@@ -5,6 +5,7 @@
 #include "Line.h"
 #include "../static/Database.h"
 #include "../core/GameObject.h"
+#include "../utility/ForceMethodConfig.hpp"
 
 Line::Line(int idx) : Behaviour(idx) {
 
@@ -33,11 +34,9 @@ void Line::update() {
             transform->toLocalPosition(points[1]->transform->getPosition()));
 
     lng::Vector2 direction = points[1]->transform->getPosition() - points[0]->transform->getPosition();
-    float magnitude = sqrtf(direction.x*direction.x + direction.y*direction.y);
-    direction /= magnitude;
-    float deltaLength = magnitude - Line::springLength;
-    points[0]->rigidBody->addForce(stiffnessK*deltaLength*direction);
-    points[1]->rigidBody->addForce(-stiffnessK*deltaLength*direction);
+    float deltaLength = direction.magnitude() - ForceMethodConfig::springLength;
+    points[0]->rigidBody->addForce(ForceMethodConfig::stiffnessK * deltaLength * direction.normalized());
+    points[1]->rigidBody->addForce(-ForceMethodConfig::stiffnessK * deltaLength * direction.normalized());
 }
 
 

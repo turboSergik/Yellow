@@ -11,8 +11,6 @@
 
 class Line : public Behaviour {
 private:
-    float stiffnessK = 1.0f;
-    float springLength = 9.f;
     LineRenderer *lineRenderer = nullptr;
 public:
     int length = -1;

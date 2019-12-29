@@ -13,19 +13,14 @@
 
 class GraphController : public Component {
 private:
-    float sqrCharge = 10.f;
-    GraphVisualizer graphVisualizer;
+    float graphSize = 0.f;
     PlayerController * playerController;
     nlohmann::json playerInfo;
     nlohmann::json layer0;
     nlohmann::json layer1;
 
-    void applyForceMethod();
-    void applyForceMethodIteration();
     lng::Vector2 randomVector();
 public:
-    std::unordered_map<int, std::list<int>> graph;
-
     void applyLayer0(const nlohmann::json& json);
     void applyLayer1(const nlohmann::json& json);
     void applyLayer10(const nlohmann::json& json);
