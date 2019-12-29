@@ -25,6 +25,7 @@ class Input
     static std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
                sf::Mouse::ButtonCount> releasedMouseEvents;
     
+    static std::mutex wheelScrollMutex;
     static sf::Event::MouseWheelScrollEvent wheelScrollEvent;
     static bool wheelScrolled;
 

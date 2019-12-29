@@ -1,5 +1,5 @@
 #include "Input.hpp"
-
+#include <iostream>
 //for keys
 ThreadSafeBitset<sf::Keyboard::KeyCount> Input::pressedKeys;
 ThreadSafeBitset<sf::Keyboard::KeyCount> Input::heldKeys;
@@ -13,13 +13,10 @@ std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
 std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
         sf::Mouse::ButtonCount> Input::releasedMouseEvents;
 
+std::mutex Input::wheelScrollMutex;
 sf::Event::MouseWheelScrollEvent Input::wheelScrollEvent;
 bool Input::wheelScrolled = false;
 
-//Input & Input::instance() {
-//    static Input input;
-//    return input;
-//}
 
 void Input::addKeyPressed(sf::Event::KeyEvent keyEvent) {
     if (keyEvent.code >= 0) {
@@ -83,15 +80,18 @@ sf::Event::MouseButtonEvent Input::getMBReleasedEvent(sf::Mouse::Button button) 
 }
 
 void Input::addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEvent) {
+    std::lock_guard<std::mutex> lock(wheelScrollMutex);
     wheelScrolled = true;
     Input::wheelScrollEvent = mouseScrollEvent;
 }
 
 sf::Event::MouseWheelScrollEvent Input::getWheelScrollEvent() {
+    std::lock_guard<std::mutex> lock(wheelScrollMutex);    
     return wheelScrollEvent;
 }
 
 bool Input::getWheelScrolled() {
+    std::lock_guard<std::mutex> lock(wheelScrollMutex);    
     return wheelScrolled;
 }
 
@@ -100,5 +100,6 @@ void Input::reset() {
     releasedKeys.reset();
     pressedMouseButtons.reset();
     releasedMouseButtons.reset();
+    std::lock_guard<std::mutex> lock(wheelScrollMutex);    
     wheelScrolled = false;
 }
