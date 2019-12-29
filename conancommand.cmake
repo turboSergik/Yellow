@@ -62,7 +62,7 @@ macro(set_conan_params)
             string(APPEND CONAN_PARAMS ${MSVC_VERSION_NC})
             # maybe need runtime
             
-            # I can even not choose enything becouse 
+            # I can even not choose anything becouse 
             # for c and c++ visual studio uses same compiler
             string(APPEND CONAN_PARAMS " -e CXX=")
             string(APPEND CONAN_PARAMS "\"${CMAKE_CXX_COMPILER}\"")
@@ -123,6 +123,8 @@ macro(set_conan_params)
         endif()
     endif()
     set(CONAN_INSTALL_COMMAND "conan install --build=missing ")
+string(APPEND CONAN_INSTALL_COMMAND "-s build_type=")
+    string(APPEND CONAN_INSTALL_COMMAND "${CMAKE_BUILD_TYPE} ")
     string(APPEND CONAN_INSTALL_COMMAND ${CONAN_PARAMS})
     string(APPEND CONAN_INSTALL_COMMAND " --install-folder=")
     string(APPEND CONAN_INSTALL_COMMAND ${CMAKE_BINARY_DIR})
