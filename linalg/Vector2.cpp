@@ -68,17 +68,17 @@ void Vector2::normalize() {
     }
 }
 
-Vector2 Vector2::normalized() {
+Vector2 Vector2::normalized() const {
     Vector2 result = *this;
     result.normalize();
     return result;
 }
 
-float Vector2::sqrMagnitude() {
+float Vector2::sqrMagnitude() const {
     return x * x + y * y;
 }
 
-float Vector2::magnitude() {
+float Vector2::magnitude() const {
     return hypotf(this->x, this->y);
 }
 

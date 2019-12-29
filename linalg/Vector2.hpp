@@ -59,9 +59,9 @@ public:
 
 
     void normalize();
-    Vector2 normalized();
-    float sqrMagnitude();
-    float magnitude();
+    Vector2 normalized() const;
+    float sqrMagnitude() const;
+    float magnitude() const;
     static float dot(const sf::Vector2f &, const sf::Vector2f &);
     static float cross(const sf::Vector2f &, const sf::Vector2f &);
 
