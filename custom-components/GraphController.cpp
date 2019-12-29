@@ -168,7 +168,7 @@ void GraphController::update() {
         const auto & point1 = it1->second;
         for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {
             const auto &point2 = it2->second;
-            lng::Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
+            Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
             float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.magnitude() : 0.f;
             //float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.sqrMagnitude()) : 0.f;
             point2->rigidBody->addForce(direction.normalized() * k);

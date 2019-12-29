@@ -8,12 +8,14 @@
 #include "Behaviour.h"
 #include "../linalg/Vector2.hpp"
 
+enum GoodsType {
+    Products = 1,
+    Armor = 2
+};
+
 class Train : public Behaviour {
 private:
-    lng::Vector2 lerp(const lng::Vector2 & a, const lng::Vector2 & b, float t);
-    float cross(const lng::Vector2 & a, const lng::Vector2 & b);
-    float dot(const lng::Vector2 & a, const lng::Vector2 & b);
-    float magnitude(const lng::Vector2 & v);
+    Vector2 lerp(const Vector2 & a, const Vector2 & b, float t);
 public:
     explicit Train(int idx);
 

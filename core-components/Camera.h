@@ -23,7 +23,7 @@ public:
     float getWidth();
     void setWidth(float width);
     void setWindowSize(float width, float height);
-    void setWindowSize(const lng::Vector2 &size);
+    void setWindowSize(const Vector2 &size);
     void onWindowResized();
     sf::RenderStates getRenderState();
 };

@@ -7,6 +7,7 @@
 #include "../static/Time.h"
 #include <cmath>
 #include <iostream>
+#include "../linalg/Vector2.hpp"
 
 const float PI = 3.14159265358f;
 
@@ -56,33 +57,21 @@ void Train::applyLayer1(const nlohmann::json &json) {
 }
 
 void Train::update() {
-    const lng::Vector2 & startPosition = Train::line->points[0]->transform->getPosition();
-    const lng::Vector2 & endPosition = Train::line->points[1]->transform->getPosition();
-    lng::Vector2 step = (endPosition - startPosition) / static_cast<float>(Train::line->length);
-    lng::Vector2 targetPosition = startPosition + step * static_cast<float>(Train::position);
-    const lng::Vector2 & currentPosition = Train::transform->getPosition();
-    lng::Vector2 direction = targetPosition - currentPosition;
-    float magnitude = Train::magnitude(direction);
+    const Vector2 & startPosition = Train::line->points[0]->transform->getPosition();
+    const Vector2 & endPosition = Train::line->points[1]->transform->getPosition();
+    Vector2 step = (endPosition - startPosition) / static_cast<float>(Train::line->length);
+    Vector2 targetPosition = startPosition + step * static_cast<float>(Train::position);
+    const Vector2 & currentPosition = Train::transform->getPosition();
+    Vector2 direction = targetPosition - currentPosition;
+    float magnitude = direction.magnitude();
     if (magnitude != 0) {
-        float k = cross( {1, 0}, direction) >= 0 ? 1 : -1;
-        float angle = k * acos(dot(direction, {1, 0})/magnitude)*180/PI;
+        float k = Vector2::cross( {1, 0}, direction) >= 0 ? 1 : -1;
+        float angle = k * acos(Vector2::dot(direction.normalized(), {1, 0})) * 180 / PI;
         Train::transform->setRotation(angle);
     }
     Train::transform->setPosition(Train::lerp(currentPosition, targetPosition, 0.3f));
 }
 
-lng::Vector2 Train::lerp(const lng::Vector2 & a, const lng::Vector2 & b, float t) {
+Vector2 Train::lerp(const Vector2 & a, const Vector2 & b, float t) {
     return a + (b-a)*t;
-}
-
-float Train::cross(const lng::Vector2 &a, const lng::Vector2 &b) {
-    return a.x*b.y - a.y*b.x;
-}
-
-float Train::dot(const lng::Vector2 &a, const lng::Vector2 &b) {
-    return a.x*b.x + a.y*b.y;
-}
-
-float Train::magnitude(const lng::Vector2 &v) {
-    return sqrt(v.x*v.x + v.y*v.y);
 }

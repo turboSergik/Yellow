@@ -10,7 +10,7 @@
 
 void CameraController::update() {
     Camera * mainCamera = Camera::mainCamera;
-    lng::Vector2 pos = CameraController::transform->getLocalPosition();
+    Vector2 pos = CameraController::transform->getLocalPosition();
     if (Input::isKey(up)) {
         pos += {0.f, mainCamera->getWidth()*moveFactor*Time::deltaTime};
         CameraController::transform->setLocalPosition(pos);

@@ -4,10 +4,10 @@
 
 #include "RigidBody.hpp"
 
-void RigidBody::addForceAtPosition(lng::Vector2 force, lng::Vector2 position) {
-    lng::Vector2 rVector = worldCenterOfMass - position;
-    lng::Vector2 rForce = rVector.normalized() * lng::Vector2::dot(rVector.normalized(), force);
-    lng::Vector2 iForce = force - rForce;
+void RigidBody::addForceAtPosition(Vector2 force, Vector2 position) {
+    Vector2 rVector = worldCenterOfMass - position;
+    Vector2 rForce = rVector.normalized() * Vector2::dot(rVector.normalized(), force);
+    Vector2 iForce = force - rForce;
     addForce(rForce);
 
     //TODO: apply moment of inertia
@@ -36,6 +36,6 @@ void RigidBody::update() {
     angularAcceleration = 0;
 }
 
-void RigidBody::addForce(lng::Vector2 force) {
+void RigidBody::addForce(Vector2 force) {
     acceleration += force/mass;
 }

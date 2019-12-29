@@ -7,6 +7,7 @@
 #include "../static/Database.h"
 #include "../core/GameObject.h"
 #include "../utility/ForceMethodConfig.hpp"
+#include "../linalg/Vector2.hpp"
 
 void Point::applyLayer10(const nlohmann::json &json) {
     transform->setLocalPosition({json.value("x", 0.f),
@@ -30,7 +31,7 @@ void Point::start() {
 }
 
 void Point::update() {
-    lng::Vector2 direction = -rigidBody->velocity;
+    Vector2 direction = -rigidBody->velocity;
     rigidBody->addForce(direction.normalized() * (ForceMethodConfig::frictionK
     * direction.sqrMagnitude() + ForceMethodConfig::dampK * sqrtf(direction.magnitude())));
     //rigidBody->addForce(direction.normalized() *(frictionK * direction.sqrMagnitude()));

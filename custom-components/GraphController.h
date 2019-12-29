@@ -10,6 +10,7 @@
 #include "../utility/json.hpp"
 #include "../utility/GraphVisualizer.h"
 #include "PlayerController.hpp"
+#include "../linalg/Vector2.hpp"
 
 class GraphController : public Component {
 private:
@@ -19,7 +20,7 @@ private:
     nlohmann::json layer0;
     nlohmann::json layer1;
 
-    lng::Vector2 randomVector();
+    Vector2 randomVector();
 public:
     void applyLayer0(const nlohmann::json& json);
     void applyLayer1(const nlohmann::json& json);
