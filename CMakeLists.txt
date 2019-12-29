@@ -50,7 +50,8 @@ set(SOURCES
         utility/Event.cpp
         custom-components/PlayerController.cpp
         core-components/RigidBody.cpp
-        linalg/Vector2.cpp)
+        linalg/Vector2.cpp
+        custom-components/TrainMoveAnimation.cpp)
 
 add_executable(WG ${SOURCES})
 
