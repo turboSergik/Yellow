@@ -13,8 +13,6 @@
 #include "network/Network.hpp"
 
 int main() {
-    srand(time(nullptr));
-
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Graph");
     window.setFramerateLimit(60);
 
