@@ -13,6 +13,7 @@
 class RigidBody : public Component {
 public:
     float mass = 1;
+    float drag = 0.05;
     lng::Vector2 centerOfMass = {0, 0};
     lng::Vector2 worldCenterOfMass = {0, 0};
     lng::Vector2 velocity = {0, 0};

@@ -23,6 +23,10 @@ void RigidBody::update() {
     transform->setPosition(transform->getPosition() + velocity * Time::deltaTime +
                            acceleration * Time::deltaTime * Time::deltaTime / 2.f);
     velocity += acceleration * Time::deltaTime;
+    float k = 1.f - drag*Time::deltaTime;
+    if (k > 1.f) k = 1.f;
+    else if (k < 0.f) k = 0.f;
+    velocity *= k;
     //rotate
     transform->setRotation(transform->getRotation() + angularVelocity * Time::deltaTime +
                            angularAcceleration * Time::deltaTime * Time::deltaTime / 2.f);
