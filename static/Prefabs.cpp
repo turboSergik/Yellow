@@ -19,6 +19,7 @@ Point *Prefabs::point(int idx) {
     Point *point = obj->addComponent<Point>(idx);
     RigidBody * rigidBody = obj->addComponent<RigidBody>();
     rigidBody->mass = 1.0f;
+    rigidBody->drag = 0.0f;
     return point;
 }
 

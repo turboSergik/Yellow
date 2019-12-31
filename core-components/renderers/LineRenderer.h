@@ -14,7 +14,7 @@ private:
     sf::Vertex vertices[2];
 public:
     const sf::Vertex *getVertices() const;
-    void setVertices(const lng::Vector2 &v1, const lng::Vector2 &v2);
+    void setVertices(const Vector2 &v1, const Vector2 &v2);
     //TODO: add color change ability
     void onDraw(sf::RenderTarget &target, sf::RenderStates states) const override;
 

@@ -4,10 +4,10 @@
 
 #include "RigidBody.hpp"
 
-void RigidBody::addForceAtPosition(lng::Vector2 force, lng::Vector2 position) {
-    lng::Vector2 rVector = worldCenterOfMass - position;
-    lng::Vector2 rForce = normalized(rVector) * dot(normalized(rVector), force);
-    lng::Vector2 iForce = force - rForce;
+void RigidBody::addForceAtPosition(Vector2 force, Vector2 position) {
+    Vector2 rVector = worldCenterOfMass - position;
+    Vector2 rForce = rVector.normalized() * Vector2::dot(rVector.normalized(), force);
+    Vector2 iForce = force - rForce;
     addForce(rForce);
 
     //TODO: apply moment of inertia
@@ -16,31 +16,26 @@ void RigidBody::addForceAtPosition(lng::Vector2 force, lng::Vector2 position) {
 
 }
 
-lng::Vector2 RigidBody::normalized(const lng::Vector2 &v) {
-    float m = v.x*v.x + v.y*v.y;
-    return v/m;
-}
-
-float RigidBody::dot(const lng::Vector2 &v1, const lng::Vector2 &v2) {
-    return v1.x*v2.x + v1.y*v2.y;
-}
-
 void RigidBody::update() {
     worldCenterOfMass = transform->toGlobalPosition(centerOfMass);
     
     //translate
     transform->setPosition(transform->getPosition() + velocity * Time::deltaTime +
                            acceleration * Time::deltaTime * Time::deltaTime / 2.f);
-    velocity = velocity + acceleration * Time::deltaTime;
+    velocity += acceleration * Time::deltaTime;
+    float k = 1.f - drag*Time::deltaTime;
+    if (k > 1.f) k = 1.f;
+    else if (k < 0.f) k = 0.f;
+    velocity *= k;
     //rotate
     transform->setRotation(transform->getRotation() + angularVelocity * Time::deltaTime +
-                           angularAcceleration * Time::deltaTime * Time::deltaTime / 2);
+                           angularAcceleration * Time::deltaTime * Time::deltaTime / 2.f);
     angularVelocity += angularAcceleration * Time::deltaTime;
     //update
     acceleration = {0, 0};
     angularAcceleration = 0;
 }
 
-void RigidBody::addForce(lng::Vector2 force) {
+void RigidBody::addForce(Vector2 force) {
     acceleration += force/mass;
 }

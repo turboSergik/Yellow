@@ -4,12 +4,13 @@
 
 #include "Transform.h"
 #include "GameObject.h"
+#include "../linalg/Vector2.hpp"
 
-const lng::Vector2 &Transform::getPosition() const {
+const Vector2 &Transform::getPosition() const {
     return position;
 }
 
-void Transform::setPosition(const lng::Vector2 &position) {
+void Transform::setPosition(const Vector2 &position) {
     if (parent) {
         Transform::setLocalPosition(parent->toLocalPosition(position));
     } else {
@@ -17,11 +18,11 @@ void Transform::setPosition(const lng::Vector2 &position) {
     }
 }
 
-const lng::Vector2 &Transform::getLocalPosition() const {
+const Vector2 &Transform::getLocalPosition() const {
     return localPosition;
 }
 
-void Transform::setLocalPosition(const lng::Vector2 &localPosition) {
+void Transform::setLocalPosition(const Vector2 &localPosition) {
     Transform::localPosition = localPosition;
     recalculateAccordingToLocals();
 }
@@ -46,11 +47,11 @@ void Transform::setLocalRotation(float localRotation) {
     Transform::localRotation = localRotation;
 }
 
-const lng::Vector2 &Transform::getScale() const {
+const Vector2 &Transform::getScale() const {
     return scale;
 }
 
-void Transform::setScale(const lng::Vector2 &scale) {
+void Transform::setScale(const Vector2 &scale) {
     Transform::scale = scale;
     if (parent) {
         Transform::localScale = {scale.x / parent->scale.x, scale.y / parent->scale.y};
@@ -59,15 +60,15 @@ void Transform::setScale(const lng::Vector2 &scale) {
     }
 }
 
-const lng::Vector2 &Transform::getLocalScale() const {
+const Vector2 &Transform::getLocalScale() const {
     return localScale;
 }
 
-void Transform::setLocalScale(const lng::Vector2 &localScale) {
+void Transform::setLocalScale(const Vector2 &localScale) {
     Transform::localScale = localScale;
 }
 
-void Transform::setPositionAndRotation(const lng::Vector2 &position, float rotation) {
+void Transform::setPositionAndRotation(const Vector2 &position, float rotation) {
     if (parent) {
         Transform::localPosition = parent->toLocalPosition(position);
         Transform::localRotation = rotation - parent->rotation;
@@ -133,27 +134,27 @@ void Transform::recalculateAccordingToLocals() {
     }
 }
 
-lng::Vector2 Transform::toLocalPosition(const lng::Vector2 &position) const {
+Vector2 Transform::toLocalPosition(const Vector2 &position) const {
     return worldToLocal.transformPoint(position);
 }
 
-lng::Vector2 Transform::toLocalDirection(const lng::Vector2 &direction) const {
+Vector2 Transform::toLocalDirection(const Vector2 &direction) const {
     return sf::Transform(sf::Transform::Identity).rotate(-rotation).transformPoint(direction);
 }
 
-lng::Vector2 Transform::toGlobalPosition(const lng::Vector2 &position) const {
+Vector2 Transform::toGlobalPosition(const Vector2 &position) const {
     return localToWorld.transformPoint(position);
 }
 
-lng::Vector2 Transform::toGlobalDirection(const lng::Vector2 &direction) const {
+Vector2 Transform::toGlobalDirection(const Vector2 &direction) const {
     return sf::Transform(sf::Transform::Identity).rotate(rotation).transformPoint(direction);
 }
 
-const lng::Vector2 &Transform::getUp() const {
+const Vector2 &Transform::getUp() const {
     return up;
 }
 
-const lng::Vector2 &Transform::getRight() const {
+const Vector2 &Transform::getRight() const {
     return right;
 }
 

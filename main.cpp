@@ -53,6 +53,7 @@ bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
 }
 
 int main() {
+
     srand(time(nullptr));
     
 #ifdef __linux__

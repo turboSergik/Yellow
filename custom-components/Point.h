@@ -12,8 +12,7 @@ class Post;
 
 class Point : public Behaviour {
 private:
-    float frictionK = 0.05f;
-    float dampK = 0.1f;
+
 public:
     RigidBody * rigidBody = nullptr;
     Post * post = nullptr;

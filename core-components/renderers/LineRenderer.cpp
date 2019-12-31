@@ -13,7 +13,7 @@ void LineRenderer::onDraw(sf::RenderTarget &target, sf::RenderStates states) con
     target.draw(vertices, 2, sf::Lines, states);
 }
 
-void LineRenderer::setVertices(const lng::Vector2 &v1, const lng::Vector2 &v2) {
+void LineRenderer::setVertices(const Vector2 &v1, const Vector2 &v2) {
     vertices[0].position = v1;
     vertices[1].position = v2;
 }
