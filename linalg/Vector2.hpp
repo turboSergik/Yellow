@@ -17,12 +17,12 @@ public:
     Vector2() = default;
 
     template <typename T,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+    typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     explicit Vector2(T);
 
     template <typename T1, typename T2,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T1>::value>::type,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T2>::value>::type>
+    typename = typename std::enable_if<std::is_arithmetic<T1>::value>::type,
+    typename = typename std::enable_if<std::is_arithmetic<T2>::value>::type>
     Vector2(T1, T2);
 
     Vector2(const Vector2 &) = default;
@@ -42,19 +42,19 @@ public:
 
 
     template <typename T,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+    typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     Vector2 & operator+=(T);
 
     template <typename T,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+    typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     Vector2 & operator-=(T);
 
     template <typename T,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+    typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     Vector2 & operator*=(T);
 
     template <typename T,
-    typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+    typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
     Vector2 & operator/=(T);
 
 
@@ -108,55 +108,55 @@ Vector2 & Vector2::operator/=(T value) {
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator+(T value, const Vector2 & vector) {
     return Vector2(vector.x + static_cast<float>(value),
                    vector.y + static_cast<float>(value));
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator+(const Vector2 & vector, T value) {
     return Vector2(vector.x + static_cast<float>(value),
                    vector.y + static_cast<float>(value));
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator-(T value, const Vector2 & vector) {
     return Vector2(static_cast<float>(value) - vector.x,
                    static_cast<float>(value) - vector.y);
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator-(const Vector2 & vector, T value) {
     return Vector2(vector.x - static_cast<float>(value),
                    vector.y - static_cast<float>(value));
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator*(T value, const Vector2 & vector) {
     return Vector2(vector.x * static_cast<float>(value),
                    vector.y * static_cast<float>(value));
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator*(const Vector2 & vector, T value) {
     return Vector2(vector.x * static_cast<float>(value),
                    vector.y * static_cast<float>(value));}
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator/(T value, const Vector2 & vector) {
     return Vector2(static_cast<float>(value) / vector.x,
                    static_cast<float>(value) / vector.y);
 }
 
 template <typename T,
-typename = typename std::__1::enable_if<std::is_arithmetic<T>::value>::type>
+typename = typename std::enable_if<std::is_arithmetic<T>::value>::type>
 Vector2 operator/(const Vector2 & vector, T value) {
     return Vector2(vector.x / static_cast<float>(value),
                    vector.y / static_cast<float>(value));
