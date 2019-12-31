@@ -13,17 +13,19 @@
 #include "network/PacketQueue.hpp"
 #include "static/Input.hpp"
 #include "network/Network.hpp"
+#ifdef __linux__
+// #include <X11/Xlib.h>
+// extern include function which implemented in Xlib
+// not included becouse of conflicting declaration Time
+extern "C" int XInitThreads();
 
-std::mutex windowMutex;
+#endif
+
 
 void mainLoop(sf::RenderWindow & window, 
               Camera * mainCamera) {
     
     window.setFramerateLimit(60);
-    
-//    GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
-//    Camera *mainCamera = Prefabs::camera(&window);
-//    mainCamera->gameObject->instantiate();
     
     window.setActive(true);
     
@@ -32,11 +34,9 @@ void mainLoop(sf::RenderWindow & window,
     while (window.isOpen()) {
         MethodsPool::update();
         Input::reset();
-        windowMutex.lock();
         window.clear();        
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
-        windowMutex.unlock();
         Network::update();
         Time::deltaTime = clock.restart().asSeconds();
     }
@@ -46,10 +46,7 @@ void mainLoop(sf::RenderWindow & window,
 bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
     bool result = false;
     while (!result) {
-        // may be not best desidion
-        windowMutex.lock();
         result = window.pollEvent(event);
-        windowMutex.unlock();
         std::this_thread::yield();
     }
     return result;
@@ -57,7 +54,11 @@ bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
 
 int main() {
     srand(time(nullptr));
-
+    
+#ifdef __linux__
+    XInitThreads();
+#endif
+    
     sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
 
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
@@ -68,7 +69,6 @@ int main() {
         
     std::thread mainLoopThread(mainLoop, std::ref(window), mainCamera);
     
-    // window.setKeyRepeatEnabled(false);
     sf::Event event{};
     
     while (window.isOpen()) {
@@ -79,17 +79,11 @@ int main() {
             switch (event.type) {
             case sf::Event::Closed:
                 root->destroyImmediate();
-                windowMutex.lock();
                 window.close();
-                windowMutex.unlock();
                 mainLoopThread.join();
                 return 0;
-                // break;
             case sf::Event::Resized:
-                // update the view to the new size of the window
-                windowMutex.lock();
                 mainCamera->onWindowResized();
-                windowMutex.unlock();
                 break;
             case sf::Event::KeyPressed:
                 Input::addKeyPressed(event.key);

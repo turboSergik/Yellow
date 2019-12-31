@@ -5,6 +5,10 @@ project(WG LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
 include(${CMAKE_SOURCE_DIR}/conancommand.cmake)
 set_conan_params()
 
@@ -55,3 +59,8 @@ set(SOURCES
 add_executable(WG ${SOURCES})
 
 target_link_libraries(WG ${CONAN_LIBS})
+
+if (LINUX)
+    message("linux triggered")
+    target_link_libraries(WG X11)
+endif()
