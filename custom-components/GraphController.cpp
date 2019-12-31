@@ -151,7 +151,7 @@ void GraphController::start() {
     Network::onMapResponse10.addListener<GraphController, &GraphController::onMapLayer10>(this);
 
     Network::connect("wgforge-srv.wargaming.net", 443);
-    Network::send(Action::LOGIN, {{"name", "Yellow2"}, {"game", "Yellow"}});
+    Network::send(Action::LOGIN, {{"name", "Yellow"}, {"game", "Yellow"}, {"num_players", 1}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
     //Network::send(Action::MAP, {{"layer", 10}});
