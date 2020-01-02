@@ -164,6 +164,7 @@ void GraphController::start() {
 }
 
 void GraphController::update() {
+
     for (auto it1 = Database::points.begin(); it1 != Database::points.end(); it1++) {
         const auto & point1 = it1->second;
         for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {
@@ -174,6 +175,7 @@ void GraphController::update() {
             point2->rigidBody->addForce(direction.normalized() * k);
             point1->rigidBody->addForce(-direction.normalized() * k);
         }
+
     }
 }
 
@@ -200,6 +202,7 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     if (this->layer1 != json) {
         this->applyLayer1(json);
         this->playerController->isMapUpdated = true;
+
     } else {
         Network::send(Action::MAP, {{"layer", 1}});
     }
