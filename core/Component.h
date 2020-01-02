@@ -24,7 +24,6 @@ public:
     void destroy();
     
     virtual ~Component() = default;
-    //TODO: add start() event (check add to scene and call)
 };
 
 

@@ -48,7 +48,9 @@ set(SOURCES
         utility/methodWrapper.cpp
         network/Network.cpp
         utility/Event.cpp
-        custom-components/PlayerController.cpp)
+        custom-components/PlayerController.cpp
+        core-components/RigidBody.cpp
+        linalg/Vector2.cpp)
 
 add_executable(WG ${SOURCES})
 

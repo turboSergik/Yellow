@@ -10,22 +10,21 @@
 #include "../utility/json.hpp"
 #include "../utility/GraphVisualizer.h"
 #include "PlayerController.hpp"
+#include "../linalg/Vector2.hpp"
 
 class GraphController : public Component {
 private:
-    GraphVisualizer graphVisualizer;
+    float graphSize = 0.f;
     PlayerController * playerController;
     nlohmann::json playerInfo;
     nlohmann::json layer0;
     nlohmann::json layer1;
-public:
-    std::unordered_map<int, std::list<int>> graph;
 
+    Vector2 randomVector();
+public:
     void applyLayer0(const nlohmann::json& json);
     void applyLayer1(const nlohmann::json& json);
     void applyLayer10(const nlohmann::json& json);
-    void applyForceMethod();
-    void applyForceMethodIteration();
 
     void start();
     void update();
@@ -33,6 +32,7 @@ public:
     void onLogin(const nlohmann::json & json);
     void onMapLayer0(const nlohmann::json & json);
     void onMapLayer1(const nlohmann::json & json);
+    void onMapLayer10(const nlohmann::json & json);
 };
 
 

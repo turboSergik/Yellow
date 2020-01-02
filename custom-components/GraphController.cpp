@@ -12,7 +12,10 @@
 #include "../network/PacketQueue.hpp"
 #include "../network/Packet.hpp"
 #include "../network/Network.hpp"
-#include "../static/Time.h"
+#include "../utility/random.hpp"
+#include "../utility/ForceMethodConfig.hpp"
+
+using Random = effolkronium::random_static;
 
 void GraphController::applyLayer10(const nlohmann::json &json) {
     if (json.contains("coordinates")) {
@@ -22,7 +25,7 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
                 auto &point = Database::points[idx];
                 if (!point) {
                     point = Prefabs::point(idx);
-                    point->gameObject->instantiate(GraphController::transform);
+                    point->gameObject->instantiate(this->transform);
                 }
                 point->applyLayer10(item);
             }
@@ -34,7 +37,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
     //TODO: find difference between jsons
     playerController->markets.clear();
     playerController->storages.clear();
-    GraphController::layer1 = json;
+    this->layer1 = json;
     if (json.contains("posts")) {
         for (const auto &item : json["posts"]) {
             int idx = item.value("idx", -1);
@@ -106,17 +109,21 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
 }
 
 void GraphController::applyLayer0(const nlohmann::json &json) {
-    GraphController::layer0 = json;
+    this->layer0 = json;
     if (json.contains("points")) {
+        this->graphSize = 2*ForceMethodConfig::springLength*sqrtf(json["points"].size());
+        Camera::mainCamera->setWidth(this->graphSize);
         for (const auto & item : json["points"]) {
             int idx = item.value("idx", -1);
             if (idx != -1) {
-                auto & point = Database::points[idx];
+                auto &point = Database::points[idx];
                 if (!point) {
                     point = Prefabs::point(idx);
-                    point->gameObject->instantiate(GraphController::transform);
+                    point->gameObject->instantiate(this->transform);
                 }
                 point->applyLayer0(item);
+                point->transform->setPosition({Random::get(-this->graphSize, this->graphSize),
+                                               Random::get(-this->graphSize, this->graphSize)});
             }
         }
     }
@@ -127,89 +134,80 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
                 auto &line = Database::lines[idx];
                 if (!line) {
                     line = Prefabs::line(idx);
-                    line->gameObject->instantiate(GraphController::transform);
+                    line->gameObject->instantiate(this->transform);
                 }
                 line->applyLayer0(item);
-                //for graph
-                if (item.contains("points")) {
-                    const auto &item_points = item["points"];
-                    graph[item_points[0]].push_back(item_points[1]);
-                    graph[item_points[1]].push_back(item_points[0]);
-                }
             }
         }
     }
-    playerController->playerPoint = Database::points[playerInfo["home"]["idx"]];
-}
-
-void GraphController::applyForceMethod() {
-    auto positions = graphVisualizer.forceMethod();
-    sf::Vector2f center = {0, 0};
-    for (auto & pair : Database::points) {
-        pair.second->transform->setLocalPosition(positions[pair.second->idx]);
-        center += positions[pair.second->idx];
-    }
-    center /= static_cast<float>(Database::points.size());
-    GraphController::transform->setPosition(-center);
-}
-
-void GraphController::applyForceMethodIteration() {
-    auto positions = graphVisualizer.forceMethodIteration();
-    sf::Vector2f center = {0, 0};
-    for (auto & pair : Database::points) {
-        pair.second->transform->setLocalPosition(positions[pair.second->idx]);
-        center += positions[pair.second->idx];
-    }
-    center /= static_cast<float>(Database::points.size());
-    GraphController::transform->setPosition(-center);
+    this->playerController->playerPoint = Database::points[playerInfo["home"]["idx"]];
 }
 
 void GraphController::start() {
-    GraphController::playerController = gameObject->addComponent<PlayerController>();
+    this->playerController = gameObject->addComponent<PlayerController>();
     Network::onLoginResponse.addListener<GraphController, &GraphController::onLogin>(this);
-    Network::onMap0Response.addListener<GraphController, &GraphController::onMapLayer0>(this);
-    Network::onMap1Response.addListener<GraphController, &GraphController::onMapLayer1>(this);
+    Network::onMapResponse0.addListener<GraphController, &GraphController::onMapLayer0>(this);
+    Network::onMapResponse1.addListener<GraphController, &GraphController::onMapLayer1>(this);
+    Network::onMapResponse10.addListener<GraphController, &GraphController::onMapLayer10>(this);
 
     Network::connect("wgforge-srv.wargaming.net", 443);
-    Network::send(Action::LOGIN, {{"name", "Yellow2"}, {"game", "Yellow"}});
+    Network::send(Action::LOGIN, {{"name", "Yellow"}, {"game", "Yellow"}, {"num_players", 1}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
+    //Network::send(Action::MAP, {{"layer", 10}});
+
+    //Test mode
+//    std::ifstream fin("graphs/graph3.json");
+//    fin >> this->layer0;
+//    fin.close();
+//    applyLayer0(this->layer0);
 }
 
 void GraphController::update() {
-    for (int i = 0; i < 70; i++) {
-        GraphController::applyForceMethodIteration();
+
+    for (auto it1 = Database::points.begin(); it1 != Database::points.end(); it1++) {
+        const auto & point1 = it1->second;
+        for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {
+            const auto &point2 = it2->second;
+            Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
+            float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.magnitude() : 0.f;
+            //float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.sqrMagnitude()) : 0.f;
+            point2->rigidBody->addForce(direction.normalized() * k);
+            point1->rigidBody->addForce(-direction.normalized() * k);
+        }
+
     }
 }
 
 void GraphController::onDestroy() {
     Network::onLoginResponse.removeListener<GraphController, &GraphController::onLogin>(this);
-    Network::onMap0Response.removeListener<GraphController, &GraphController::onMapLayer0>(this);
-    Network::onMap1Response.removeListener<GraphController, &GraphController::onMapLayer1>(this);
+    Network::onMapResponse0.removeListener<GraphController, &GraphController::onMapLayer0>(this);
+    Network::onMapResponse1.removeListener<GraphController, &GraphController::onMapLayer1>(this);
+    Network::onMapResponse10.removeListener<GraphController, &GraphController::onMapLayer10>(this);
 }
 
 void GraphController::onLogin(const nlohmann::json & json) {
-    //TODO: handle when login received
-    playerInfo = json;
+    this->playerInfo = json;
 }
 
 void GraphController::onMapLayer0(const nlohmann::json & json) {
-    //TODO: handle when layer0 received
-    if (GraphController::layer0 != json) {
-        GraphController::applyLayer0(json);
-        GraphController::graphVisualizer.setGraph(graph);
+    if (this->layer0 != json) {
+        this->applyLayer0(json);
     } else {
         Network::send(Action::MAP, {{"layer", 0}});
     }
 }
 
 void GraphController::onMapLayer1(const nlohmann::json & json) {
-    //TODO: handle when layer1 received
-    if (GraphController::layer1 != json) {
-        GraphController::applyLayer1(json);
-        playerController->isMapUpdated = true;
-        playerController->tickNow++;
+    if (this->layer1 != json) {
+        this->applyLayer1(json);
+        this->playerController->isMapUpdated = true;
+
     } else {
         Network::send(Action::MAP, {{"layer", 1}});
     }
+}
+
+void GraphController::onMapLayer10(const nlohmann::json & json) {
+    std::cout << "Layer 10 exists" << std::endl;
 }
