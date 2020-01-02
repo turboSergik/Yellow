@@ -177,7 +177,7 @@ void GraphController::start() {
 }
 
 void GraphController::update() {
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 70; i++) {
         GraphController::applyForceMethodIteration();
     }
 }
@@ -208,6 +208,7 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     if (GraphController::layer1 != json) {
         GraphController::applyLayer1(json);
         playerController->isMapUpdated = true;
+        playerController->tickNow++;
     } else {
         Network::send(Action::MAP, {{"layer", 1}});
     }
