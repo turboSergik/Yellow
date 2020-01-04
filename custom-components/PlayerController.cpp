@@ -14,10 +14,6 @@
 #include <unordered_map>
 #include <set>
 
-int f[300000];
-bool blockedEdges[300000];
-bool blockedVertex[300000];
-int lineFict[300000];
 
 std::unordered_map<int, std::set<int> > timeTableVertex;
 std::unordered_map<int, std::set<int> > timeTableLine;
@@ -26,7 +22,6 @@ std::unordered_map<int, std::set<int> > timeTableLine;
 std::unordered_map<int, long long> fLine[50];
 std::unordered_map<int, long long> fVertex[50];
 
-// std::vector<int> globalWays[300000];
 
 //TODO: make friend or comparator function
 bool operator< (El left, El right) {
@@ -102,22 +97,29 @@ int getTrainVertex(Train* train) {
     else return train->line->points[1]->idx;
 }
 
-
-void clearEdges() {
-    for (auto line : Database::lines) blockedEdges[line.second -> idx] = false;
-    for (auto train : Database::trains) {
-        if (train.second -> position != 0 &&
-             train.second -> position != train.second -> line -> length) blockedEdges[train.second -> line -> idx] = true;
-    }
-}
-
-
 void clearLinesAndVertex(int marketCount) {
 
     for (int i = 0; i < marketCount; i++) {
         fVertex[i].clear();
         fLine[i].clear();
     }
+}
+
+
+void PlayerController::trainUpgrade() {
+
+    for (auto trainNow : PlayerController::playerTrains) {
+        if (trainNow -> level == 1) tryTrainUpdate(trainNow);
+    }
+
+    for (auto trainNow : PlayerController::playerTrains) {
+        if (trainNow -> level == 2) tryTrainUpdate(trainNow);
+    }
+
+    for (auto trainNow : PlayerController::playerTrains) {
+        if (trainNow -> level == 3) tryTrainUpdate(trainNow);
+    }
+    return;
 }
 
 
@@ -239,23 +241,6 @@ bool PlayerController::isFreeTimeTable(El now) {
     return true;
 }
 
-void PlayerController::clearVertex() {
-    for (auto point : Database::points) blockedVertex[point.second -> idx] = false;
-    for (auto train : Database::trains) {
-        if (train.second -> position != 0 &&
-             train.second -> position != train.second -> line -> length) {
-                 if (train.second -> speed == 1) blockedVertex[train.second -> line -> points[1] -> idx] = true;
-                 else blockedVertex[train.second -> line -> points[0] -> idx] = true;
-             }
-
-        if (train.second -> position == 0) blockedEdges[train.second -> line -> points[0] -> idx] = true;
-        if (train.second -> position == train.second -> line -> length) blockedEdges[train.second -> line -> points[1] -> idx] = true;
-    }
-
-    if (playerTown != nullptr) blockedEdges[PlayerController::playerTown -> point -> idx] = false;
-}
-
-
 void logTrain(Train* train) {
 
     if (train -> position == 0) std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " point=" << train -> line -> points[0] -> idx << std::endl;
@@ -264,20 +249,6 @@ void logTrain(Train* train) {
 
 }
 
-
-void addLineFict(std::vector<int>& way){
-
-    for (int i = 1; i < way.size(); i++) {
-        int a = way[i];
-        int b = way[i - 1];
-
-        for (auto line : Database::lines) {
-            if (line.second -> points[0] -> idx == a && line.second -> points[1] -> idx == b) lineFict[line.second -> idx] += 2;
-            if (line.second -> points[1] -> idx == a && line.second -> points[0] -> idx == b) lineFict[line.second -> idx] += 2;
-        }
-    }
-
-}
 
 void trainIteration(Train*);
 void tryTrainUpdate(Train*);
@@ -292,8 +263,7 @@ void PlayerController::update() {
         _count += 1;
     }
 
-    clearEdges();
-    clearVertex();
+
     PlayerController::timeFromLastTurn += Time::deltaTime;
     if (PlayerController::isMapUpdated && PlayerController::timeFromLastTurn > PlayerController::waitingTime) {
         //TODO: most of gameLogic

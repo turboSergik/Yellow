@@ -44,6 +44,7 @@ public:
     int tickNow = 0;
 
     void update();
+    void trainUpgrade();
     void tryTrainUpdate(Train*);
     void strategyIteration();
     std::pair<std::vector<int>, int> trainWayToProducts(Train*);
