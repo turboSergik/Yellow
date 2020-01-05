@@ -26,26 +26,28 @@ extern "C" int XInitThreads();
 void mainLoop(sf::RenderWindow & window, 
               Camera * mainCamera) {
     
-    window.setFramerateLimit(60);
+    //window.setFramerateLimit(60);
     
     window.setActive(true);
     
     sf::Clock clock; // starts the clock
-    
-    sf::Clock fixedUpdateClock;
-    
+
+    float time = 0.f;
     while (window.isOpen()) {
+        Time::deltaTime = clock.restart().asSeconds();
         Input::setFromInputBuffer();
         MethodsPool::start();
         MethodsPool::update();
-        // now without timer for fixedUpdate
-        MethodsPool::fixedUpdate();
+        time += Time::deltaTime;
+        while (time >= Time::fixedDeltaTime) {
+            MethodsPool::fixedUpdate();
+            time -= Time::fixedDeltaTime;
+        }
         MethodsPool::onDestroy();
         window.clear();        
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
         Network::update();
-        Time::deltaTime = clock.restart().asSeconds();
     }
     
 }
@@ -72,9 +74,7 @@ int main() {
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
-    
-    window.setActive(false);
-        
+
     std::thread mainLoopThread(mainLoop, std::ref(window), mainCamera);
     
     sf::Event event{};
@@ -86,9 +86,9 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
+                root->destroyImmediate();
                 window.close();
                 mainLoopThread.join();
-                root->destroyImmediate();
                 return 0;
             case sf::Event::Resized:
                 mainCamera->onWindowResized();
