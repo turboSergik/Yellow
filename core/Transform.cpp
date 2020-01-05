@@ -45,6 +45,7 @@ float Transform::getLocalRotation() const {
 
 void Transform::setLocalRotation(float localRotation) {
     Transform::localRotation = localRotation;
+    Transform::recalculateAccordingToLocals();
 }
 
 const Vector2 &Transform::getScale() const {
