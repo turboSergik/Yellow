@@ -16,21 +16,21 @@ void RigidBody::addForceAtPosition(Vector2 force, Vector2 position) {
 
 }
 
-void RigidBody::update() {
+void RigidBody::fixedUpdate() {
     worldCenterOfMass = transform->toGlobalPosition(centerOfMass);
     
     //translate
-    transform->setPosition(transform->getPosition() + velocity * Time::deltaTime +
-                           acceleration * Time::deltaTime * Time::deltaTime / 2.f);
-    velocity += acceleration * Time::deltaTime;
-    float k = 1.f - drag*Time::deltaTime;
+    transform->setPosition(transform->getPosition() + velocity * Time::fixedDeltaTime +
+                           acceleration * Time::fixedDeltaTime * Time::fixedDeltaTime / 2.f);
+    velocity += acceleration * Time::fixedDeltaTime;
+    float k = 1.f - drag*Time::fixedDeltaTime;
     if (k > 1.f) k = 1.f;
     else if (k < 0.f) k = 0.f;
     velocity *= k;
     //rotate
-    transform->setRotation(transform->getRotation() + angularVelocity * Time::deltaTime +
-                           angularAcceleration * Time::deltaTime * Time::deltaTime / 2.f);
-    angularVelocity += angularAcceleration * Time::deltaTime;
+    transform->setRotation(transform->getRotation() + angularVelocity * Time::fixedDeltaTime +
+                           angularAcceleration * Time::fixedDeltaTime * Time::fixedDeltaTime / 2.f);
+    angularVelocity += angularAcceleration * Time::fixedDeltaTime;
     //update
     acceleration = {0, 0};
     angularAcceleration = 0;

@@ -22,7 +22,7 @@ public:
     float angularVelocity = 0;
     float angularAcceleration = 0;
 
-    void update();
+    void fixedUpdate();
     void addForce(Vector2 force);
     void addForceAtPosition(Vector2 force, Vector2 position);
 //    lng::Vector2 getRelativePointVelocity(const lng::Vector2 & point) {
