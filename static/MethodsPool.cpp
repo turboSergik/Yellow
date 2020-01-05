@@ -3,6 +3,7 @@
 #include "../core/GameObject.h"
 
 std::vector<UpdateWrapper> MethodsPool::updatePool;
+std::vector<FixedUpdateWrapper> MethodsPool::fixedUpdatePool;
 std::list<StartWrapper> MethodsPool::startPool;
 std::list<GameObject *> MethodsPool::destroyObjectPool;
 std::list<Component *> MethodsPool::destroyComponentPool;
@@ -13,16 +14,31 @@ void MethodsPool::removeFromUpdate(size_t index) {
     MethodsPool::updatePool.pop_back();
 }
 
-void MethodsPool::update() {
+void MethodsPool::start() {
     for (StartWrapper & start : MethodsPool::startPool) {
         start();
     }
     startPool.clear();
+}
+
+void MethodsPool::update() {
+
     // using indexing because vector size can change, and vector may resize
     size_t oldSize = MethodsPool::updatePool.size();
     for (size_t i = 0; i < oldSize; ++i) {
         MethodsPool::updatePool[i]();
     }
+}
+
+void MethodsPool::fixedUpdate() {
+    size_t oldSize = MethodsPool::fixedUpdatePool.size();
+    for (size_t i = 0; i < oldSize; ++i) {
+        MethodsPool::fixedUpdatePool[i]();
+    }
+}
+
+void MethodsPool::onDestroy()
+{
     for (Component * component : destroyComponentPool) {
         component->destroyImmediate();
     }

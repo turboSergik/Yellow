@@ -1,90 +1,50 @@
 #include "Input.hpp"
+#include <iostream>
+#include "InputBuffer.hpp"
 
 //for keys
-ThreadSafeBitset<sf::Keyboard::KeyCount> Input::pressedKeys;
-ThreadSafeBitset<sf::Keyboard::KeyCount> Input::heldKeys;
-ThreadSafeBitset<sf::Keyboard::KeyCount> Input::releasedKeys;
+std::bitset<sf::Keyboard::KeyCount> Input::pressedKeys;
+std::bitset<sf::Keyboard::KeyCount> Input::heldKeys;
+std::bitset<sf::Keyboard::KeyCount> Input::releasedKeys;
 
 //for mouse buttons
-ThreadSafeBitset<sf::Mouse::ButtonCount> Input::pressedMouseButtons;
-ThreadSafeBitset<sf::Mouse::ButtonCount> Input::releasedMouseButtons;
-std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
+std::bitset<sf::Mouse::ButtonCount> Input::pressedMouseButtons;
+std::bitset<sf::Mouse::ButtonCount> Input::releasedMouseButtons;
+std::array<sf::Event::MouseButtonEvent, 
         sf::Mouse::ButtonCount> Input::pressedMouseEvents;
-std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
+std::array<sf::Event::MouseButtonEvent, 
         sf::Mouse::ButtonCount> Input::releasedMouseEvents;
 
 sf::Event::MouseWheelScrollEvent Input::wheelScrollEvent;
 bool Input::wheelScrolled = false;
 
-//Input & Input::instance() {
-//    static Input input;
-//    return input;
-//}
-
-void Input::addKeyPressed(sf::Event::KeyEvent keyEvent) {
-    if (keyEvent.code >= 0) {
-        pressedKeys.set(static_cast<size_t>(keyEvent.code));
-        heldKeys.set(static_cast<size_t>(keyEvent.code));
-    }
-    // another case will trigger if 
-    // sfml don't know what is this button
-}
-
-void Input::addKeyReleased(sf::Event::KeyEvent keyEvent) {
-    if (keyEvent.code >= 0) {
-        releasedKeys.set(static_cast<size_t>(keyEvent.code));
-        heldKeys.reset(static_cast<size_t>(keyEvent.code));
-    }
-}
-
 bool Input::isKeyDown(sf::Keyboard::Key key) {
     // assume you will not ask sf::Keybord::Unknown
-    return pressedKeys.get(static_cast<size_t>(key));
+    return pressedKeys[static_cast<size_t>(key)];
 }
 
 bool Input::isKeyUp(sf::Keyboard::Key key) {
-    return releasedKeys.get(static_cast<size_t>(key));
+    return releasedKeys[static_cast<size_t>(key)];
 }
 
 bool Input::isKey(sf::Keyboard::Key key) {
-    return heldKeys.get(static_cast<size_t>(key));
-}
-
-void Input::addMouseButtonPressed(sf::Event::MouseButtonEvent buttonEvent) {
-    pressedMouseButtons.set(buttonEvent.button);
-    pressedMouseEvents[buttonEvent.button].second.lock();
-    pressedMouseEvents[buttonEvent.button].first = buttonEvent;
-    pressedMouseEvents[buttonEvent.button].second.unlock();
-}
-
-void Input::addMouseButtonReleased(sf::Event::MouseButtonEvent buttonEvent) {
-    releasedMouseButtons.set(buttonEvent.button);
-    releasedMouseEvents[buttonEvent.button].second.lock();
-    releasedMouseEvents[buttonEvent.button].first = buttonEvent;
-    releasedMouseEvents[buttonEvent.button].second.unlock();
+    return heldKeys[static_cast<size_t>(key)];
 }
 
 bool Input::getMouseButtonPressed(sf::Mouse::Button button) {
-    return pressedMouseButtons.get(button);
+    return pressedMouseButtons[button];
 }
 
 bool Input::getMouseButtonReleased(sf::Mouse::Button button) {
-    return releasedMouseButtons.get(button);
+    return releasedMouseButtons[button];
 }
 
 sf::Event::MouseButtonEvent Input::getMBPressedEvent(sf::Mouse::Button button) {
-    std::lock_guard<std::mutex> lock(pressedMouseEvents[button].second);
-    return pressedMouseEvents[button].first;
+    return pressedMouseEvents[button];
 }
 
 sf::Event::MouseButtonEvent Input::getMBReleasedEvent(sf::Mouse::Button button) {
-    std::lock_guard<std::mutex> lock(releasedMouseEvents[button].second);
-    return releasedMouseEvents[button].first;
-}
-
-void Input::addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEvent) {
-    wheelScrolled = true;
-    Input::wheelScrollEvent = mouseScrollEvent;
+    return releasedMouseEvents[button];
 }
 
 sf::Event::MouseWheelScrollEvent Input::getWheelScrollEvent() {
@@ -95,10 +55,69 @@ bool Input::getWheelScrolled() {
     return wheelScrolled;
 }
 
-void Input::reset() {
-    pressedKeys.reset();
-    releasedKeys.reset();
-    pressedMouseButtons.reset();
-    releasedMouseButtons.reset();
-    wheelScrolled = false;
+void Input::setFromInputBuffer() {
+    
+    size_t i = 0;
+    size_t inBitsetIndex = 0;
+    for (; i < sf::Keyboard::KeyCount; ++inBitsetIndex) {
+        
+        size_t end = i + 32;
+        
+        InputBuffer::pressedKeys.getMutex(inBitsetIndex).lock();
+        InputBuffer::heldKeys.getMutex(inBitsetIndex).lock();
+        InputBuffer::releasedKeys.getMutex(inBitsetIndex).lock();    
+        
+        for (; (i < sf::Keyboard::KeyCount) && (i < end); ++i) {
+            Input::pressedKeys.set(i, InputBuffer::pressedKeys.unsafeGet(i));
+            Input::heldKeys.set(i, InputBuffer::heldKeys.unsafeGet(i));
+            Input::releasedKeys.set(i, InputBuffer::releasedKeys.unsafeGet(i));
+        }
+        
+        InputBuffer::pressedKeys.unsafeSetNumber(inBitsetIndex, 0);
+        InputBuffer::releasedKeys.unsafeSetNumber(inBitsetIndex, 0);
+        
+        InputBuffer::pressedKeys.getMutex(inBitsetIndex).unlock();
+        InputBuffer::heldKeys.getMutex(inBitsetIndex).unlock();
+        InputBuffer::releasedKeys.getMutex(inBitsetIndex).unlock();   
+    }
+    i = 0;
+    inBitsetIndex = 0;
+    
+    for (; i < sf::Mouse::ButtonCount; ++inBitsetIndex) {
+        
+        size_t end = i + 32;
+        
+        InputBuffer::pressedMouseButtons.getMutex(inBitsetIndex).lock();
+        InputBuffer::releasedMouseButtons.getMutex(inBitsetIndex).lock();
+        
+        for (; (i < sf::Mouse::ButtonCount) && (i < end); ++i) {
+            
+            Input::pressedMouseButtons.set(i, InputBuffer::pressedKeys.unsafeGet(i));
+            Input::releasedMouseButtons.set(i, InputBuffer::releasedKeys.unsafeGet(i));
+            
+            InputBuffer::pressedMouseEvents[i].second.lock();
+            InputBuffer::releasedMouseEvents[i].second.lock();
+            
+            Input::pressedMouseEvents[i] = InputBuffer::pressedMouseEvents[i].first;
+            Input::releasedMouseEvents[i] = InputBuffer::releasedMouseEvents[i].first;            
+            
+            InputBuffer::pressedMouseEvents[i].second.unlock();
+            InputBuffer::releasedMouseEvents[i].second.unlock();
+
+        }
+        
+        InputBuffer::pressedMouseButtons.unsafeSetNumber(inBitsetIndex, 0);
+        InputBuffer::releasedMouseButtons.unsafeSetNumber(inBitsetIndex, 0);
+        
+        InputBuffer::pressedMouseButtons.getMutex(inBitsetIndex).unlock();
+        InputBuffer::releasedMouseButtons.getMutex(inBitsetIndex).unlock();
+        
+    }
+    InputBuffer::wheelScrollMutex.lock();
+    
+    Input::wheelScrollEvent = InputBuffer::wheelScrollEvent;
+    Input::wheelScrolled = InputBuffer::wheelScrolled;
+    InputBuffer::wheelScrolled = false;
+    
+    InputBuffer::wheelScrollMutex.unlock();
 }

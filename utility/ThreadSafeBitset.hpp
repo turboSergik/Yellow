@@ -1,5 +1,5 @@
-#ifndef ATOMICBITSET_HPP
-#define ATOMICBITSET_HPP
+#ifndef THREADSAFEBITSET_HPP
+#define THREADSAFEBITSET_HPP
 #include <cstddef>
 #include <cstdint>
 #include <mutex>
@@ -36,12 +36,14 @@ public:
     ThreadSafeBitset<N> & flip(size_t);
     
     bool get(size_t);
+    bool unsafeGet(size_t);
+    void unsafeSetNumber(size_t, uint32_t);
+    std::mutex & getMutex(size_t);
+    
     size_t size();
     
     
 };
-
-#endif // ATOMICBITSET_HPP
 
 template<size_t N>
 ThreadSafeBitset<N>::ThreadSafeBitset(bool initBool) {
@@ -99,6 +101,21 @@ bool ThreadSafeBitset<N>::get(size_t index) {
 }
 
 template<size_t N>
+bool ThreadSafeBitset<N>::unsafeGet(size_t index) {
+    return (this->data[index / 32].first >> (index % 32)) & 1;
+}
+
+template<size_t N>
+void ThreadSafeBitset<N>::unsafeSetNumber(size_t i, uint32_t val) {
+    data[i].first = val;
+}
+
+template<size_t N>
+std::mutex & ThreadSafeBitset<N>::getMutex(size_t index) {
+    return data[index].second;
+}
+
+template<size_t N>
 ThreadSafeBitset<N> & ThreadSafeBitset<N>::flip(size_t index) {
     return bitOperation(index, [this](size_t actualIndex, size_t numberOfBit) -> ThreadSafeBitset<N> & {
         bool value = (this->data[actualIndex].first >> numberOfBit) & 1;
@@ -145,3 +162,5 @@ ThreadSafeBitset<N> & ThreadSafeBitset<N>::forEach(Func f) {
     });
     return *this;
 }
+
+#endif // THREADSAFEBITSET_HPP

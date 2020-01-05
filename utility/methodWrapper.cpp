@@ -49,6 +49,14 @@ void UpdateWrapper::operator()() const {
     wrappedMethod(obj);
 }
 
+void * FixedUpdateWrapper::getObject() const {
+    return obj;
+}
+
+void FixedUpdateWrapper::operator()() const {
+    wrappedMethod(obj);
+}
+
 void * StartWrapper::getObject() const {
     return obj;
 }
@@ -64,3 +72,5 @@ void * OnDestroyWrapper::getObject() const {
 void OnDestroyWrapper::operator()() const {
     wrappedMethod(obj);
 }
+
+
