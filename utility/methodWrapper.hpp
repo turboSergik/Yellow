@@ -62,7 +62,7 @@ class FixedUpdateWrapper {
     
     template <typename T>
     static void concreteWrapperMethod(void * obj) {
-        reinterpret_cast<T *>(obj)->update();
+        reinterpret_cast<T *>(obj)->fixedUpdate();
     }
 public:
     FixedUpdateWrapper() = delete;
