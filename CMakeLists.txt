@@ -48,6 +48,7 @@ set(SOURCES
         custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
         static/Input.cpp
+        static/InputBuffer.cpp
         static/MethodsPool.cpp
         utility/methodWrapper.cpp
         network/Network.cpp
@@ -61,6 +62,5 @@ add_executable(WG ${SOURCES})
 target_link_libraries(WG ${CONAN_LIBS})
 
 if (LINUX)
-    message("linux triggered")
     target_link_libraries(WG X11)
 endif()

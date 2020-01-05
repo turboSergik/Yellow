@@ -12,6 +12,7 @@
 #include "static/Time.h"
 #include "network/PacketQueue.hpp"
 #include "static/Input.hpp"
+#include "static/InputBuffer.hpp"
 #include "network/Network.hpp"
 #ifdef __linux__
 // #include <X11/Xlib.h>
@@ -31,9 +32,15 @@ void mainLoop(sf::RenderWindow & window,
     
     sf::Clock clock; // starts the clock
     
+    sf::Clock fixedUpdateClock;
+    
     while (window.isOpen()) {
+        Input::setFromInputBuffer();
+        MethodsPool::start();
         MethodsPool::update();
-        Input::reset();
+        // now without timer for fixedUpdate
+        MethodsPool::fixedUpdate();
+        MethodsPool::onDestroy();
         window.clear();        
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
@@ -79,28 +86,28 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
-                root->destroyImmediate();
                 window.close();
                 mainLoopThread.join();
+                root->destroyImmediate();
                 return 0;
             case sf::Event::Resized:
                 mainCamera->onWindowResized();
                 break;
             case sf::Event::KeyPressed:
-                Input::addKeyPressed(event.key);
+                InputBuffer::addKeyPressed(event.key);
                 break;
             case sf::Event::KeyReleased:
-                Input::addKeyReleased(event.key);
+                InputBuffer::addKeyReleased(event.key);
                 break;
             case sf::Event::MouseButtonPressed:
-                Input::addMouseButtonPressed(event.mouseButton);
+                InputBuffer::addMouseButtonPressed(event.mouseButton);
                 break;
             case sf::Event::MouseButtonReleased:
-                Input::addMouseButtonReleased(event.mouseButton);
+                InputBuffer::addMouseButtonReleased(event.mouseButton);
                 break;
             case sf::Event::MouseWheelScrolled:
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-                    Input::addWheelScroll(event.mouseWheelScroll);
+                    InputBuffer::addWheelScroll(event.mouseWheelScroll);
                     // std::cout << event.mouseWheelScroll.delta << std::endl;                    
                 }
                 break;
