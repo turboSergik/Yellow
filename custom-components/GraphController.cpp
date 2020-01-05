@@ -163,8 +163,7 @@ void GraphController::start() {
 //    applyLayer0(this->layer0);
 }
 
-void GraphController::update() {
-
+void GraphController::fixedUpdate() {
     for (auto it1 = Database::points.begin(); it1 != Database::points.end(); it1++) {
         const auto & point1 = it1->second;
         for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {

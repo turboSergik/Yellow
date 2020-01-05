@@ -19,15 +19,13 @@ private:
     nlohmann::json playerInfo;
     nlohmann::json layer0;
     nlohmann::json layer1;
-
-    Vector2 randomVector();
 public:
     void applyLayer0(const nlohmann::json& json);
     void applyLayer1(const nlohmann::json& json);
     void applyLayer10(const nlohmann::json& json);
 
     void start();
-    void update();
+    void fixedUpdate();
     void onDestroy();
     void onLogin(const nlohmann::json & json);
     void onMapLayer0(const nlohmann::json & json);
