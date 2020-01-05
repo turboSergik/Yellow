@@ -68,7 +68,7 @@ public:
     FixedUpdateWrapper() = delete;
     template <class T>
     FixedUpdateWrapper(T * objPtr) : obj(objPtr) ,
-    wrappedMethod(UpdateWrapper::concreteWrapperMethod<T>) {}
+    wrappedMethod(FixedUpdateWrapper::concreteWrapperMethod<T>) {}
     
     void * getObject() const;
     
