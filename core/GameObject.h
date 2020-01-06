@@ -120,9 +120,11 @@ T * GameObject::addComponent(Args &&... args) {
     if (onScene) {
         onSceneStart(instance);
         onSceneUpdate(instance);
+        onSceneFixedUpdate(instance);
     } else {
         addStart(instance);
         addUpdate(instance);
+        addFixedUpdate(instance);
     }
     addOnDestroy(instance);
     return instance;
