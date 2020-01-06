@@ -31,7 +31,7 @@ void Line::start() {
     lineRenderer = gameObject->getComponent<LineRenderer>();
 }
 
-void Line::update() {
+void Line::fixedUpdate() {
     Vector2 direction =
             this->points[1]->transform->getPosition() -
             this->points[0]->transform->getPosition();

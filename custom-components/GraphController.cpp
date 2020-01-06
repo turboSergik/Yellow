@@ -151,7 +151,7 @@ void GraphController::start() {
     Network::onMapResponse10.addListener<GraphController, &GraphController::onMapLayer10>(this);
 
     Network::connect("wgforge-srv.wargaming.net", 443);
-    Network::send(Action::LOGIN, {{"name", "Yellow2"}, {"game", "Yellow"}});
+    Network::send(Action::LOGIN, {{"name", "Yellow"}, {"game", "Yellow"}, {"num_players", 1}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
     //Network::send(Action::MAP, {{"layer", 10}});
@@ -163,7 +163,7 @@ void GraphController::start() {
 //    applyLayer0(this->layer0);
 }
 
-void GraphController::update() {
+void GraphController::fixedUpdate() {
     for (auto it1 = Database::points.begin(); it1 != Database::points.end(); it1++) {
         const auto & point1 = it1->second;
         for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {
@@ -174,6 +174,7 @@ void GraphController::update() {
             point2->rigidBody->addForce(direction.normalized() * k);
             point1->rigidBody->addForce(-direction.normalized() * k);
         }
+
     }
 }
 
@@ -200,6 +201,7 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     if (this->layer1 != json) {
         this->applyLayer1(json);
         this->playerController->isMapUpdated = true;
+
     } else {
         Network::send(Action::MAP, {{"layer", 1}});
     }

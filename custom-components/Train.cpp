@@ -44,7 +44,7 @@ void Train::applyLayer1(const nlohmann::json &json) {
             this->transform->setPosition(prevPosition);
         }
         this->transform->setParent(this->line->transform, true);
-        this->targetPosition = this->line->toWorldLocalPosition(this->position);
+        //this->targetPosition = this->line->toWorldLocalPosition(this->position);
     }
     this->speed = json.value("speed", this->speed);
     this->player_idx = json.value("player_idx", this->player_idx);
@@ -54,6 +54,7 @@ void Train::applyLayer1(const nlohmann::json &json) {
 }
 
 void Train::update() {
+    this->targetPosition = this->line->toWorldLocalPosition(this->position);
     this->transform->setLocalPosition(lerp(
             this->transform->getLocalPosition(),targetPosition, 0.2f));
 }

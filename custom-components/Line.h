@@ -22,7 +22,7 @@ public:
     Vector2 toWorldGlobalPosition(int position);
     Vector2 toWorldLocalPosition(int position);
     void start();
-    void update();
+    void fixedUpdate();
     void applyLayer0(const nlohmann::json &json) override;
 };
 
