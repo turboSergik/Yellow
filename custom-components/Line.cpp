@@ -31,19 +31,13 @@ void Line::start() {
     lineRenderer = gameObject->getComponent<LineRenderer>();
 }
 
-void Line::update() {
+void Line::fixedUpdate() {
     Vector2 direction =
             this->points[1]->transform->getPosition() -
             this->points[0]->transform->getPosition();
     this->worldLength = direction.magnitude();
     this->transform->setRotation(180 / PI * atan2f(direction.y, direction.x));
     this->lineRenderer->setVertices({0, 0}, {this->worldLength, 0});
-}
-
-void Line::fixedUpdate() {
-    Vector2 direction =
-            this->points[1]->transform->getPosition() -
-            this->points[0]->transform->getPosition();
     float deltaLength = this->worldLength - ForceMethodConfig::springLength;
     this->points[0]->rigidBody->addForce(
             ForceMethodConfig::stiffnessK * deltaLength * direction.normalized());
