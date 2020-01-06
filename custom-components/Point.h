@@ -23,7 +23,7 @@ public:
     void applyLayer0(const nlohmann::json &json) override;
 
     void start();
-    void update();
+    void fixedUpdate();
 };
 
 
