@@ -201,6 +201,7 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     if (this->layer1 != json) {
         this->applyLayer1(json);
         this->playerController->isMapUpdated = true;
+        playerController->tickNow++;
 
     } else {
         Network::send(Action::MAP, {{"layer", 1}});

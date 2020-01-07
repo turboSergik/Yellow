@@ -26,13 +26,13 @@ extern "C" int XInitThreads();
 
 static std::atomic<bool> closeCalled;
 
-void mainLoop(sf::RenderWindow & window, 
+void mainLoop(sf::RenderWindow & window,
               Camera * mainCamera) {
-    
+
     //window.setFramerateLimit(60);
-    
+
     window.setActive(true);
-    
+
     sf::Clock clock; // starts the clock
 
     float time = 0.f;
@@ -47,12 +47,12 @@ void mainLoop(sf::RenderWindow & window,
             time -= Time::fixedDeltaTime;
         }
         MethodsPool::onDestroy();
-        window.clear();        
+        window.clear();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
         Network::update();
     }
-    
+
 }
 
 bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
@@ -67,36 +67,36 @@ bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
 int main() {
 
     srand(time(nullptr));
-    
+
 #ifdef __linux__
     XInitThreads();
 #endif
-    
+
     closeCalled.store(false, std::memory_order_acquire);
-    
-    sf::RenderWindow window(sf::VideoMode(1600, 900), "Graph");
-    
+
+    sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
+
     window.setActive(false);
-    
+
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
 
     std::thread mainLoopThread(mainLoop, std::ref(window), mainCamera);
-    
+
     sf::Event event{};
-    
+
     while (window.isOpen()) {
-        
+
         if (safeWaitEvent(window, event)) {
             // scary event handling
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
                 closeCalled.store(true, std::memory_order_acquire);
-                mainLoopThread.join();                
+                mainLoopThread.join();
                 root->destroyImmediate();
-                window.close();                
+                window.close();
                 return 0;
             case sf::Event::Resized:
                 mainCamera->onWindowResized();
@@ -116,7 +116,7 @@ int main() {
             case sf::Event::MouseWheelScrolled:
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                     InputBuffer::addWheelScroll(event.mouseWheelScroll);
-                    // std::cout << event.mouseWheelScroll.delta << std::endl;                    
+                    // std::cout << event.mouseWheelScroll.delta << std::endl;
                 }
                 break;
             default:
@@ -125,6 +125,6 @@ int main() {
 
         }
     }
-    
+
     return 0;
 }

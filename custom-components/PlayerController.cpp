@@ -453,6 +453,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
     std::cout << std::endl;
     */
 
+
     addTimeTable(finalWay);
 
     reverse(finalWay.begin(), finalWay.end());
@@ -591,6 +592,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     for (int i = 0; i < finalWay.size(); i++) std::cout << finalWay[i] << " ";
     std::cout << std::endl;
     */
+
 
     addTimeTable(finalWay);
 
