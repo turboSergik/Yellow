@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <thread>
+#include <mutex>
 #include "static/Database.h"
 #include "core/GameObject.h"
 #include "core-components/Camera.h"
@@ -10,52 +12,103 @@
 #include "static/Time.h"
 #include "network/PacketQueue.hpp"
 #include "static/Input.hpp"
+#include "static/InputBuffer.hpp"
 #include "network/Network.hpp"
+#ifdef __linux__
+// #include <X11/Xlib.h>
+// extern include function which implemented in Xlib
+// not included becouse of conflicting declaration Time
+extern "C" int XInitThreads();
 
-int main() {
-    srand(time(nullptr));
+#endif
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Graph");
-    window.setFramerateLimit(60);
 
-    GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
-    Camera *mainCamera = Prefabs::camera(&window);
-    mainCamera->gameObject->instantiate();
-
+void mainLoop(sf::RenderWindow & window, 
+              Camera * mainCamera) {
+    
+    //window.setFramerateLimit(60);
+    
+    window.setActive(true);
+    
     sf::Clock clock; // starts the clock
 
-    window.setKeyRepeatEnabled(false);
-
+    float time = 0.f;
     while (window.isOpen()) {
-        sf::Event event{};
-        Input::reset();
-        while (window.pollEvent(event)) {
+        Time::deltaTime = clock.restart().asSeconds();
+        Input::setFromInputBuffer();
+        MethodsPool::start();
+        MethodsPool::update();
+        time += Time::deltaTime;
+        while (time >= Time::fixedDeltaTime) {
+            MethodsPool::fixedUpdate();
+            time -= Time::fixedDeltaTime;
+        }
+        MethodsPool::onDestroy();
+        window.clear();        
+        Renderer::draw(window, mainCamera->getRenderState());
+        window.display();
+        Network::update();
+    }
+    
+}
+
+bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
+    bool result = false;
+    while (!result) {
+        result = window.pollEvent(event);
+        std::this_thread::yield();
+    }
+    return result;
+}
+
+int main() {
+
+    srand(time(nullptr));
+    
+#ifdef __linux__
+    XInitThreads();
+#endif
+    
+    sf::RenderWindow window(sf::VideoMode(1600, 900), "Graph");
+
+    GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
+    Camera * mainCamera = Prefabs::camera(&window);
+    mainCamera->gameObject->instantiate();
+
+    std::thread mainLoopThread(mainLoop, std::ref(window), mainCamera);
+    
+    sf::Event event{};
+    
+    while (window.isOpen()) {
+        
+        if (safeWaitEvent(window, event)) {
             // scary event handling
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
                 root->destroyImmediate();
                 window.close();
+                mainLoopThread.join();
                 return 0;
             case sf::Event::Resized:
-                // update the view to the new size of the window
                 mainCamera->onWindowResized();
                 break;
             case sf::Event::KeyPressed:
-                Input::addKeyPressed(event.key);
+                InputBuffer::addKeyPressed(event.key);
                 break;
             case sf::Event::KeyReleased:
-                Input::addKeyReleased(event.key);
+                InputBuffer::addKeyReleased(event.key);
                 break;
             case sf::Event::MouseButtonPressed:
-                Input::addMouseButtonPressed(event.mouseButton);
+                InputBuffer::addMouseButtonPressed(event.mouseButton);
                 break;
             case sf::Event::MouseButtonReleased:
-                Input::addMouseButtonReleased(event.mouseButton);
+                InputBuffer::addMouseButtonReleased(event.mouseButton);
                 break;
             case sf::Event::MouseWheelScrolled:
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-                    Input::addWheelScroll(event.mouseWheelScroll);
+                    InputBuffer::addWheelScroll(event.mouseWheelScroll);
+                    // std::cout << event.mouseWheelScroll.delta << std::endl;                    
                 }
                 break;
             default:
@@ -63,14 +116,7 @@ int main() {
             }
 
         }
-
-        Time::deltaTime = clock.restart().asSeconds();
-        window.clear();
-        MethodsPool::update();
-        Renderer::draw(window, mainCamera->getRenderState());
-        window.display();
-        Network::update();
     }
-
+    
     return 0;
 }

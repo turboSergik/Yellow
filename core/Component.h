@@ -9,11 +9,15 @@
 #include "../utility/methodWrapper.hpp"
 #include <vector>
 #include <limits>
+#include <forward_list>
 
 class Component {
     std::list<Component *>::iterator componentPosition;
+    std::forward_list<OnDestroyWrapper>::iterator preDestroyPosition;
     
-    size_t updatePosition = std::numeric_limits<size_t>::max();
+    size_t updatePosition;
+    size_t fixedUpdatePosition;
+    
     void destroyImmediate();
     friend class GameObject;
     friend class MethodsPool;
@@ -24,7 +28,6 @@ public:
     void destroy();
     
     virtual ~Component() = default;
-    //TODO: add start() event (check add to scene and call)
 };
 
 

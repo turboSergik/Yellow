@@ -16,6 +16,18 @@ public:
 template <class T>
 struct HasUpdate : decltype (CheckHasUpdate::template checkFunc<T>(nullptr)) {};
 
+class CheckHasFixedUpdate {
+public:
+    template <typename T>
+    static std::true_type checkFunc(decltype(std::declval<T>().fixedUpdate()) *);
+    template <typename T>
+    static std::false_type checkFunc(...);
+};
+
+template <class T>
+struct HasFixedUpdate : decltype (CheckHasFixedUpdate::template checkFunc<T>(nullptr)) {};
+
+
 class CheckHasStart {
 public:
     template <typename T>

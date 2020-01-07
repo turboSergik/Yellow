@@ -6,14 +6,17 @@
 #define WG_TRAIN_H
 
 #include "Behaviour.h"
+#include "../linalg/Vector2.hpp"
 
+enum GoodsType {
+    Products = 1,
+    Armor = 2
+};
 
 class Train : public Behaviour {
 private:
-    sf::Vector2f lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t);
-    float cross(const sf::Vector2f & a, const sf::Vector2f & b);
-    float dot(const sf::Vector2f & a, const sf::Vector2f & b);
-    float magnitude(const sf::Vector2f & v);
+    Vector2 targetPosition;
+    Vector2 lerp(const Vector2 & a, const Vector2 & b, float t);
 public:
     explicit Train(int idx);
 
@@ -26,9 +29,11 @@ public:
     int level = 0;
     int next_level_price = 0;
     int position = 0;
+    int prevPosition = 0;
     int speed = 0;
     std::string player_idx;
     Line *line = nullptr;
+    Line *prevLine = nullptr;
     //TODO: ask what this field store
     //"goods_type": null, WTF?
 

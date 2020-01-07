@@ -56,6 +56,27 @@ public:
     ~UpdateWrapper() = default;
 };
 
+class FixedUpdateWrapper {
+    void * obj;
+    void (*wrappedMethod)(void *);
+    
+    template <typename T>
+    static void concreteWrapperMethod(void * obj) {
+        reinterpret_cast<T *>(obj)->fixedUpdate();
+    }
+public:
+    FixedUpdateWrapper() = delete;
+    template <class T>
+    FixedUpdateWrapper(T * objPtr) : obj(objPtr) ,
+    wrappedMethod(FixedUpdateWrapper::concreteWrapperMethod<T>) {}
+    
+    void * getObject() const;
+    
+    void operator()() const;
+    
+    ~FixedUpdateWrapper() = default;
+};
+
 class StartWrapper {
     void * obj;
     void (*wrappedMethod)(void *);

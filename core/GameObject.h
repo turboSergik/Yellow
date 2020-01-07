@@ -20,6 +20,7 @@ private:
     std::list<Component*> components;
     std::forward_list<StartWrapper> startPool;
     std::forward_list<UpdateWrapper> updatePool;
+    std::forward_list<FixedUpdateWrapper> fixedUpdatePool;
     std::forward_list<OnDestroyWrapper> onDestroyPool;
     bool onScene = false;
     
@@ -40,7 +41,15 @@ private:
     
     template <class T>
     typename std::enable_if<!HasUpdate<T>::value>::type
-    addUpdate(T * ) {}
+    addUpdate(T * );
+    
+    template <class T>
+    typename std::enable_if<HasFixedUpdate<T>::value>::type
+    addFixedUpdate(T * component);
+    
+    template <class T>
+    typename std::enable_if<!HasFixedUpdate<T>::value>::type
+    addFixedUpdate(T * );
     
     template <class T>
     typename std::enable_if<HasOnDestroy<T>::value>::type
@@ -48,7 +57,7 @@ private:
     
     template <class T>
     typename std::enable_if<!HasOnDestroy<T>::value>::type
-    addOnDestroy(T * ) {}
+    addOnDestroy(T * );
 
     template <class T>
     typename std::enable_if<HasStart<T>::value>::type
@@ -64,7 +73,15 @@ private:
     
     template <class T>
     typename std::enable_if<!HasUpdate<T>::value>::type
-    onSceneUpdate(T * ) {}
+    onSceneUpdate(T * );
+    
+    template <class T>
+    typename std::enable_if<HasFixedUpdate<T>::value>::type
+    onSceneFixedUpdate(T * component);
+    
+    template <class T>
+    typename std::enable_if<!HasFixedUpdate<T>::value>::type
+    onSceneFixedUpdate(T * );
     
     void sceneDestroy();
     
@@ -103,9 +120,11 @@ T * GameObject::addComponent(Args &&... args) {
     if (onScene) {
         onSceneStart(instance);
         onSceneUpdate(instance);
+        onSceneFixedUpdate(instance);
     } else {
         addStart(instance);
         addUpdate(instance);
+        addFixedUpdate(instance);
     }
     addOnDestroy(instance);
     return instance;
@@ -136,9 +155,42 @@ GameObject::addUpdate(T * component) {
 }
 
 template <class T>
+typename std::enable_if<!HasUpdate<T>::value>::type
+GameObject::addUpdate(T * component) {
+    component->updatePosition = std::numeric_limits<size_t>::max();
+}
+
+template <class T>
+typename std::enable_if<HasFixedUpdate<T>::value>::type
+GameObject::addFixedUpdate(T * component) {
+    fixedUpdatePool.push_front(FixedUpdateWrapper(component));
+}
+
+template <class T>
+typename std::enable_if<!HasFixedUpdate<T>::value>::type
+GameObject::addFixedUpdate(T * component) {
+    component->fixedUpdatePosition = std::numeric_limits<size_t>::max();
+}
+
+template <class T>
 typename std::enable_if<HasOnDestroy<T>::value>::type
 GameObject::addOnDestroy(T * component) {
-    onDestroyPool.push_front(OnDestroyWrapper(component));
+    if (!onDestroyPool.empty()) {
+        Component * previousFront = 
+                reinterpret_cast<Component *>(
+                    onDestroyPool.front().getObject());
+        onDestroyPool.push_front(OnDestroyWrapper(component));
+        previousFront->preDestroyPosition = onDestroyPool.begin();
+    } else {
+        onDestroyPool.push_front(OnDestroyWrapper(component));        
+    }
+    component->preDestroyPosition = onDestroyPool.before_begin();
+}
+
+template <class T>
+typename std::enable_if<!HasOnDestroy<T>::value>::type
+GameObject::addOnDestroy(T * component) {
+    component->preDestroyPosition = onDestroyPool.end();
 }
 
 template <class T>
@@ -152,6 +204,25 @@ typename std::enable_if<HasUpdate<T>::value>::type
 GameObject::onSceneUpdate(T * component) {
     component->updatePosition = MethodsPool::updatePool.size();    
     MethodsPool::updatePool.push_back(UpdateWrapper(component));
+}
+
+template <class T>
+typename std::enable_if<!HasUpdate<T>::value>::type
+GameObject::onSceneUpdate(T * component) {
+    addUpdate(component);
+}
+
+template <class T>
+typename std::enable_if<HasFixedUpdate<T>::value>::type
+GameObject::onSceneFixedUpdate(T * component) {
+    component->fixedUpdatePosition = MethodsPool::fixedUpdatePool.size();    
+    MethodsPool::fixedUpdatePool.push_back(FixedUpdateWrapper(component));
+}
+
+template <class T>
+typename std::enable_if<!HasFixedUpdate<T>::value>::type
+GameObject::onSceneFixedUpdate(T * component) {
+    addUpdate(component);
 }
 
 #endif //WG_GAMEOBJECT_H
