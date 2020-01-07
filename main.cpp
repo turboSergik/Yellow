@@ -14,6 +14,8 @@
 #include "static/Input.hpp"
 #include "static/InputBuffer.hpp"
 #include "network/Network.hpp"
+#include <atomic>
+
 #ifdef __linux__
 // #include <X11/Xlib.h>
 // extern include function which implemented in Xlib
@@ -22,6 +24,7 @@ extern "C" int XInitThreads();
 
 #endif
 
+static std::atomic<bool> closeCalled;
 
 void mainLoop(sf::RenderWindow & window, 
               Camera * mainCamera) {
@@ -33,7 +36,7 @@ void mainLoop(sf::RenderWindow & window,
     sf::Clock clock; // starts the clock
 
     float time = 0.f;
-    while (window.isOpen()) {
+    while (!closeCalled.load(std::memory_order_release)) {
         Time::deltaTime = clock.restart().asSeconds();
         Input::setFromInputBuffer();
         MethodsPool::start();
@@ -69,8 +72,12 @@ int main() {
     XInitThreads();
 #endif
     
+    closeCalled.store(false, std::memory_order_acquire);
+    
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Graph");
-
+    
+    window.setActive(false);
+    
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
@@ -86,9 +93,10 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
+                closeCalled.store(true, std::memory_order_acquire);
+                mainLoopThread.join();                
                 root->destroyImmediate();
-                window.close();
-                mainLoopThread.join();
+                window.close();                
                 return 0;
             case sf::Event::Resized:
                 mainCamera->onWindowResized();
