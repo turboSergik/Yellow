@@ -17,8 +17,9 @@ class Network {
 private:
     static bool validatePacket(const Packet & packet);
 public:
-    static Event<const nlohmann::json &> onMap0Response;
-    static Event<const nlohmann::json &> onMap1Response;
+    static Event<const nlohmann::json &> onMapResponse0;
+    static Event<const nlohmann::json &> onMapResponse1;
+    static Event<const nlohmann::json &> onMapResponse10;
     static Event<const nlohmann::json &> onLoginResponse;
     static Event<const nlohmann::json &> onPlayerResponse;
     static Event<const nlohmann::json &> onGamesResponse;

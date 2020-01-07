@@ -6,15 +6,20 @@
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
 #include "../custom-components/CameraController.h"
+#include "../core-components/RigidBody.hpp"
 
-
+const float largeR = 1.0f;
+const float smallR = 0.8f * largeR;
 //TODO: add constants to easy manipulate default values of shapes
 Point *Prefabs::point(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(40);
-    circleRenderer->circle.setOrigin(40, 40);
+    circleRenderer->circle.setRadius(largeR);
+    circleRenderer->circle.setOrigin(largeR, largeR);
     Point *point = obj->addComponent<Point>(idx);
+    RigidBody * rigidBody = obj->addComponent<RigidBody>();
+    rigidBody->mass = 1.0f;
+    rigidBody->drag = 0.0f;
     return point;
 }
 
@@ -28,8 +33,8 @@ Line *Prefabs::line(int idx) {
 Train *Prefabs::train(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(30);
-    circleRenderer->circle.setOrigin(30, 30);
+    circleRenderer->circle.setRadius(smallR);
+    circleRenderer->circle.setOrigin(smallR, smallR);
     circleRenderer->circle.setFillColor(sf::Color::Green);
     circleRenderer->circle.setPointCount(3);
     circleRenderer->circle.setRotation(90);
@@ -40,8 +45,8 @@ Train *Prefabs::train(int idx) {
 Town *Prefabs::town(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(30);
-    circleRenderer->circle.setOrigin(30, 30);
+    circleRenderer->circle.setRadius(smallR);
+    circleRenderer->circle.setOrigin(smallR, smallR);
     circleRenderer->circle.setFillColor(sf::Color::Black);
     Town *town = obj->addComponent<Town>(idx);
     return town;
@@ -50,8 +55,8 @@ Town *Prefabs::town(int idx) {
 Market *Prefabs::market(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(30);
-    circleRenderer->circle.setOrigin(30, 30);
+    circleRenderer->circle.setRadius(smallR);
+    circleRenderer->circle.setOrigin(smallR, smallR);
     circleRenderer->circle.setFillColor(sf::Color::Red);
     Market *market = obj->addComponent<Market>(idx);
     return market;
@@ -60,8 +65,8 @@ Market *Prefabs::market(int idx) {
 Storage *Prefabs::storage(int idx) {
     GameObject *obj = new GameObject();
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
-    circleRenderer->circle.setRadius(30);
-    circleRenderer->circle.setOrigin(30, 30);
+    circleRenderer->circle.setRadius(smallR);
+    circleRenderer->circle.setOrigin(smallR, smallR);
     circleRenderer->circle.setFillColor(sf::Color::Blue);
     Storage *storage = obj->addComponent<Storage>(idx);
     return storage;

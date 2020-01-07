@@ -4,8 +4,9 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Event.hpp>
-#include <bitset>
+#include "../utility/ThreadSafeBitset.hpp"
 #include <array>
+#include <bitset>
 
 class Input
 {
@@ -18,44 +19,32 @@ class Input
 
     static std::bitset<sf::Mouse::ButtonCount> pressedMouseButtons;
     static std::bitset<sf::Mouse::ButtonCount> releasedMouseButtons;
-
+    
     static std::array<sf::Event::MouseButtonEvent,
                sf::Mouse::ButtonCount> pressedMouseEvents;
 
-    static std::array<sf::Event::MouseButtonEvent,
+    static std::array<sf::Event::MouseButtonEvent, 
                sf::Mouse::ButtonCount> releasedMouseEvents;
-
+    
     static sf::Event::MouseWheelScrollEvent wheelScrollEvent;
     static bool wheelScrolled;
-
-//    Input() = default;
-//    Input(const Input &) = delete;
-//    Input(Input &&) = delete;
-//    Input & operator=(const Input &) = delete;
-//    Input & operator=(Input &&) = delete;
+    
 public:
-//    static Input & instance();
-//    ~Input() = default;
-
-    static void addKeyPressed(sf::Event::KeyEvent keyEvent);
-    static void addKeyReleased(sf::Event::KeyEvent keyEvent);
 
     static bool isKeyDown(sf::Keyboard::Key key);
     static bool isKey(sf::Keyboard::Key key);
     static bool isKeyUp(sf::Keyboard::Key key);
 
-    static void addMouseButtonPressed(sf::Event::MouseButtonEvent buttonEvent);
-    static void addMouseButtonReleased(sf::Event::MouseButtonEvent buttonEvent);
     static bool getMouseButtonPressed(sf::Mouse::Button button);
     static bool getMouseButtonReleased(sf::Mouse::Button button);
     static sf::Event::MouseButtonEvent getMBPressedEvent(sf::Mouse::Button button);
     static sf::Event::MouseButtonEvent getMBReleasedEvent(sf::Mouse::Button button);
 
-    static void addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEvent);
     static sf::Event::MouseWheelScrollEvent getWheelScrollEvent();
     static bool getWheelScrolled();
-
-    static void reset();
+    
+    static void setFromInputBuffer();
+    
 };
 
 #endif // INPUT_HPP

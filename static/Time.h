@@ -5,10 +5,10 @@
 #ifndef WG_TIME_H
 #define WG_TIME_H
 
-
 class Time {
 public:
     static float deltaTime;
+    static float fixedDeltaTime;
 };
 
 
