@@ -66,7 +66,7 @@ bool PlayerController::isTown(int vertex) {
 int marketProduct(int vertex) {
     for (auto ver : Database::posts)  if (ver.second->point->idx == vertex) {
             auto *townObj = static_cast<Market* >(ver.second);
-            return townObj->product;
+            return townObj->productFict;
         }
 }
 
@@ -74,7 +74,7 @@ int marketProduct(int vertex) {
 int storageArmor(int vertex) {
     for (auto ver : Database::posts)  if (ver.second->point->idx == vertex) {
             auto *townObj = static_cast<Storage* >(ver.second);
-            return townObj->armor;
+            return townObj->armorFict;
         }
 }
 
@@ -250,8 +250,45 @@ void logTrain(Train* train) {
 }
 
 
+void addFictProduct(std::vector<int> &way, int capacity){
+
+    int now = 0;
+    for (int i = way.size() - 1; i >= 0; i--) {
+
+        for (auto post : Database::posts) if (post.second -> type == PostType::MARKET) {
+
+            auto *marketObj = static_cast<Market* >(post.second);
+
+            int add = capacity - now;
+            marketObj -> productFict = std::max(0, marketObj -> productFict - std::min(marketObj -> product, add));
+
+            now += std::min(add, marketObj -> product);
+        }
+    }
+}
+
+
+void addFictArmor(std::vector<int> &way, int capacity){
+
+    int now = 0;
+    for (int i = way.size() - 1; i >= 0; i--) {
+
+        for (auto post : Database::posts) if (post.second -> type == PostType::STORAGE) {
+
+            auto *storageObj = static_cast<Storage* >(post.second);
+
+            int add = capacity - now;
+            storageObj -> armorFict = std::max(0, storageObj -> armorFict - std::min(storageObj -> armor, add));
+
+            now += std::min(add, storageObj -> armor);
+        }
+    }
+}
+
+
 void trainIteration(Train*);
 void tryTrainUpdate(Train*);
+
 
 void PlayerController::update() {
 
@@ -267,6 +304,33 @@ void PlayerController::update() {
     PlayerController::timeFromLastTurn += Time::deltaTime;
     if (PlayerController::isMapUpdated && PlayerController::timeFromLastTurn > PlayerController::waitingTime) {
         //TODO: most of gameLogic
+
+        std::cout << "TICK=" << tickNow << std::endl;
+        for (auto post : Database::posts) {
+
+            if (post.second -> type == PostType::MARKET) {
+
+                auto *marketObj = static_cast<Market* >(post.second);
+                marketObj -> productFict += marketObj -> replenishment;
+
+
+                if (PlayerController::tickNow % 30 == 2) marketObj -> productFict = marketObj -> product;
+                marketObj -> productFict = std::min(marketObj -> productFict, marketObj -> product_capacity);
+
+            }
+
+            if (post.second -> type == PostType::STORAGE) {
+
+                auto *storageObj = static_cast<Storage* >(post.second);
+                storageObj -> armorFict += storageObj -> replenishment;
+
+                if (PlayerController::tickNow % 30 == 2) storageObj -> armor = storageObj -> armor;
+                storageObj -> armorFict = std::min(storageObj -> armorFict, storageObj -> armor_capacity);
+
+                // std::cout << "Id=" << storageObj -> point -> idx << " product=" << storageObj -> armorFict << " max=" << storageObj -> armor_capacity  << std::endl;
+            }
+        }
+
         strategyIteration();
         PlayerController::timeFromLastTurn = 0;
     }
@@ -459,6 +523,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
     reverse(finalWay.begin(), finalWay.end());
     if (finalWay.size()) finalWay.pop_back();
 
+    addFictProduct(finalWay, train -> goods_capacity);
 
     return {finalWay, summary1 + summary2};
 }
@@ -599,6 +664,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     reverse(finalWay.begin(), finalWay.end());
     if (finalWay.size()) finalWay.pop_back();
 
+    addFictArmor(finalWay, train -> goods_capacity);
 
     return {finalWay, summary1 + summary2};
 }

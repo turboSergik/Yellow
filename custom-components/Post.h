@@ -46,9 +46,11 @@ public:
 
 class Market : public Post {
 public:
-    int product = 0;
     int product_capacity = 0;
     int replenishment = 0;
+
+    int product = 0;
+    int productFict = 0;
 
     explicit Market(int idx);
     void applyLayer1(const nlohmann::json &json) override;
@@ -56,9 +58,11 @@ public:
 
 class Storage : public Post {
 public:
-    int armor = 0;
     int armor_capacity = 0;
     int replenishment = 0;
+
+    int armor = 0;
+    int armorFict = 0;
 
     explicit Storage(int idx);
     void applyLayer1(const nlohmann::json &json) override;
