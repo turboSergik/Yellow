@@ -6,6 +6,7 @@
 #include "../static/Database.h"
 #include "../network/Network.hpp"
 #include "../static/Time.h"
+#include "../utility/random.hpp"
 
 #include <queue>
 #include <bitset>
@@ -14,6 +15,7 @@
 #include <unordered_map>
 #include <set>
 
+using Random = effolkronium::random_static;
 
 std::unordered_map<int, std::set<int> > timeTableVertex;
 std::unordered_map<int, std::set<int> > timeTableLine;
@@ -412,7 +414,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
     sort(needMarkets.begin(), needMarkets.end());
 
     do{
-        if (rand() % 4 != 0) continue;
+        if (Random::get(0, 4) != 0) continue;
 
         clearLinesAndVertex(marketCount);
 
@@ -553,7 +555,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     sort(needStorages.begin(), needStorages.end());
 
     do{
-        if (rand() % 4 != 0) continue;
+        if (Random::get(0, 4) != 0) continue;
 
         clearLinesAndVertex(storagesCount);
 
