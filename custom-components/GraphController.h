@@ -11,6 +11,7 @@
 #include "../utility/GraphVisualizer.h"
 #include "PlayerController.hpp"
 #include "../linalg/Vector2.hpp"
+#include "../utility/Config.hpp"
 
 class GraphController : public Component {
 private:

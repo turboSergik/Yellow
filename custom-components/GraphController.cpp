@@ -13,7 +13,7 @@
 #include "../network/Packet.hpp"
 #include "../network/Network.hpp"
 #include "../utility/random.hpp"
-#include "../utility/ForceMethodConfig.hpp"
+#include "../core-components/renderers/CircleRenderer.h"
 
 using Random = effolkronium::random_static;
 
@@ -93,6 +93,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
         }
     }
     playerController->playerTown = static_cast<Town*>(Database::posts[playerInfo["home"]["post_idx"]]);
+    playerController->playerTown->gameObject->getComponent<CircleRenderer>()->circle.setFillColor(InterfaceConfig::playerTownColor);
     if (playerInfo.contains("trains")) {
         playerController->playerTrains.clear();
         for (const auto & item : playerInfo["trains"]) {
@@ -103,6 +104,7 @@ void GraphController::applyLayer1(const nlohmann::json &json) {
             auto & train = Database::trains[idx];
             if (train) {
                 playerController->playerTrains.push_back(train);
+                train->gameObject->getComponent<CircleRenderer>()->circle.setFillColor(InterfaceConfig::playerTrainColor);
             }
         }
     }
@@ -151,7 +153,10 @@ void GraphController::start() {
     Network::onMapResponse10.addListener<GraphController, &GraphController::onMapLayer10>(this);
 
     Network::connect("wgforge-srv.wargaming.net", 443);
-    Network::send(Action::LOGIN, {{"name", "Yellow"}, {"game", "Yellow"}, {"num_players", 1}});
+    Network::send(Action::LOGIN, {
+        {"name", PlayerConfig::playerName},
+        {"game", PlayerConfig::hostName},
+        {"num_players", PlayerConfig::numPlayers}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
     //Network::send(Action::MAP, {{"layer", 10}});
