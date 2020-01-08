@@ -6,7 +6,7 @@
 #include "Line.h"
 #include "../static/Database.h"
 #include "../core/GameObject.h"
-#include "../utility/ForceMethodConfig.hpp"
+
 
 const float PI = 3.14159265358f;
 

@@ -16,7 +16,7 @@ public:
     sf::Keyboard::Key left = sf::Keyboard::Left;
     sf::Keyboard::Key down = sf::Keyboard::Down;
     sf::Keyboard::Key right = sf::Keyboard::Right;
-    float maxSize = 10000;
+    float maxSize = 1000;
     float minSize = 1;
     float scrollFactor = 17.f;
     float moveFactor = 0.3f;
