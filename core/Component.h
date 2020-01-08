@@ -24,7 +24,17 @@ class Component {
 public:
     GameObject *gameObject = nullptr; //TODO: prevent changes of this field
     Transform *transform = nullptr;
-    
+
+    //TODO: add add/getComponent functions
+//    template <class T, class... Args>
+//    T * addComponent(Args &&... args) {
+//        gameObject->addComponent(std::forward<Args>(args)...);
+//    }
+//
+//    template <class T>
+//    T * getComponent() {
+//        gameObject->addComponent(std::forward<Args>(args)...);
+//    }
     void destroy();
     
     virtual ~Component() = default;
