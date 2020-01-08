@@ -35,13 +35,15 @@ private:
     float timeFromLastTurn = 0.5f;
     float waitingTime = 0.5f;//time to wait (show animations)
 public:
+
+    int tickNow = 0;   /// must have
+
     Point * playerPoint = nullptr;
     Town * playerTown = nullptr;
     std::vector<Train*> playerTrains;
     std::vector<Market*> markets;
     std::vector<Storage*> storages;
     bool isMapUpdated = false;
-    int tickNow = 0;
 
     void update();
     void trainUpgrade();
