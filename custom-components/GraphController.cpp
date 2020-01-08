@@ -234,7 +234,7 @@ void GraphController::onPlayer(const nlohmann::json & json) {
 }
 
 void GraphController::onGames(const nlohmann::json & json) {
-    std::cout << json.dump(4) << std::endl;
+    //std::cout << json.dump(4) << std::endl;
     if (isGameRunning(json)) {
         Network::send(Action::PLAYER);
     } else {
