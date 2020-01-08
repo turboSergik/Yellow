@@ -17,3 +17,13 @@ void LineRenderer::setVertices(const Vector2 &v1, const Vector2 &v2) {
     vertices[0].position = v1;
     vertices[1].position = v2;
 }
+
+const sf::Color & LineRenderer::getColor() const {
+    return color;
+}
+
+void LineRenderer::setColor(const sf::Color &color) {
+    this->color = color;
+    vertices[0].color = color;
+    vertices[1].color = color;
+}
