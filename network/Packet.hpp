@@ -60,4 +60,11 @@ enum Result
     INTERNAL_SERVER_ERROR = 500
 };
 
+enum GameState
+{
+    INIT = 1,
+    RUN = 2,
+    FINISHED = 3
+};
+
 #endif // PACKAGE_HPP
