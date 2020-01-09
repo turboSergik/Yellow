@@ -41,6 +41,7 @@ public:
     int destiny = 0;
     std::vector<int> needWay;
 
+    float animationSpeed = 10.0f;
     void applyLayer1(const nlohmann::json &json) override;
     void update();
 };
