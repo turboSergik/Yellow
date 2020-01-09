@@ -8,6 +8,7 @@
 
 #include "Behaviour.h"
 #include "../core-components/renderers/LineRenderer.h"
+#include "../utility/Config.hpp"
 
 class Line : public Behaviour {
 private:

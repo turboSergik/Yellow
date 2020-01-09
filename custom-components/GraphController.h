@@ -11,6 +11,7 @@
 #include "../utility/GraphVisualizer.h"
 #include "PlayerController.hpp"
 #include "../linalg/Vector2.hpp"
+#include "../utility/Config.hpp"
 
 class GraphController : public Component {
 private:
@@ -20,9 +21,11 @@ private:
     nlohmann::json layer0;
     nlohmann::json layer1;
 public:
-    void applyLayer0(const nlohmann::json& json);
-    void applyLayer1(const nlohmann::json& json);
-    void applyLayer10(const nlohmann::json& json);
+    void applyLayer0(const nlohmann::json & json);
+    void applyLayer1(const nlohmann::json & json);
+    void applyLayer10(const nlohmann::json & json);
+    void applyPlayerInfo(const nlohmann::json & json);
+    bool isGameRunning(const nlohmann::json & json);
 
     void start();
     void fixedUpdate();
@@ -31,6 +34,8 @@ public:
     void onMapLayer0(const nlohmann::json & json);
     void onMapLayer1(const nlohmann::json & json);
     void onMapLayer10(const nlohmann::json & json);
+    void onPlayer(const nlohmann::json & json);
+    void onGames(const nlohmann::json & json);
 };
 
 

@@ -7,6 +7,7 @@
 
 #include "Behaviour.h"
 #include "../core-components/RigidBody.hpp"
+#include "../utility/Config.hpp"
 
 class Post;
 

@@ -56,6 +56,7 @@ void Market::applyLayer1(const nlohmann::json &json) {
     Market::product = json.value("product", Market::product);
     Market::product_capacity = json.value("product_capacity", Market::product_capacity);
     Market::replenishment = json.value("replenishment", Market::replenishment);
+
 }
 
 Storage::Storage(int idx) : Post(idx) {

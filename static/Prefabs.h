@@ -12,6 +12,7 @@
 #include "../custom-components/Line.h"
 #include "../core-components/Camera.h"
 #include "../custom-components/GraphController.h"
+#include "../utility/Config.hpp"
 
 class Prefabs {
 public:

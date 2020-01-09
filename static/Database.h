@@ -16,11 +16,16 @@
 class Database {
 
 public:
+    static bool isMapUpdated;
+    static int tick;
     //if someone need singleton, he can do it himself
     static std::unordered_map<int, Point*> points;
     static std::unordered_map<int, Line*> lines;
     static std::unordered_map<int, Post*> posts;
     static std::unordered_map<int, Train*> trains;
+
+    static std::vector<Market*> markets;
+    static std::vector<Storage*> storages;
 };
 
 

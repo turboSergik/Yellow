@@ -6,7 +6,6 @@
 #include "Point.h"
 #include "../static/Database.h"
 #include "../core/GameObject.h"
-#include "../utility/ForceMethodConfig.hpp"
 #include "../linalg/Vector2.hpp"
 
 void Point::applyLayer10(const nlohmann::json &json) {

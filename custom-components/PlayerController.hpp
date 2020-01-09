@@ -38,10 +38,6 @@ public:
     Point * playerPoint = nullptr;
     Town * playerTown = nullptr;
     std::vector<Train*> playerTrains;
-    std::vector<Market*> markets;
-    std::vector<Storage*> storages;
-    bool isMapUpdated = false;
-    int tickNow = 0;
 
     void update();
     void trainUpgrade();
