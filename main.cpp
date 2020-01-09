@@ -38,7 +38,7 @@ void mainLoop(sf::RenderWindow & window,
     sf::Clock clock; // starts the clock
 
     float time = 0.f;
-    while (!closeCalled.load(std::memory_order_release)) {
+    while (!closeCalled.load(std::memory_order_acquire)) {
         Time::deltaTime = clock.restart().asSeconds();
         Input::setFromInputBuffer();
         MethodsPool::start();
@@ -73,7 +73,7 @@ int main() {
     XInitThreads();
 #endif
 
-    closeCalled.store(false, std::memory_order_acquire);
+    closeCalled.store(false, std::memory_order_release);
 
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
 
@@ -94,7 +94,7 @@ int main() {
             // TODO handle events somewhere else
             switch (event.type) {
             case sf::Event::Closed:
-                closeCalled.store(true, std::memory_order_acquire);
+                closeCalled.store(true, std::memory_order_release);
                 mainLoopThread.join();
                 root->destroyImmediate();
                 window.close();
