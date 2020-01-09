@@ -3,6 +3,7 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <atomic>
 #include "static/Database.h"
 #include "core/GameObject.h"
 #include "core-components/Camera.h"
@@ -14,7 +15,7 @@
 #include "static/Input.hpp"
 #include "static/InputBuffer.hpp"
 #include "network/Network.hpp"
-#include <atomic>
+
 
 #ifdef __linux__
 // #include <X11/Xlib.h>
@@ -25,6 +26,7 @@ extern "C" int XInitThreads();
 #endif
 
 static std::atomic<bool> closeCalled;
+static std::mutex windowMutex;
 
 void mainLoop(sf::RenderWindow & window,
               Camera * mainCamera) {
@@ -47,15 +49,17 @@ void mainLoop(sf::RenderWindow & window,
             time -= Time::fixedDeltaTime;
         }
         MethodsPool::onDestroy();
+        windowMutex.lock();
         window.clear();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
+        windowMutex.unlock();
         Network::update();
     }
 
 }
 
-bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
+bool waitEvent(sf::Window & window, sf::Event & event) {
     bool result = false;
     while (!result) {
         result = window.pollEvent(event);
@@ -88,7 +92,7 @@ int main() {
 
     while (window.isOpen()) {
 
-        if (safeWaitEvent(window, event)) {
+        if (waitEvent(window, event)) {
             // scary event handling
             // TODO handle events somewhere else
             switch (event.type) {
@@ -99,7 +103,9 @@ int main() {
                 window.close();
                 return 0;
             case sf::Event::Resized:
+                windowMutex.lock();
                 mainCamera->onWindowResized();
+                windowMutex.unlock();
                 break;
             case sf::Event::KeyPressed:
                 InputBuffer::addKeyPressed(event.key);
