@@ -4,9 +4,8 @@
 
 #include "Train.h"
 #include "../static/Database.h"
+#include "../utility/Mathf.hpp"
 #include <cmath>
-
-const float PI = 3.14159265358f;
 
 Train::Train(int idx) : Behaviour(idx) {
 
@@ -37,7 +36,7 @@ void Train::applyLayer1(const nlohmann::json &json) {
         Vector2 prevPosition = this->prevLine->transform->toGlobalPosition({this->prevPosition, 0});
         Vector2 nextPosition = this->line->transform->toGlobalPosition({this->position, 0});
         Vector2 direction = nextPosition - prevPosition;
-        this->transform->setRotation(180 / PI * atan2f(direction.y, direction.x));
+        this->transform->setRotation(Mathf::RAD2DEG * atan2f(direction.y, direction.x));
         if (json.contains("events") && !json["events"].empty()) {
             this->transform->setPosition(nextPosition);
         } else {
@@ -55,12 +54,8 @@ void Train::applyLayer1(const nlohmann::json &json) {
 
 void Train::update() {
     this->transform->setLocalScale(1.f/this->line->transform->getLocalScale());
-    this->transform->setLocalPosition(lerp(
+    this->transform->setLocalPosition(Mathf::lerp(
             this->transform->getLocalPosition(),
             {this->position, 0},
             this->animationSpeed*Time::deltaTime));
-}
-
-Vector2 Train::lerp(const Vector2 & a, const Vector2 & b, float t) {
-    return a + (b-a)*t;
 }

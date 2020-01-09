@@ -6,6 +6,7 @@
 #include "../static/Time.h"
 #include "../static/Input.hpp"
 #include "../core-components/Camera.h"
+#include "../utility/Mathf.hpp"
 #include <iostream>
 #include <cmath>
 
@@ -15,36 +16,34 @@ void CameraController::start() {
 
 void CameraController::update() {
     Camera * mainCamera = Camera::mainCamera;
-    Vector2 pos = CameraController::transform->getLocalPosition();
+    Vector2 pos = this->transform->getLocalPosition();
     if (Input::isKey(up)) {
         pos += {0.f, mainCamera->getWidth()*moveFactor*Time::deltaTime};
-        CameraController::transform->setLocalPosition(pos);
+        this->transform->setLocalPosition(pos);
     }
     if (Input::isKey(left)) {
         pos -= {mainCamera->getWidth()*moveFactor*Time::deltaTime,0.f };
-        CameraController::transform->setLocalPosition(pos);
+        this->transform->setLocalPosition(pos);
     }
     if (Input::isKey(down)) {
         pos -= {0.f, mainCamera->getWidth()*moveFactor*Time::deltaTime};
-        CameraController::transform->setLocalPosition(pos);
+        this->transform->setLocalPosition(pos);
     }
     if (Input::isKey(right)) {
         pos += {mainCamera->getWidth()*moveFactor*Time::deltaTime,0.f };
-        CameraController::transform->setLocalPosition(pos);
+        this->transform->setLocalPosition(pos);
     }
     if (Input::getWheelScrolled()) {
 
-        this->targetWidth -= this->targetWidth * CameraController::scrollFactor * Input::getWheelScrollEvent().delta;
-        //std::cout << width << std::endl;
-        if (this->targetWidth < CameraController::minSize) {
-            this->targetWidth = CameraController::minSize;
-        }
-        if (this->targetWidth > CameraController::maxSize) {
-            this->targetWidth = CameraController::maxSize;
-        }
+        this->targetWidth -=
+                this->targetWidth *
+                this->scrollFactor *
+                Input::getWheelScrollEvent().delta;
+        this->targetWidth = Mathf::clamp(this->targetWidth, this->minSize, this->maxSize);
     }
     float width = mainCamera->getWidth();
     if (fabs(targetWidth - width) > 1e-5) {
-        mainCamera->setWidth(width + (targetWidth - width)*this->scrollSpeed*Time::deltaTime);
+        mainCamera->setWidth(
+                Mathf::lerp(width, this->targetWidth, this->scrollSpeed*Time::deltaTime));
     }
 }

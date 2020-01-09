@@ -6,9 +6,7 @@
 #include "Line.h"
 #include "../static/Database.h"
 #include "../core/GameObject.h"
-
-
-const float PI = 3.14159265358f;
+#include "../utility/Mathf.hpp"
 
 Line::Line(int idx) : Behaviour(idx) {
 
@@ -37,7 +35,7 @@ void Line::fixedUpdate() {
             this->points[1]->transform->getPosition() -
             this->points[0]->transform->getPosition();
     float worldLength = direction.magnitude();
-    this->transform->setRotation(180 / PI * atan2f(direction.y, direction.x));
+    this->transform->setRotation(Mathf::RAD2DEG * atan2f(direction.y, direction.x));
     this->transform->setLocalScale(Vector2(worldLength/this->length));
 
     float deltaLength = worldLength - ForceMethodConfig::springLength;

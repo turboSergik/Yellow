@@ -16,7 +16,6 @@ enum GoodsType {
 
 class Train : public Behaviour {
 private:
-    Vector2 lerp(const Vector2 & a, const Vector2 & b, float t);
 public:
     explicit Train(int idx);
 
