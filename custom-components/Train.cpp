@@ -56,7 +56,7 @@ void Train::applyLayer1(const nlohmann::json &json) {
 void Train::update() {
     this->targetPosition = this->line->toWorldLocalPosition(this->position);
     this->transform->setLocalPosition(lerp(
-            this->transform->getLocalPosition(),targetPosition, 0.1f));
+            this->transform->getLocalPosition(),targetPosition, this->animationSpeed*Time::deltaTime));
 }
 
 Vector2 Train::lerp(const Vector2 & a, const Vector2 & b, float t) {
