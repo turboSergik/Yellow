@@ -7,6 +7,11 @@
 #include "../static/Input.hpp"
 #include "../core-components/Camera.h"
 #include <iostream>
+#include <cmath>
+
+void CameraController::start() {
+    this->targetWidth = Camera::mainCamera->getWidth();
+}
 
 void CameraController::update() {
     Camera * mainCamera = Camera::mainCamera;
@@ -28,15 +33,18 @@ void CameraController::update() {
         CameraController::transform->setLocalPosition(pos);
     }
     if (Input::getWheelScrolled()) {
-        float width = mainCamera->getWidth();
-        width -= width * CameraController::scrollFactor * Input::getWheelScrollEvent().delta * Time::deltaTime;
+
+        this->targetWidth -= this->targetWidth * CameraController::scrollFactor * Input::getWheelScrollEvent().delta;
         //std::cout << width << std::endl;
-        if (width < CameraController::minSize) {
-            width = CameraController::minSize;
+        if (this->targetWidth < CameraController::minSize) {
+            this->targetWidth = CameraController::minSize;
         }
-        if (width > CameraController::maxSize) {
-            width = CameraController::maxSize;
+        if (this->targetWidth > CameraController::maxSize) {
+            this->targetWidth = CameraController::maxSize;
         }
-        mainCamera->setWidth(width);
+    }
+    float width = mainCamera->getWidth();
+    if (fabs(targetWidth - width) > 1e-5) {
+        mainCamera->setWidth(width + (targetWidth - width)*this->scrollSpeed*Time::deltaTime);
     }
 }

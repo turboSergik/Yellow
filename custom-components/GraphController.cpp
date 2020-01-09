@@ -14,6 +14,7 @@
 #include "../network/Network.hpp"
 #include "../utility/random.hpp"
 #include "../core-components/renderers/CircleRenderer.h"
+#include "CameraController.h"
 
 using Random = effolkronium::random_static;
 
@@ -79,7 +80,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
     this->layer0 = json;
     if (json.contains("points")) {
         this->graphSize = 2*ForceMethodConfig::springLength*sqrtf(json["points"].size());
-        Camera::mainCamera->setWidth(this->graphSize);
+        Camera::mainCamera->gameObject->getComponent<CameraController>()->targetWidth = this->graphSize;
         for (const auto & item : json["points"]) {
             int idx = item.value("idx", -1);
             if (idx != -1) {
@@ -204,7 +205,7 @@ bool GraphController::isGameRunning(const nlohmann::json & json) {
 }
 
 void GraphController::onLogin(const nlohmann::json & json) {
-    //this->playerInfo = json;
+    this->playerInfo = json;
 }
 
 void GraphController::onMapLayer0(const nlohmann::json & json) {
@@ -236,7 +237,8 @@ void GraphController::onPlayer(const nlohmann::json & json) {
 void GraphController::onGames(const nlohmann::json & json) {
     //std::cout << json.dump(4) << std::endl;
     if (isGameRunning(json)) {
-        Network::send(Action::PLAYER);
+        //Network::send(Action::PLAYER);
+        this->applyPlayerInfo(playerInfo);
     } else {
         Network::send(Action::GAMES);
     }
