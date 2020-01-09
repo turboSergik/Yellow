@@ -45,6 +45,6 @@ void CameraController::update() {
     }
     float width = mainCamera->getWidth();
     if (fabs(targetWidth - width) > 1e-5) {
-        mainCamera->setWidth(width + (targetWidth - width)*5.f*Time::deltaTime);
+        mainCamera->setWidth(width + (targetWidth - width)*this->scrollSpeed*Time::deltaTime);
     }
 }
