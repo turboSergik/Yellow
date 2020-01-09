@@ -8,6 +8,11 @@
 
 
 void Component::destroyImmediate() {
+    if (preDestroyPosition != gameObject->onDestroyPool.end()) {
+        (*std::next(preDestroyPosition))();
+        gameObject->onDestroyPool.erase_after(preDestroyPosition);        
+    }
+        
     if (this->updatePosition != std::numeric_limits<size_t>::max()) {
         MethodsPool::removeFromUpdate(this->updatePosition);        
     }

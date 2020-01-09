@@ -6,14 +6,16 @@
 #define WG_TRAIN_H
 
 #include "Behaviour.h"
+#include "../linalg/Vector2.hpp"
 
+enum GoodsType {
+    Nothing = 0,
+    Products = 1,
+    Armor = 2
+};
 
 class Train : public Behaviour {
 private:
-    sf::Vector2f lerp(const sf::Vector2f & a, const sf::Vector2f & b, float t);
-    float cross(const sf::Vector2f & a, const sf::Vector2f & b);
-    float dot(const sf::Vector2f & a, const sf::Vector2f & b);
-    float magnitude(const sf::Vector2f & v);
 public:
     explicit Train(int idx);
 
@@ -26,16 +28,18 @@ public:
     int level = 0;
     int next_level_price = 0;
     int position = 0;
+    int prevPosition = 0;
     int speed = 0;
     std::string player_idx;
     Line *line = nullptr;
-    //TODO: ask what this field store
-    //"goods_type": null, WTF?
+    Line *prevLine = nullptr;
+    GoodsType goods_type;
 
     int move_type = 0;
     int destiny = 0;
-    std::vector<int> need_way;
+    std::vector<int> needWay;
 
+    float animationSpeed = 10.0f;
     void applyLayer1(const nlohmann::json &json) override;
     void update();
 };

@@ -8,6 +8,7 @@
 
 #include "Behaviour.h"
 #include "../core-components/renderers/LineRenderer.h"
+#include "../utility/Config.hpp"
 
 class Line : public Behaviour {
 private:
@@ -19,7 +20,7 @@ public:
     explicit Line(int idx);
 
     void start();
-    void update();
+    void fixedUpdate();
     void applyLayer0(const nlohmann::json &json) override;
 };
 

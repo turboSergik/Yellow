@@ -2,35 +2,48 @@
 // Created by Олег Бобров on 15.11.2019.
 //
 
+#include <iostream>
 #include "Line.h"
 #include "../static/Database.h"
 #include "../core/GameObject.h"
+#include "../utility/Mathf.hpp"
 
 Line::Line(int idx) : Behaviour(idx) {
 
 }
 
 void Line::applyLayer0(const nlohmann::json &json) {
-    Line::length = json.value("length", Line::length);
+    this->length = json.value("length", this->length);
     if (json.contains("points")) {
         auto &item_points = json["points"];
         //TODO: check null array
-        Line::points[0] = Database::points[item_points[0]];
-        Line::points[1] = Database::points[item_points[1]];
-        Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
-        Line::points[0]->adjacent.emplace_back(Line::points[1], this);
-        Line::points[1]->adjacent.emplace_back(Line::points[0], this);
+        this->points[0] = Database::points[item_points[0]];
+        this->points[1] = Database::points[item_points[1]];
+        this->transform->setParent(this->points[0]->transform);
+        this->points[0]->adjacent.emplace_back(this->points[1], this);
+        this->points[1]->adjacent.emplace_back(this->points[0], this);
     }
 }
 
 void Line::start() {
-    lineRenderer = gameObject->getComponent<LineRenderer>();
+    this->lineRenderer = this->gameObject->getComponent<LineRenderer>();
+    this->lineRenderer->setVertices({0, 0}, {this->length, 0.f});
 }
 
-void Line::update() {
-    Line::transform->setLocalPosition(Line::points[0]->transform->getLocalPosition());
-    lineRenderer->setVertices({0, 0},
-            transform->toLocalPosition(points[1]->transform->getPosition()));
+void Line::fixedUpdate() {
+    Vector2 direction =
+            this->points[1]->transform->getPosition() -
+            this->points[0]->transform->getPosition();
+    float worldLength = direction.magnitude();
+    this->transform->setRotation(Mathf::RAD2DEG * atan2f(direction.y, direction.x));
+    this->transform->setLocalScale(Vector2(worldLength/this->length));
+
+    float deltaLength = worldLength - ForceMethodConfig::springLength;
+    direction.normalize();
+    this->points[0]->rigidBody->addForce(
+            ForceMethodConfig::stiffnessK * deltaLength * direction);
+    this->points[1]->rigidBody->addForce(
+            -ForceMethodConfig::stiffnessK * deltaLength * direction);
 }
 
 

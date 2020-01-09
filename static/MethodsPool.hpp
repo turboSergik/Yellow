@@ -12,13 +12,17 @@ class MethodsPool
 {
     friend class GameObject;
     friend class Component;
-    static std::vector<UpdateWrapper> updatePool;
     static std::list<StartWrapper> startPool;
+    static std::vector<UpdateWrapper> updatePool;
+    static std::vector<FixedUpdateWrapper> fixedUpdatePool;
     static std::list<GameObject *> destroyObjectPool;
     static std::list<Component *> destroyComponentPool;
     static void removeFromUpdate(size_t index);
 public:
+    static void start();
     static void update();
+    static void fixedUpdate();
+    static void onDestroy();
 };
 
 #endif // METHODSPOOL_HPP

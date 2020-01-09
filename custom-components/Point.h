@@ -6,17 +6,25 @@
 #define WG_POINT_H
 
 #include "Behaviour.h"
+#include "../core-components/RigidBody.hpp"
+#include "../utility/Config.hpp"
 
 class Post;
 
 class Point : public Behaviour {
+private:
+
 public:
-    Post* post = nullptr;
+    RigidBody * rigidBody = nullptr;
+    Post * post = nullptr;
     std::list<std::pair<Point*, Line*>> adjacent;
 
     explicit Point(int idx);
     void applyLayer10(const nlohmann::json &json) override;
     void applyLayer0(const nlohmann::json &json) override;
+
+    void start();
+    void fixedUpdate();
 };
 
 
