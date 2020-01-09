@@ -34,11 +34,11 @@ void Train::applyLayer1(const nlohmann::json &json) {
     if (json.contains("line_idx")) {
         this->prevLine = this->line != nullptr ? this->line : Database::lines[json["line_idx"]];
         this->line = Database::lines[json["line_idx"]];
-        Vector2 prevPosition = this->prevLine->toWorldGlobalPosition(this->prevPosition);
-        Vector2 nextPosition = this->line->toWorldGlobalPosition(this->position);
+        Vector2 prevPosition = this->prevLine->transform->toGlobalPosition({this->prevPosition, 0});
+        Vector2 nextPosition = this->line->transform->toGlobalPosition({this->position, 0});
         Vector2 direction = nextPosition - prevPosition;
         this->transform->setRotation(180 / PI * atan2f(direction.y, direction.x));
-        if (this->cooldown) {
+        if (json.contains("events") && !json["events"].empty()) {
             this->transform->setPosition(nextPosition);
         } else {
             this->transform->setPosition(prevPosition);
@@ -48,15 +48,17 @@ void Train::applyLayer1(const nlohmann::json &json) {
     }
     this->speed = json.value("speed", this->speed);
     this->player_idx = json.value("player_idx", this->player_idx);
-
-    //TODO: ask what this field store
-    //"goods_type": null, WTF?
+    if (json.contains("goods_type")) {
+        this->goods_type = json["goods_type"].is_null() ? GoodsType::Nothing : GoodsType(json["goods_type"]);
+    }
 }
 
 void Train::update() {
-    this->targetPosition = this->line->toWorldLocalPosition(this->position);
+    this->transform->setLocalScale(1.f/this->line->transform->getLocalScale());
     this->transform->setLocalPosition(lerp(
-            this->transform->getLocalPosition(),targetPosition, this->animationSpeed*Time::deltaTime));
+            this->transform->getLocalPosition(),
+            {this->position, 0},
+            this->animationSpeed*Time::deltaTime));
 }
 
 Vector2 Train::lerp(const Vector2 & a, const Vector2 & b, float t) {
