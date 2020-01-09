@@ -12,7 +12,6 @@
 
 class Line : public Behaviour {
 private:
-    float worldLength = 0.f;
     LineRenderer *lineRenderer = nullptr;
 public:
     int length = -1;
@@ -20,8 +19,6 @@ public:
 
     explicit Line(int idx);
 
-    Vector2 toWorldGlobalPosition(int position);
-    Vector2 toWorldLocalPosition(int position);
     void start();
     void fixedUpdate();
     void applyLayer0(const nlohmann::json &json) override;
