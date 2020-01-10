@@ -56,7 +56,10 @@ set(SOURCES
         custom-components/PlayerController.cpp
         core-components/RigidBody.cpp
         linalg/Vector2.cpp
-        utility/Mathf.cpp)
+        utility/Mathf.cpp
+        core-components/colliders/Collider.cpp
+        core-components/colliders/CircleCollider.cpp
+        core-components/colliders/BoxCollider.cpp)
 
 add_executable(WG ${SOURCES})
 
