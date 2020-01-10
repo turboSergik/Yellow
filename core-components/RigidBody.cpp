@@ -18,6 +18,7 @@ void RigidBody::addForceAtPosition(Vector2 force, Vector2 position) {
 }
 
 void RigidBody::fixedUpdate() {
+    if (this->kinematic) return;
     worldCenterOfMass = transform->toGlobalPosition(centerOfMass);
     
     //translate
@@ -36,5 +37,16 @@ void RigidBody::fixedUpdate() {
 }
 
 void RigidBody::addForce(Vector2 force) {
+    if (this->kinematic) return;
     acceleration += force/mass;
+}
+
+bool RigidBody::isKinematic() {
+    return this->kinematic;
+}
+
+void RigidBody::setKinematic(bool state) {
+    this->kinematic = state;
+    this->velocity = this->acceleration = Vector2::ZERO;
+    this->angularVelocity = this->angularAcceleration = 0.f;
 }
