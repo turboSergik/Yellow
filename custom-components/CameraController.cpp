@@ -33,12 +33,12 @@ void CameraController::update() {
         pos += {mainCamera->getWidth()*moveFactor*Time::deltaTime,0.f };
         this->transform->setLocalPosition(pos);
     }
-    if (Input::getWheelScrolled()) {
+    if (Input::wheelScrolled) {
 
         this->targetWidth -=
                 this->targetWidth *
                 this->scrollFactor *
-                Input::getWheelScrollEvent().delta;
+                Input::wheelScrollEvent.delta;
         this->targetWidth = Mathf::clamp(this->targetWidth, this->minSize, this->maxSize);
     }
     float width = mainCamera->getWidth();
