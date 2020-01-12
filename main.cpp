@@ -57,21 +57,11 @@ void mainLoop(MainLoopIteration & mainLoopIteration,
 
 }
 
-
-
-bool waitEvent(sf::Window & window, sf::Event & event) {
-    bool result = false;
-    while (!result) {
-        result = window.pollEvent(event);
-        std::this_thread::yield();
-    }
-    return result;
-}
-
 int main() {
-
+    
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
-
+    window.setActive(true);
+    
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
