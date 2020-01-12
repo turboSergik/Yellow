@@ -36,8 +36,8 @@ void mainLoop(sf::RenderWindow & window,
     window.setActive(true);
 
     sf::Clock clock; // starts the clock
-
     float time = 0.f;
+    (std::declval<Vector2>() - std::declval<Vector2>()).normalize();
     while (!closeCalled.load(std::memory_order_acquire)) {
         Time::deltaTime = clock.restart().asSeconds();
         Input::setFromInputBuffer();
