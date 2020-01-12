@@ -12,12 +12,13 @@ void Collider::start() {
 }
 
 void Collider::onDestroy() {
-    Collider::colliders.erase(it);
+    Collider::colliders.erase(this->it);
 }
 
-Collider *Collider::overlapPoint(const Vector2 &point) {
-    return *std::find(Collider::colliders.begin(), Collider::colliders.end(),
-            [&point](const Collider * collider) {
-                return collider->isOverlapsPoint(point);
-            });
+Collider * Collider::overlapPoint(const Vector2 &point) {
+    auto it = std::find_if(Collider::colliders.begin(), Collider::colliders.end(),
+                           [=](const Collider * collider) {
+                               return collider->isOverlapsPoint(point);
+                           });
+    return it == Collider::colliders.end() ? nullptr : *it;
 }
