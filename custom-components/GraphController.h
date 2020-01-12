@@ -28,6 +28,7 @@ public:
     bool isGameRunning(const nlohmann::json & json);
 
     void start();
+    void update();
     void fixedUpdate();
     void onDestroy();
     void onLogin(const nlohmann::json & json);

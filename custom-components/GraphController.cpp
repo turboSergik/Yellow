@@ -15,6 +15,8 @@
 #include "../utility/random.hpp"
 #include "../core-components/renderers/CircleRenderer.h"
 #include "CameraController.h"
+#include "../static/Input.hpp"
+#include "../core-components/colliders/Collider.hpp"
 
 using Random = effolkronium::random_static;
 
@@ -34,6 +36,19 @@ void GraphController::start() {
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
     Network::send(Action::GAMES);
+}
+
+void GraphController::update() {
+    Vector2 screenPoint = Input::mousePosition;
+    Vector2 worldPoint = Camera::mainCamera->screenToWorldPoint(Input::mousePosition);
+    if (Input::getMouseButtonPressed(sf::Mouse::Button::Left)) {
+        Collider * collider = Collider::overlapPoint(worldPoint);
+        if (collider) {
+            RigidBody * rigidBody = collider->gameObject->getComponent<RigidBody>();
+            //rigidBody->setKinematic();
+            //TODO: draggable points
+        }
+    }
 }
 
 void GraphController::fixedUpdate() {
@@ -80,6 +95,7 @@ void GraphController::applyLayer0(const nlohmann::json &json) {
     this->layer0 = json;
     if (json.contains("points")) {
         this->graphSize = 2*ForceMethodConfig::springLength*sqrtf(json["points"].size());
+        Camera::mainCamera->setWidth(this->graphSize);
         Camera::mainCamera->gameObject->getComponent<CameraController>()->targetWidth = this->graphSize;
         for (const auto & item : json["points"]) {
             int idx = item.value("idx", -1);
