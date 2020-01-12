@@ -15,30 +15,16 @@
 #include "static/Input.hpp"
 #include "static/InputBuffer.hpp"
 #include "network/Network.hpp"
+//TODO MAIN, may be hashmap in methodsPool, mouse scroll.
 
-
-#ifdef __linux__
-// #include <X11/Xlib.h>
-// extern include function which implemented in Xlib
-// not included becouse of conflicting declaration Time
-extern "C" int XInitThreads();
-
-#endif
-
-static std::atomic<bool> closeCalled;
-static std::mutex windowMutex;
-
-void mainLoop(sf::RenderWindow & window,
-              Camera * mainCamera) {
-
-    //window.setFramerateLimit(60);
-
-    window.setActive(true);
-
-    sf::Clock clock; // starts the clock
-    float time = 0.f;
-    (std::declval<Vector2>() - std::declval<Vector2>()).normalize();
-    while (!closeCalled.load(std::memory_order_acquire)) {
+struct MainLoopIteration {
+    sf::RenderWindow & window; 
+    Camera * mainCamera;
+    sf::Clock & clock;
+    float & time;
+    
+    void operator()() {
+        // here is main loop iteration
         Time::deltaTime = clock.restart().asSeconds();
         Input::setFromInputBuffer();
         MethodsPool::start();
@@ -49,15 +35,29 @@ void mainLoop(sf::RenderWindow & window,
             time -= Time::fixedDeltaTime;
         }
         MethodsPool::onDestroy();
-        windowMutex.lock();
         window.clear();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
-        windowMutex.unlock();
         Network::update();
+    }
+};
+
+
+void mainLoop(MainLoopIteration & mainLoopIteration, 
+              std::atomic<bool> & closeCalled) {
+
+    mainLoopIteration.window.setActive(true);
+
+    mainLoopIteration.clock.restart(); 
+    mainLoopIteration.time = 0.f;
+    
+    while (!closeCalled.load(std::memory_order_acquire)) {
+        mainLoopIteration();
     }
 
 }
+
+
 
 bool waitEvent(sf::Window & window, sf::Event & event) {
     bool result = false;
@@ -69,40 +69,41 @@ bool waitEvent(sf::Window & window, sf::Event & event) {
 }
 
 int main() {
-#ifdef __linux__
-    XInitThreads();
-#endif
-
-    closeCalled.store(false, std::memory_order_release);
 
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
-
-    window.setActive(false);
 
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
-
-    std::thread mainLoopThread(mainLoop, std::ref(window), mainCamera);
-
+    
+    sf::Clock clock; // starts the clock
+    float time = 0.f;
+    MainLoopIteration mainLoopIteration{window, mainCamera, clock, time};
+    
+#ifdef _WIN32
+    std::atomic<bool> closeCalled;
+    closeCalled.store(false, std::memory_order_release);
+    window.setActive(false);
+    std::thread mainLoopThread(mainLoop, std::ref(mainLoopIteration), std::ref(closeCalled));
+#endif
+    
     sf::Event event{};
 
     while (window.isOpen()) {
 
-        if (waitEvent(window, event)) {
-            // scary event handling
-            // TODO handle events somewhere else
+        if (window.pollEvent(event)) {
             switch (event.type) {
             case sf::Event::Closed:
+#ifdef _WIN32
                 closeCalled.store(true, std::memory_order_release);
                 mainLoopThread.join();
+#endif
                 root->destroyImmediate();
+                mainCamera->gameObject->destroyImmediate();
                 window.close();
                 return 0;
             case sf::Event::Resized:
-                windowMutex.lock();
                 mainCamera->onWindowResized();
-                windowMutex.unlock();
                 break;
             case sf::Event::KeyPressed:
                 InputBuffer::addKeyPressed(event.key);
@@ -122,11 +123,16 @@ int main() {
                     // std::cout << event.mouseWheelScroll.delta << std::endl;
                 }
                 break;
+            case sf::Event::MouseMoved:
+                InputBuffer::setMousePosition(event.mouseMove);
             default:
                 break;
             }
 
         }
+#ifndef _WIN32
+        mainLoopIteration();
+#endif
     }
 
     return 0;

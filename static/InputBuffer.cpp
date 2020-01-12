@@ -17,6 +17,8 @@ std::mutex InputBuffer::wheelScrollMutex;
 sf::Event::MouseWheelScrollEvent InputBuffer::wheelScrollEvent;
 bool InputBuffer::wheelScrolled = false;
 
+Vector2 InputBuffer::mousePosition;
+std::mutex InputBuffer::mousePositionMutex;
 
 void InputBuffer::addKeyPressed(sf::Event::KeyEvent keyEvent) {
     if (keyEvent.code >= 0) {
@@ -52,6 +54,11 @@ void InputBuffer::addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEve
     std::lock_guard<std::mutex> lock(wheelScrollMutex);
     wheelScrolled = true;
     InputBuffer::wheelScrollEvent = mouseScrollEvent;
+}
+
+void InputBuffer::setMousePosition(sf::Event::MouseMoveEvent mouseMoveEvent) {
+    std::lock_guard<std::mutex> lock(mousePositionMutex);    
+    mousePosition = {mouseMoveEvent.x, mouseMoveEvent.y};
 }
 
 void InputBuffer::reset() {

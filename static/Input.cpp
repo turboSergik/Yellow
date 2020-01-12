@@ -18,6 +18,8 @@ std::array<sf::Event::MouseButtonEvent,
 sf::Event::MouseWheelScrollEvent Input::wheelScrollEvent;
 bool Input::wheelScrolled = false;
 
+Vector2 Input::mousePosition;
+
 bool Input::isKeyDown(sf::Keyboard::Key key) {
     // assume you will not ask sf::Keybord::Unknown
     return pressedKeys[static_cast<size_t>(key)];
@@ -45,14 +47,6 @@ sf::Event::MouseButtonEvent Input::getMBPressedEvent(sf::Mouse::Button button) {
 
 sf::Event::MouseButtonEvent Input::getMBReleasedEvent(sf::Mouse::Button button) {
     return releasedMouseEvents[button];
-}
-
-sf::Event::MouseWheelScrollEvent Input::getWheelScrollEvent() {
-    return wheelScrollEvent;
-}
-
-bool Input::getWheelScrolled() {
-    return wheelScrolled;
 }
 
 void Input::setFromInputBuffer() {
@@ -120,4 +114,9 @@ void Input::setFromInputBuffer() {
     InputBuffer::wheelScrolled = false;
     
     InputBuffer::wheelScrollMutex.unlock();
+    
+    InputBuffer::mousePositionMutex.lock();
+    Input::mousePosition = InputBuffer::mousePosition;
+    InputBuffer::mousePositionMutex.unlock();
+    
 }
