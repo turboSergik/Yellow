@@ -19,12 +19,14 @@ private:
     sf::View view;
 public:
     static Camera* mainCamera;
-    Camera(sf::RenderTarget *renderTarget1);
+    Camera(sf::RenderTarget *renderTarget);
     float getWidth();
     void setWidth(float width);
     void setWindowSize(float width, float height);
     void setWindowSize(const Vector2 &size);
     void onWindowResized();
+    Vector2 screenToWorldPoint(const Vector2 & point);
+    Vector2 worldToScreenPoint(const Vector2 & point);
     sf::RenderStates getRenderState();
 };
 
