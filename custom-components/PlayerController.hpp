@@ -15,17 +15,17 @@ class El {
 //TODO: remove this structure or make private
 public:
     std::vector<int> way;
-    std::bitset<2000> used;
 
     int value = 0;
     int spent = 0;
     int vertex = 0;
     int maxValue = 0;
-    int startVertex = 0;
 
     int marketPos = 0;
     int position = 0;
-    Line* line = 0;
+
+    Line* line = nullptr;
+    Point* point = nullptr;
 
 };
 
@@ -53,7 +53,6 @@ public:
     void clearVertex();
 
     std::map<int, int> canGo;
-
 
 };
 
