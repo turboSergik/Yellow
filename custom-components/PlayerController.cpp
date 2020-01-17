@@ -423,11 +423,17 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
     }
     sort(needMarkets.begin(), needMarkets.end());
 
+    std::cout << "size:" << needMarkets.size() << std::endl;
+
     unsigned int start_time =  clock(); // начальное время
 
+    int step = 0;
     do{
 
-        if (Random::get(0, 4) != 0) continue;
+        random_shuffle(needMarkets.begin(), needMarkets.end());
+
+        step += 1;
+        if (step == 10) break;
 
         clearLinesAndVertex(marketCount);
 
@@ -571,7 +577,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
         // std::cout << "====== COUNT=" << _count << " kol3=" << kol3 << " kol2=" << kol2 << std::endl;
         // return {};
 
-    } while (std::next_permutation(needMarkets.begin(), needMarkets.end()));
+    } while (1);
 
 
     addTimeTable(finalWay);
@@ -610,8 +616,13 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     }
     sort(needStorages.begin(), needStorages.end());
 
+    int step = 0;
     do{
-        if (Random::get(0, 4) != 0) continue;
+
+        step++;
+        if (step == 10) break;
+
+        random_shuffle(needStorages.begin(), needStorages.end());
 
         clearLinesAndVertex(storagesCount);
 
@@ -740,7 +751,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
             }
         }
 
-    } while (std::next_permutation(needStorages.begin(), needStorages.end()));
+    } while (1);
 
     addTimeTable(finalWay);
 
