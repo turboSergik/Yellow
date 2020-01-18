@@ -22,6 +22,8 @@ public:
     float scrollFactor = 0.1f;
     float moveFactor = 0.3f;
     float targetWidth;
+    Vector2 cursorScreenPosition;
+    Vector2 targetTranslation;
 
     void start();
     void update();

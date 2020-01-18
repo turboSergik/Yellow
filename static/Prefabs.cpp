@@ -7,6 +7,7 @@
 #include "../core-components/renderers/LineRenderer.h"
 #include "../custom-components/CameraController.h"
 #include "../core-components/RigidBody.hpp"
+#include "../core-components/colliders/CircleCollider.hpp"
 
 
 //TODO: add constants to easy manipulate default values of shapes
@@ -20,6 +21,8 @@ Point *Prefabs::point(int idx) {
     RigidBody * rigidBody = obj->addComponent<RigidBody>();
     rigidBody->mass = 1.0f;
     rigidBody->drag = 0.0f;
+    CircleCollider * circleCollider = obj->addComponent<CircleCollider>();
+    circleCollider->setRadius(InterfaceConfig::largeR);
     return point;
 }
 
