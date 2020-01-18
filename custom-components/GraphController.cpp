@@ -40,15 +40,24 @@ void GraphController::start() {
 }
 
 void GraphController::update() {
-    Vector2 screenPoint = Input::mousePosition;
+    // Vector2 screenPoint = Input::mousePosition;
     Vector2 worldPoint = Camera::mainCamera->screenToWorldPoint(Input::mousePosition);
+    
     if (Input::getMouseButtonPressed(sf::Mouse::Button::Left)) {
-        Collider * collider = Collider::overlapPoint(worldPoint);
+        Collider * collider = Collider::overlapPoint(worldPoint);        
         if (collider) {
+            draggingCollider = collider;
             RigidBody * rigidBody = collider->gameObject->getComponent<RigidBody>();
-            //rigidBody->setKinematic();
-            //TODO: draggable points
+            rigidBody->setKinematic(true);
         }
+    }
+    if (draggingCollider) {
+        draggingCollider->transform->setPosition(worldPoint);
+    }
+    if (Input::getMouseButtonReleased(sf::Mouse::Button::Left) && draggingCollider) {
+        RigidBody * rigidBody = draggingCollider->gameObject->getComponent<RigidBody>();
+        rigidBody->setKinematic(false);
+        draggingCollider = nullptr;
     }
 }
 
