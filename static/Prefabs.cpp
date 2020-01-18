@@ -8,6 +8,9 @@
 #include "../custom-components/CameraController.h"
 #include "../core-components/RigidBody.hpp"
 #include "../core-components/colliders/CircleCollider.hpp"
+#include "../custom-components/ForceMethodPhysics/PointPhysics.hpp"
+#include "../custom-components/ForceMethodPhysics/LinePhysics.hpp"
+#include "../custom-components/ForceMethodPhysics/ForceMethodPhysics.hpp"
 
 
 //TODO: add constants to easy manipulate default values of shapes
@@ -19,11 +22,12 @@ Point *Prefabs::point(int idx) {
     circleRenderer->circle.setFillColor(InterfaceConfig::graphColor);
     Point *point = obj->addComponent<Point>(idx);
     RigidBody * rigidBody = obj->addComponent<RigidBody>();
+    point->rigidBody = rigidBody;
     rigidBody->mass = 1.0f;
     rigidBody->drag = 0.0f;
-    //rigidBody->setKinematic();
     CircleCollider * circleCollider = obj->addComponent<CircleCollider>();
     circleCollider->setRadius(InterfaceConfig::largeR);
+    obj->addComponent<PointPhysics>();
     return point;
 }
 
@@ -32,6 +36,7 @@ Line *Prefabs::line(int idx) {
     LineRenderer * lineRenderer =  obj->addComponent<LineRenderer>();
     lineRenderer->setColor(InterfaceConfig::graphColor);
     Line *line = obj->addComponent<Line>(idx);
+    obj->addComponent<LinePhysics>();
     return line;
 }
 
@@ -87,5 +92,6 @@ Camera *Prefabs::camera(sf::RenderTarget *renderTarget) {
 GraphController *Prefabs::graphRoot() {
     GameObject *obj = new GameObject();
     GraphController *graphController = obj->addComponent<GraphController>();
+    obj->addComponent<ForceMethodPhysics>();
     return graphController;
 }
