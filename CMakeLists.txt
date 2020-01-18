@@ -55,7 +55,10 @@ set(SOURCES
         utility/Mathf.cpp
         core-components/colliders/Collider.cpp
         core-components/colliders/CircleCollider.cpp
-        core-components/colliders/BoxCollider.cpp)
+        core-components/colliders/BoxCollider.cpp
+        custom-components/ForceMethodPhysics/ForceMethodPhysics.cpp
+        custom-components/ForceMethodPhysics/PointPhysics.cpp
+        custom-components/ForceMethodPhysics/LinePhysics.cpp)
 
 add_executable(WG ${SOURCES})
 
