@@ -21,6 +21,7 @@ Point *Prefabs::point(int idx) {
     RigidBody * rigidBody = obj->addComponent<RigidBody>();
     rigidBody->mass = 1.0f;
     rigidBody->drag = 0.0f;
+    //rigidBody->setKinematic();
     CircleCollider * circleCollider = obj->addComponent<CircleCollider>();
     circleCollider->setRadius(InterfaceConfig::largeR);
     return point;

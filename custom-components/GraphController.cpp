@@ -35,6 +35,7 @@ void GraphController::start() {
             {"num_players", PlayerConfig::numPlayers}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
+    Network::send(Action::MAP, {{"layer", 10}});
     Network::send(Action::GAMES);
 }
 
@@ -58,11 +59,10 @@ void GraphController::fixedUpdate() {
             const auto &point2 = it2->second;
             Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
             float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.magnitude() : 0.f;
-            //float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.sqrMagnitude()) : 0.f;
+            //float k = direction.sqrMagnitude() != 0.f ? ForceMethodConfig::charge * ForceMethodConfig::charge / direction.sqrMagnitude() : 0.f;
             point2->rigidBody->addForce(direction.normalized() * k);
             point1->rigidBody->addForce(-direction.normalized() * k);
         }
-
     }
 }
 
@@ -94,7 +94,8 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
 void GraphController::applyLayer0(const nlohmann::json &json) {
     this->layer0 = json;
     if (json.contains("points")) {
-        this->graphSize = 2*ForceMethodConfig::springLength*sqrtf(json["points"].size());
+        //this->graphSize = ForceMethodConfig::springLength*json["points"].size();
+        this->graphSize = 1000;
         Camera::mainCamera->setWidth(this->graphSize);
         Camera::mainCamera->gameObject->getComponent<CameraController>()->targetWidth = this->graphSize;
         for (const auto & item : json["points"]) {
@@ -243,7 +244,9 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
 }
 
 void GraphController::onMapLayer10(const nlohmann::json & json) {
-    std::cout << "Layer 10 exists" << std::endl;
+    //std::cout << "Layer 10 exists" << std::endl;
+    //this->applyLayer10(json);
+    std::cout << json.dump(4) << std::endl;
 }
 
 void GraphController::onPlayer(const nlohmann::json & json) {
