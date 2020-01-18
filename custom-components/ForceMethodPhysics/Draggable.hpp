@@ -2,8 +2,8 @@
 // Created by Олег Бобров on 19.01.2020.
 //
 
-#ifndef WG_FORCEMETHODPHYSICS_HPP
-#define WG_FORCEMETHODPHYSICS_HPP
+#ifndef WG_DRAGGABLE_HPP
+#define WG_DRAGGABLE_HPP
 
 #include "../../core/GameObject.h"
 #include "../../core-components/colliders/Collider.hpp"
@@ -13,16 +13,15 @@
 #include "../../static/Database.h"
 #include "../../utility/Config.hpp"
 
-class ForceMethodPhysics : public Component {
+class Draggable : public Component {
 private:
     Collider * draggingCollider = nullptr;
 public:
     void start();
     void update();
-    void fixedUpdate();
     void onDestroy();
     void onMapLayer10(const nlohmann::json & json);
 };
 
 
-#endif //WG_FORCEMETHODPHYSICS_HPP
+#endif //WG_DRAGGABLE_HPP

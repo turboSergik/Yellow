@@ -10,7 +10,7 @@
 #include "../core-components/colliders/CircleCollider.hpp"
 #include "../custom-components/ForceMethodPhysics/PointPhysics.hpp"
 #include "../custom-components/ForceMethodPhysics/LinePhysics.hpp"
-#include "../custom-components/ForceMethodPhysics/ForceMethodPhysics.hpp"
+#include "../custom-components/ForceMethodPhysics/Draggable.hpp"
 
 
 //TODO: add constants to easy manipulate default values of shapes
@@ -92,6 +92,6 @@ Camera *Prefabs::camera(sf::RenderTarget *renderTarget) {
 GraphController *Prefabs::graphRoot() {
     GameObject *obj = new GameObject();
     GraphController *graphController = obj->addComponent<GraphController>();
-    obj->addComponent<ForceMethodPhysics>();
+    obj->addComponent<Draggable>();
     return graphController;
 }

@@ -11,6 +11,7 @@
 class PointPhysics : public Component {
 private:
     Point * point;
+    std::unordered_map<int, Point *>::iterator begin;
 public:
     void start();
     void fixedUpdate();
