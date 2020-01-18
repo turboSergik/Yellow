@@ -10,8 +10,8 @@
 
 void Point::applyLayer10(const nlohmann::json &json) {
     this->transform->setLocalPosition({
-        json.value("x", 0.f),
-        json.value("y", 0.f) });
+        json.value("x", 0.f)/10.f,
+        json.value("y", 0.f)/10.f });
 }
 
 void Point::applyLayer0(const nlohmann::json &json) {
