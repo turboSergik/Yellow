@@ -16,7 +16,7 @@ namespace ForceMethodConfig {
 }
 
 namespace PlayerConfig {
-    const std::string playerName = "Oleg";
+    const std::string playerName = "AgentDvaNoska";
     const std::string hostName = "Yellow";
     const int numPlayers = 1;
 }
