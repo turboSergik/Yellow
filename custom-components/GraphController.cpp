@@ -35,44 +35,8 @@ void GraphController::start() {
             {"num_players", PlayerConfig::numPlayers}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
-    Network::send(Action::MAP, {{"layer", 10}});
+    //Network::send(Action::MAP, {{"layer", 10}});
     Network::send(Action::GAMES);
-}
-
-void GraphController::update() {
-    // Vector2 screenPoint = Input::mousePosition;
-    Vector2 worldPoint = Camera::mainCamera->screenToWorldPoint(Input::mousePosition);
-    
-    if (Input::getMouseButtonPressed(sf::Mouse::Button::Left)) {
-        Collider * collider = Collider::overlapPoint(worldPoint);        
-        if (collider) {
-            draggingCollider = collider;
-            RigidBody * rigidBody = collider->gameObject->getComponent<RigidBody>();
-            rigidBody->setKinematic(true);
-        }
-    }
-    if (draggingCollider) {
-        draggingCollider->transform->setPosition(worldPoint);
-    }
-    if (Input::getMouseButtonReleased(sf::Mouse::Button::Left) && draggingCollider) {
-        RigidBody * rigidBody = draggingCollider->gameObject->getComponent<RigidBody>();
-        rigidBody->setKinematic(false);
-        draggingCollider = nullptr;
-    }
-}
-
-void GraphController::fixedUpdate() {
-    for (auto it1 = Database::points.begin(); it1 != Database::points.end(); it1++) {
-        const auto & point1 = it1->second;
-        for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {
-            const auto &point2 = it2->second;
-            Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
-            float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.magnitude() : 0.f;
-            //float k = direction.sqrMagnitude() != 0.f ? ForceMethodConfig::charge * ForceMethodConfig::charge / direction.sqrMagnitude() : 0.f;
-            point2->rigidBody->addForce(direction.normalized() * k);
-            point1->rigidBody->addForce(-direction.normalized() * k);
-        }
-    }
 }
 
 void GraphController::onDestroy() {
@@ -254,7 +218,7 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
 
 void GraphController::onMapLayer10(const nlohmann::json & json) {
     //std::cout << "Layer 10 exists" << std::endl;
-    //this->applyLayer10(json);
+    this->applyLayer10(json);
     std::cout << json.dump(4) << std::endl;
 }
 

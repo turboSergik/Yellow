@@ -21,7 +21,6 @@ private:
     nlohmann::json playerInfo;
     nlohmann::json layer0;
     nlohmann::json layer1;
-    Collider * draggingCollider = nullptr;
 public:
     void applyLayer0(const nlohmann::json & json);
     void applyLayer1(const nlohmann::json & json);
@@ -30,8 +29,6 @@ public:
     bool isGameRunning(const nlohmann::json & json);
 
     void start();
-    void update();
-    void fixedUpdate();
     void onDestroy();
     void onLogin(const nlohmann::json & json);
     void onMapLayer0(const nlohmann::json & json);
