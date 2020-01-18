@@ -12,6 +12,7 @@
 #include "PlayerController.hpp"
 #include "../linalg/Vector2.hpp"
 #include "../utility/Config.hpp"
+#include "../core-components/colliders/Collider.hpp"
 
 class GraphController : public Component {
 private:
@@ -20,6 +21,7 @@ private:
     nlohmann::json playerInfo;
     nlohmann::json layer0;
     nlohmann::json layer1;
+    Collider * draggingCollider = nullptr;
 public:
     void applyLayer0(const nlohmann::json & json);
     void applyLayer1(const nlohmann::json & json);
