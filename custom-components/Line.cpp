@@ -38,12 +38,12 @@ void Line::fixedUpdate() {
     this->transform->setRotation(Mathf::RAD2DEG * atan2f(direction.y, direction.x));
     this->transform->setLocalScale(Vector2(worldLength/this->length));
 
-    float deltaLength = worldLength - ForceMethodConfig::springLength;
+    float deltaLength = worldLength - ForceMethodConfig::springLength*this->length;
     direction.normalize();
     this->points[0]->rigidBody->addForce(
-            ForceMethodConfig::stiffnessK * deltaLength * direction);
+            ForceMethodConfig::stiffnessK * deltaLength * direction / this->length);
     this->points[1]->rigidBody->addForce(
-            -ForceMethodConfig::stiffnessK * deltaLength * direction);
+            -ForceMethodConfig::stiffnessK * deltaLength * direction / this->length);
 }
 
 
