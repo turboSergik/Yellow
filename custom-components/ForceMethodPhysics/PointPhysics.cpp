@@ -34,6 +34,8 @@ void PointPhysics::fixedUpdate() {
 }
 
 void PointPhysics::onDestroy() {
+    point->rigidBody->destroy();
+    point->rigidBody = nullptr;
     Network::onMapResponse10.removeListener<PointPhysics, &PointPhysics::onMapLayer10>(this);
 }
 

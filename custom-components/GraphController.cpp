@@ -35,7 +35,7 @@ void GraphController::start() {
             {"num_players", PlayerConfig::numPlayers}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
-    // Network::send(Action::MAP, {{"layer", 10}});
+    //Network::send(Action::MAP, {{"layer", 10}});
     Network::send(Action::GAMES);
 }
 
