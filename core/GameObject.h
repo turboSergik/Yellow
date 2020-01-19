@@ -21,7 +21,7 @@ private:
     std::forward_list<StartWrapper> startPool;
     std::forward_list<UpdateWrapper> updatePool;
     std::forward_list<FixedUpdateWrapper> fixedUpdatePool;
-    std::forward_list<OnDestroyWrapper> onDestroyPool;
+    std::list<OnDestroyWrapper> onDestroyPool;
     bool onScene = false;
     
     template <class T, class... Args>
@@ -175,22 +175,14 @@ GameObject::addFixedUpdate(T * component) {
 template <class T>
 typename std::enable_if<HasOnDestroy<T>::value>::type
 GameObject::addOnDestroy(T * component) {
-    if (!onDestroyPool.empty()) {
-        Component * previousFront = 
-                reinterpret_cast<Component *>(
-                    onDestroyPool.front().getObject());
-        onDestroyPool.push_front(OnDestroyWrapper(component));
-        previousFront->preDestroyPosition = onDestroyPool.begin();
-    } else {
-        onDestroyPool.push_front(OnDestroyWrapper(component));        
-    }
-    component->preDestroyPosition = onDestroyPool.before_begin();
+    onDestroyPool.push_front(OnDestroyWrapper(component));
+    component->destroyPosition = onDestroyPool.begin();
 }
 
 template <class T>
 typename std::enable_if<!HasOnDestroy<T>::value>::type
 GameObject::addOnDestroy(T * component) {
-    component->preDestroyPosition = onDestroyPool.end();
+    component->destroyPosition = onDestroyPool.end();
 }
 
 template <class T>
