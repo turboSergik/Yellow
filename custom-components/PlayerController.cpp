@@ -403,6 +403,10 @@ void PlayerController::update() {
 
 void PlayerController::strategyIteration() {
 
+
+    unsigned int start_time =  clock(); // начальное время
+
+
     std::cout << "=====================================" << std::endl;
     std::cout << "Product=" << playerTown->product <<  " Armor=" << playerTown->armor  <<  " Population=" << playerTown->population << " Level=" << playerTown -> level << std::endl;
 
@@ -464,6 +468,11 @@ void PlayerController::strategyIteration() {
     Database::isMapUpdated = false;
     Network::send(Action::TURN);
     Network::send(Action::MAP, {{"layer", 1}});
+
+    unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time; // искомое время
+    logTime(search_time);
+
 }
 
 
@@ -609,8 +618,6 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
 
 std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* train) {
 
-    unsigned int start_time =  clock(); // начальное время
-
 
     std::vector<int> finalWay;
     int bestCost = -1e9;
@@ -735,9 +742,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
 
     addFictArmor(finalWay, train -> goods_capacity);
 
-    unsigned int end_time = clock(); // конечное время
-    unsigned int search_time = end_time - start_time; // искомое время
-    logTime(search_time);
+
 
     std::cout << "BSET WAY COST=" << bestCost2 << std::endl;
 
