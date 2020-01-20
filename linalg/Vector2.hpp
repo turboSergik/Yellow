@@ -28,16 +28,16 @@ public:
     Vector2(const Vector2 &) = default;
     Vector2(const sf::Vector2f &);
 
-    Vector2 operator-();
-    Vector2 operator+();
+    Vector2 operator-() const;
+    Vector2 operator+() const;
 
-    Vector2 operator+(const sf::Vector2f &);
+    Vector2 operator+(const sf::Vector2f &) const;
     Vector2 & operator+=(const sf::Vector2f &);
-    Vector2 operator-(const sf::Vector2f &);
+    Vector2 operator-(const sf::Vector2f &) const;
     Vector2 & operator-=(const sf::Vector2f &);
-    Vector2 operator*(const sf::Vector2f &);
+    Vector2 operator*(const sf::Vector2f &) const;
     Vector2 & operator*=(const sf::Vector2f &);
-    Vector2 operator/(const sf::Vector2f &);
+    Vector2 operator/(const sf::Vector2f &) const;
     Vector2 & operator/=(const sf::Vector2f &);
 
 

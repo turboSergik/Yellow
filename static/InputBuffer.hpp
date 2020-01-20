@@ -6,6 +6,7 @@
 #include <SFML/Window/Event.hpp>
 #include "../utility/ThreadSafeBitset.hpp"
 #include <array>
+#include "../linalg/Vector2.hpp"
 
 class InputBuffer
 {
@@ -17,11 +18,15 @@ class InputBuffer
     static ThreadSafeBitset<sf::Keyboard::KeyCount> releasedKeys;
 
     static ThreadSafeBitset<sf::Mouse::ButtonCount> pressedMouseButtons;
+    static ThreadSafeBitset<sf::Mouse::ButtonCount> heldMouseButtons;
     static ThreadSafeBitset<sf::Mouse::ButtonCount> releasedMouseButtons;
     
     static std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
                sf::Mouse::ButtonCount> pressedMouseEvents;
-
+    
+    static std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
+               sf::Mouse::ButtonCount> heldMouseEvents;
+    
     static std::array<std::pair<sf::Event::MouseButtonEvent, std::mutex>,
                sf::Mouse::ButtonCount> releasedMouseEvents;
     
@@ -29,6 +34,9 @@ class InputBuffer
     static sf::Event::MouseWheelScrollEvent wheelScrollEvent;
     static bool wheelScrolled;
 
+    static Vector2 mousePosition;
+    static std::mutex mousePositionMutex;
+    
 public:
 
     static void addKeyPressed(sf::Event::KeyEvent keyEvent);
@@ -38,7 +46,9 @@ public:
     static void addMouseButtonReleased(sf::Event::MouseButtonEvent buttonEvent);
 
     static void addWheelScroll(sf::Event::MouseWheelScrollEvent mouseScrollEvent);
-
+    
+    static void setMousePosition(sf::Event::MouseMoveEvent mouseMoveEvent);
+    
     static void reset();
     
     friend class Input;

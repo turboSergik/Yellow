@@ -9,14 +9,13 @@
 #include "../linalg/Vector2.hpp"
 
 enum GoodsType {
+    Nothing = 0,
     Products = 1,
     Armor = 2
 };
 
 class Train : public Behaviour {
 private:
-    Vector2 targetPosition;
-    Vector2 lerp(const Vector2 & a, const Vector2 & b, float t);
 public:
     explicit Train(int idx);
 
@@ -34,13 +33,13 @@ public:
     std::string player_idx;
     Line *line = nullptr;
     Line *prevLine = nullptr;
-    //TODO: ask what this field store
-    //"goods_type": null, WTF?
+    GoodsType goods_type;
 
     int move_type = 0;
     int destiny = 0;
     std::vector<int> needWay;
 
+    float animationSpeed = 10.0f;
     void applyLayer1(const nlohmann::json &json) override;
     void update();
 };

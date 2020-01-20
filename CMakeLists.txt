@@ -5,10 +5,6 @@ project(WG LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
-
 include(${CMAKE_SOURCE_DIR}/conancommand.cmake)
 set_conan_params()
 
@@ -55,12 +51,16 @@ set(SOURCES
         utility/Event.cpp
         custom-components/PlayerController.cpp
         core-components/RigidBody.cpp
-        linalg/Vector2.cpp)
+        linalg/Vector2.cpp
+        utility/Mathf.cpp
+        core-components/colliders/Collider.cpp
+        core-components/colliders/CircleCollider.cpp
+        core-components/colliders/BoxCollider.cpp
+        custom-components/ForceMethodPhysics/Draggable.cpp
+        custom-components/ForceMethodPhysics/PointPhysics.cpp
+        custom-components/ForceMethodPhysics/LinePhysics.cpp)
 
 add_executable(WG ${SOURCES})
 
 target_link_libraries(WG ${CONAN_LIBS})
 
-if (LINUX)
-    target_link_libraries(WG X11)
-endif()

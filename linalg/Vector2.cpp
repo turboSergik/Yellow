@@ -13,15 +13,15 @@ Vector2::Vector2(const sf::Vector2f & original) {
     this->y = original.y;
 }
 
-Vector2 Vector2::operator-() {
+Vector2 Vector2::operator-() const {
     return Vector2(-this->x, -this->y);
 }
 
-Vector2 Vector2::operator+() {
+Vector2 Vector2::operator+() const {
     return *this;
 }
 
-Vector2 Vector2::operator+(const sf::Vector2f & operand) {
+Vector2 Vector2::operator+(const sf::Vector2f & operand) const {
     return Vector2(this->x + operand.x, this->y + operand.y);
 }
 
@@ -31,7 +31,7 @@ Vector2 & Vector2::operator+=(const sf::Vector2f & operand) {
     return *this;
 }
 
-Vector2 Vector2::operator-(const sf::Vector2f & operand) {
+Vector2 Vector2::operator-(const sf::Vector2f & operand) const {
     return Vector2(this->x - operand.x, this->y - operand.y);
 }
 
@@ -41,7 +41,7 @@ Vector2 & Vector2::operator-=(const sf::Vector2f & operand) {
     return *this;
 }
 
-Vector2 Vector2::operator*(const sf::Vector2f & operand) {
+Vector2 Vector2::operator*(const sf::Vector2f & operand) const {
     return Vector2(this->x * operand.x, this->y * operand.y);
 }
 
@@ -51,7 +51,7 @@ Vector2 & Vector2::operator*=(const sf::Vector2f & operand) {
     return *this;
 }
 
-Vector2 Vector2::operator/(const sf::Vector2f & operand) {
+Vector2 Vector2::operator/(const sf::Vector2f & operand) const {
     return Vector2(this->x / operand.x, this->y / operand.y);
 }
 

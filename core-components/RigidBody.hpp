@@ -12,6 +12,8 @@
 #include "../linalg/Vector2.hpp"
 
 class RigidBody : public Component {
+private:
+    bool kinematic = false;
 public:
     float mass = 1;
     float drag = 0.05;
@@ -22,6 +24,8 @@ public:
     float angularVelocity = 0;
     float angularAcceleration = 0;
 
+    bool isKinematic();
+    void setKinematic(bool state = true);
     void fixedUpdate();
     void addForce(Vector2 force);
     void addForceAtPosition(Vector2 force, Vector2 position);

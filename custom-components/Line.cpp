@@ -6,9 +6,7 @@
 #include "Line.h"
 #include "../static/Database.h"
 #include "../core/GameObject.h"
-
-
-const float PI = 3.14159265358f;
+#include "../utility/Mathf.hpp"
 
 Line::Line(int idx) : Behaviour(idx) {
 
@@ -28,32 +26,17 @@ void Line::applyLayer0(const nlohmann::json &json) {
 }
 
 void Line::start() {
-    lineRenderer = gameObject->getComponent<LineRenderer>();
+    this->lineRenderer = this->gameObject->getComponent<LineRenderer>();
+    this->lineRenderer->setVertices({0, 0}, {this->length, 0.f});
 }
 
-void Line::fixedUpdate() {
+void Line::update() {
     Vector2 direction =
             this->points[1]->transform->getPosition() -
             this->points[0]->transform->getPosition();
-    this->worldLength = direction.magnitude();
-    this->transform->setRotation(180 / PI * atan2f(direction.y, direction.x));
-    this->lineRenderer->setVertices({0, 0}, {this->worldLength, 0});
-    float deltaLength = this->worldLength - ForceMethodConfig::springLength;
-    this->points[0]->rigidBody->addForce(
-            ForceMethodConfig::stiffnessK * deltaLength * direction.normalized());
-    this->points[1]->rigidBody->addForce(
-            -ForceMethodConfig::stiffnessK * deltaLength * direction.normalized());
+    this->transform->setRotation(Mathf::RAD2DEG * atan2f(direction.y, direction.x));
+    this->transform->setLocalScale(Vector2(direction.magnitude()/this->length));
 }
-
-Vector2 Line::toWorldGlobalPosition(int position) {
-    return this->transform->toGlobalPosition(
-            {this->worldLength * position / this->length, 0});
-}
-
-Vector2 Line::toWorldLocalPosition(int position) {
-    return {this->worldLength * position / this->length, 0};
-}
-
 
 
 

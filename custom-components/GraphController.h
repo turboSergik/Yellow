@@ -12,6 +12,7 @@
 #include "PlayerController.hpp"
 #include "../linalg/Vector2.hpp"
 #include "../utility/Config.hpp"
+#include "../core-components/colliders/Collider.hpp"
 
 class GraphController : public Component {
 private:
@@ -28,7 +29,6 @@ public:
     bool isGameRunning(const nlohmann::json & json);
 
     void start();
-    void fixedUpdate();
     void onDestroy();
     void onLogin(const nlohmann::json & json);
     void onMapLayer0(const nlohmann::json & json);

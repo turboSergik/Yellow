@@ -14,6 +14,9 @@
 #include "../network/Network.hpp"
 #include "../utility/random.hpp"
 #include "../core-components/renderers/CircleRenderer.h"
+#include "CameraController.h"
+#include "../static/Input.hpp"
+#include "../core-components/colliders/Collider.hpp"
 
 using Random = effolkronium::random_static;
 
@@ -32,22 +35,8 @@ void GraphController::start() {
             {"num_players", PlayerConfig::numPlayers}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
+    //Network::send(Action::MAP, {{"layer", 10}});
     Network::send(Action::GAMES);
-}
-
-void GraphController::fixedUpdate() {
-    for (auto it1 = Database::points.begin(); it1 != Database::points.end(); it1++) {
-        const auto & point1 = it1->second;
-        for (auto it2 = std::next(it1); it2 != Database::points.end(); it2++) {
-            const auto &point2 = it2->second;
-            Vector2 direction = point2->transform->getPosition() - point1->transform->getPosition();
-            float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.magnitude() : 0.f;
-            //float k = direction.magnitude() != 0.f ? ForceMethodConfig::charge / direction.sqrMagnitude()) : 0.f;
-            point2->rigidBody->addForce(direction.normalized() * k);
-            point1->rigidBody->addForce(-direction.normalized() * k);
-        }
-
-    }
 }
 
 void GraphController::onDestroy() {
@@ -78,8 +67,10 @@ void GraphController::applyLayer10(const nlohmann::json &json) {
 void GraphController::applyLayer0(const nlohmann::json &json) {
     this->layer0 = json;
     if (json.contains("points")) {
-        this->graphSize = 2*ForceMethodConfig::springLength*sqrtf(json["points"].size());
+        //this->graphSize = ForceMethodConfig::springLength*json["points"].size();
+        this->graphSize = 1000;
         Camera::mainCamera->setWidth(this->graphSize);
+        Camera::mainCamera->gameObject->getComponent<CameraController>()->targetWidth = this->graphSize;
         for (const auto & item : json["points"]) {
             int idx = item.value("idx", -1);
             if (idx != -1) {
@@ -204,7 +195,7 @@ bool GraphController::isGameRunning(const nlohmann::json & json) {
 }
 
 void GraphController::onLogin(const nlohmann::json & json) {
-    //this->playerInfo = json;
+    this->playerInfo = json;
 }
 
 void GraphController::onMapLayer0(const nlohmann::json & json) {
@@ -226,7 +217,9 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
 }
 
 void GraphController::onMapLayer10(const nlohmann::json & json) {
-    std::cout << "Layer 10 exists" << std::endl;
+    //std::cout << "Layer 10 exists" << std::endl;
+    this->applyLayer10(json);
+    std::cout << json.dump(4) << std::endl;
 }
 
 void GraphController::onPlayer(const nlohmann::json & json) {
@@ -234,9 +227,10 @@ void GraphController::onPlayer(const nlohmann::json & json) {
 }
 
 void GraphController::onGames(const nlohmann::json & json) {
-    std::cout << json.dump(4) << std::endl;
+    //std::cout << json.dump(4) << std::endl;
     if (isGameRunning(json)) {
-        Network::send(Action::PLAYER);
+        //Network::send(Action::PLAYER);
+        this->applyPlayerInfo(playerInfo);
     } else {
         Network::send(Action::GAMES);
     }

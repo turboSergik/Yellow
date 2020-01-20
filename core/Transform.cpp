@@ -10,97 +10,98 @@ const Vector2 &Transform::getPosition() const {
     return position;
 }
 
-void Transform::setPosition(const Vector2 &position) {
-    if (parent) {
-        Transform::setLocalPosition(parent->toLocalPosition(position));
+void Transform::setPosition(const Vector2 & position) {
+    if (this->parent) {
+        this->setLocalPosition(this->parent->toLocalPosition(position));
     } else {
-        Transform::setLocalPosition(position);
+        this->setLocalPosition(position);
     }
 }
 
 const Vector2 &Transform::getLocalPosition() const {
-    return localPosition;
+    return this->localPosition;
 }
 
 void Transform::setLocalPosition(const Vector2 &localPosition) {
-    Transform::localPosition = localPosition;
+    this->localPosition = localPosition;
     recalculateAccordingToLocals();
 }
 
 float Transform::getRotation() const {
-    return rotation;
+    return this->rotation;
 }
 
 void Transform::setRotation(float rotation) {
-    if (parent) {
-        Transform::setLocalRotation(rotation - parent->rotation);
+    if (this->parent) {
+        this->setLocalRotation(rotation - this->parent->rotation);
     } else {
-        Transform::setLocalRotation(rotation);
+        this->setLocalRotation(rotation);
     }
 }
 
 float Transform::getLocalRotation() const {
-    return localRotation;
+    return this->localRotation;
 }
 
 void Transform::setLocalRotation(float localRotation) {
-    Transform::localRotation = localRotation;
-    Transform::recalculateAccordingToLocals();
+    this->localRotation = localRotation;
+    this->recalculateAccordingToLocals();
 }
 
 const Vector2 &Transform::getScale() const {
-    return scale;
+    return this->scale;
 }
 
 void Transform::setScale(const Vector2 &scale) {
-    Transform::scale = scale;
-    if (parent) {
-        Transform::localScale = {scale.x / parent->scale.x, scale.y / parent->scale.y};
+    this->scale = scale;
+    if (this->parent) {
+        this->localScale = {scale.x / this->parent->scale.x, scale.y / this->parent->scale.y};
     } else {
-        Transform::localScale = scale;
+        this->localScale = scale;
     }
 }
 
 const Vector2 &Transform::getLocalScale() const {
-    return localScale;
+    return this->localScale;
 }
 
 void Transform::setLocalScale(const Vector2 &localScale) {
-    Transform::localScale = localScale;
+    this->localScale = localScale;
+    recalculateAccordingToLocals();
 }
 
 void Transform::setPositionAndRotation(const Vector2 &position, float rotation) {
-    if (parent) {
-        Transform::localPosition = parent->toLocalPosition(position);
-        Transform::localRotation = rotation - parent->rotation;
+    if (this->parent) {
+        this->localPosition = this->parent->toLocalPosition(position);
+        this->localRotation = rotation - this->parent->rotation;
     } else {
-        Transform::localPosition = position;
-        Transform::localRotation = rotation;
+        this->localPosition = position;
+        this->localRotation = rotation;
     }
     recalculateAccordingToLocals();
 }
 
 
 Transform *Transform::getParent() const {
-    return parent;
+    return this->parent;
 }
 
 void Transform::setParent(Transform *parent, bool worldPositionStays) {
-    if (Transform::parent) {
-        Transform::parent->children.erase(it);
+    if (this->parent) {
+        this->parent->children.erase(this->it);
     }
-    Transform::parent = parent;
+    this->parent = parent;
     if (worldPositionStays) {
-        setPositionAndRotation(Transform::position, Transform::rotation);
-        if (Transform::parent) {
-            Transform::parent->children.push_back(this);
-            it = std::prev(parent->children.end());
+        setPositionAndRotation(this->position, this->rotation);
+        if (this->parent) {
+            this->parent->children.push_back(this);
+            this->it = std::prev(parent->children.end());
         }
     } else {
         recalculateAccordingToLocals();
-        if (Transform::parent) {
-            Transform::parent->children.push_back(this);
-            it = std::prev(parent->children.end());
+        if (this->parent) {
+            this->parent->children.push_back(this);
+            this->it = std::prev(parent->children.end());
         }
     }
 
@@ -128,35 +129,35 @@ void Transform::recalculateAccordingToLocals() {
         rotation = localRotation;
         scale = localScale;
     }
-    right = toGlobalDirection({1, 0});
-    up = toGlobalDirection({0, 1});
+    right = toGlobalDirection(Vector2::RIGHT);
+    up = toGlobalDirection(Vector2::UP);
     for (auto child : children) {
         child->recalculateAccordingToLocals();
     }
 }
 
-Vector2 Transform::toLocalPosition(const Vector2 &position) const {
-    return worldToLocal.transformPoint(position);
+Vector2 Transform::toLocalPosition(const Vector2 & position) const {
+    return this->worldToLocal.transformPoint(position);
 }
 
-Vector2 Transform::toLocalDirection(const Vector2 &direction) const {
+Vector2 Transform::toLocalDirection(const Vector2 & direction) const {
     return sf::Transform(sf::Transform::Identity).rotate(-rotation).transformPoint(direction);
 }
 
-Vector2 Transform::toGlobalPosition(const Vector2 &position) const {
-    return localToWorld.transformPoint(position);
+Vector2 Transform::toGlobalPosition(const Vector2 & position) const {
+    return this->localToWorld.transformPoint(position);
 }
 
-Vector2 Transform::toGlobalDirection(const Vector2 &direction) const {
+Vector2 Transform::toGlobalDirection(const Vector2 & direction) const {
     return sf::Transform(sf::Transform::Identity).rotate(rotation).transformPoint(direction);
 }
 
 const Vector2 &Transform::getUp() const {
-    return up;
+    return this->up;
 }
 
 const Vector2 &Transform::getRight() const {
-    return right;
+    return this->right;
 }
 
 std::list<Transform *>::iterator Transform::begin() { return children.begin(); }
@@ -164,20 +165,20 @@ std::list<Transform *>::iterator Transform::begin() { return children.begin(); }
 std::list<Transform *>::iterator Transform::end() { return children.end(); }
 
 Transform::~Transform() {
-    for (Transform * child : children) {
+    for (Transform * child : this->children) {
         delete child->gameObject;
     }
 }
 
 Transform::Transform(GameObject *gameObject) {
-    Transform::gameObject = gameObject;
+    this->gameObject = gameObject;
 }
 
 const sf::Transform &Transform::getLocalToWorldTransform() const {
-    return localToWorld;
+    return this->localToWorld;
 }
 
 const sf::Transform &Transform::getWorldToLocalTransform() const {
-    return worldToLocal;
+    return this->worldToLocal;
 }
 

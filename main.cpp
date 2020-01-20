@@ -3,6 +3,7 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include <atomic>
 #include "static/Database.h"
 #include "core/GameObject.h"
 #include "core-components/Camera.h"
@@ -14,29 +15,16 @@
 #include "static/Input.hpp"
 #include "static/InputBuffer.hpp"
 #include "network/Network.hpp"
-#include <atomic>
+//TODO MAIN, may be hashmap in methodsPool, mouse scroll.
 
-#ifdef __linux__
-// #include <X11/Xlib.h>
-// extern include function which implemented in Xlib
-// not included becouse of conflicting declaration Time
-extern "C" int XInitThreads();
-
-#endif
-
-static std::atomic<bool> closeCalled;
-
-void mainLoop(sf::RenderWindow & window,
-              Camera * mainCamera) {
-
-    //window.setFramerateLimit(60);
-
-    window.setActive(true);
-
-    sf::Clock clock; // starts the clock
-
-    float time = 0.f;
-    while (!closeCalled.load(std::memory_order_release)) {
+struct MainLoopIteration {
+    sf::RenderWindow & window; 
+    Camera * mainCamera;
+    sf::Clock & clock;
+    float & time;
+    
+    void operator()() {
+        // here is main loop iteration
         Time::deltaTime = clock.restart().asSeconds();
         Input::setFromInputBuffer();
         MethodsPool::start();
@@ -52,47 +40,56 @@ void mainLoop(sf::RenderWindow & window,
         window.display();
         Network::update();
     }
+};
 
-}
 
-bool safeWaitEvent(sf::RenderWindow & window, sf::Event & event) {
-    bool result = false;
-    while (!result) {
-        result = window.pollEvent(event);
-        std::this_thread::yield();
+void mainLoop(MainLoopIteration & mainLoopIteration, 
+              std::atomic<bool> & closeCalled) {
+
+    mainLoopIteration.window.setActive(true);
+
+    mainLoopIteration.clock.restart(); 
+    mainLoopIteration.time = 0.f;
+    
+    while (!closeCalled.load(std::memory_order_acquire)) {
+        mainLoopIteration();
     }
-    return result;
+
 }
 
 int main() {
-#ifdef __linux__
-    XInitThreads();
-#endif
-
-    closeCalled.store(false, std::memory_order_acquire);
-
+    
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
-
-    window.setActive(false);
-
+    window.setActive(true);
+    
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
-
-    std::thread mainLoopThread(mainLoop, std::ref(window), mainCamera);
-
+    
+    sf::Clock clock; // starts the clock
+    float time = 0.f;
+    MainLoopIteration mainLoopIteration{window, mainCamera, clock, time};
+    
+#ifdef _WIN32
+    std::atomic<bool> closeCalled;
+    closeCalled.store(false, std::memory_order_release);
+    window.setActive(false);
+    std::thread mainLoopThread(mainLoop, std::ref(mainLoopIteration), std::ref(closeCalled));
+#endif
+    
     sf::Event event{};
 
     while (window.isOpen()) {
 
-        if (safeWaitEvent(window, event)) {
-            // scary event handling
-            // TODO handle events somewhere else
+        if (window.pollEvent(event)) {
             switch (event.type) {
             case sf::Event::Closed:
-                closeCalled.store(true, std::memory_order_acquire);
+#ifdef _WIN32
+                closeCalled.store(true, std::memory_order_release);
                 mainLoopThread.join();
+#endif
                 root->destroyImmediate();
+                mainCamera->gameObject->destroyImmediate();
                 window.close();
                 return 0;
             case sf::Event::Resized:
@@ -116,11 +113,16 @@ int main() {
                     // std::cout << event.mouseWheelScroll.delta << std::endl;
                 }
                 break;
+            case sf::Event::MouseMoved:
+                InputBuffer::setMousePosition(event.mouseMove);
             default:
                 break;
             }
 
         }
+#ifndef _WIN32
+        mainLoopIteration();
+#endif
     }
 
     return 0;
