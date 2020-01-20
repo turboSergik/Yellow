@@ -62,7 +62,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
     window.setActive(true);
     
-    GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
+    GameObject * root = Prefabs::root()->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
     
