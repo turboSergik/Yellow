@@ -216,7 +216,7 @@ GameObject::onSceneFixedUpdate(T * component) {
 template <class T>
 typename std::enable_if<!HasFixedUpdate<T>::value>::type
 GameObject::onSceneFixedUpdate(T * component) {
-    addUpdate(component);
+    addFixedUpdate(component);
 }
 
 #endif //WG_GAMEOBJECT_H
