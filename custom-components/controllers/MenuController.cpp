@@ -12,12 +12,10 @@ void MenuController::start() {
 
 void MenuController::onDestroy() {
     Network::onGamesResponse.removeListener<MenuController, &MenuController::onGames>(this);
-    for (auto & child : *transform) {
-        child->gameObject->destroy();
-    }
 }
 
 void MenuController::onGames(const nlohmann::json & json) {
+    //TODO: store all games here and connect to the desired
     //std::cout << json.dump(4) << std::endl;
     Game::current->setState(GameState::INIT);
 }
