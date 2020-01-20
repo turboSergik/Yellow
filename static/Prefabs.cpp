@@ -21,6 +21,7 @@ Point *Prefabs::point(int idx) {
     circleRenderer->circle.setRadius(InterfaceConfig::largeR);
     circleRenderer->circle.setOrigin(InterfaceConfig::largeR, InterfaceConfig::largeR);
     circleRenderer->circle.setFillColor(InterfaceConfig::graphColor);
+    circleRenderer->priotity = 1;
     Point *point = obj->addComponent<Point>(idx);
     RigidBody * rigidBody = obj->addComponent<RigidBody>();
     point->rigidBody = rigidBody;
@@ -37,6 +38,7 @@ Line *Prefabs::line(int idx) {
     obj->name = "Line";
     LineRenderer * lineRenderer =  obj->addComponent<LineRenderer>();
     lineRenderer->setColor(InterfaceConfig::graphColor);
+    lineRenderer->priotity = 1;
     Line *line = obj->addComponent<Line>(idx);
     obj->addComponent<LinePhysics>();
     return line;
@@ -51,6 +53,7 @@ Train *Prefabs::train(int idx) {
     circleRenderer->circle.setFillColor(InterfaceConfig::trainColor);
     circleRenderer->circle.setPointCount(3);
     circleRenderer->circle.setRotation(90);
+    circleRenderer->priotity = -1;
     Train *train = obj->addComponent<Train>(idx);
     return train;
 }

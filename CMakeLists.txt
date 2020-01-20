@@ -18,7 +18,6 @@ endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGET)
 
-
 set(SOURCES
         main.cpp
         core-components/Camera.cpp
