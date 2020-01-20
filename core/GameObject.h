@@ -11,6 +11,7 @@
 #include <utility>
 #include <cstdint>
 #include <forward_list>
+#include <string>
 #include "../utility/methodWrapper.hpp"
 #include "../static/MethodsPool.hpp"
 #include "../utility/InterfaceChecker.hpp"
@@ -88,6 +89,7 @@ private:
     friend class MethodsPool;
     friend class Component;
 public:
+    std::string name;
     Transform * transform = nullptr; //TODO: prevent changes of this field
     GameObject();
     ~GameObject();

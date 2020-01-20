@@ -16,6 +16,7 @@
 //TODO: add constants to easy manipulate default values of shapes
 Point *Prefabs::point(int idx) {
     GameObject *obj = new GameObject();
+    obj->name = "Point";
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(InterfaceConfig::largeR);
     circleRenderer->circle.setOrigin(InterfaceConfig::largeR, InterfaceConfig::largeR);
@@ -33,6 +34,7 @@ Point *Prefabs::point(int idx) {
 
 Line *Prefabs::line(int idx) {
     GameObject * obj = new GameObject();
+    obj->name = "Line";
     LineRenderer * lineRenderer =  obj->addComponent<LineRenderer>();
     lineRenderer->setColor(InterfaceConfig::graphColor);
     Line *line = obj->addComponent<Line>(idx);
@@ -42,6 +44,7 @@ Line *Prefabs::line(int idx) {
 
 Train *Prefabs::train(int idx) {
     GameObject *obj = new GameObject();
+    obj->name = "Train";
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(InterfaceConfig::smallR);
     circleRenderer->circle.setOrigin(InterfaceConfig::smallR, InterfaceConfig::smallR);
@@ -54,6 +57,7 @@ Train *Prefabs::train(int idx) {
 
 Town *Prefabs::town(int idx) {
     GameObject *obj = new GameObject();
+    obj->name = "Town";
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(InterfaceConfig::smallR);
     circleRenderer->circle.setOrigin(InterfaceConfig::smallR, InterfaceConfig::smallR);
@@ -64,6 +68,7 @@ Town *Prefabs::town(int idx) {
 
 Market *Prefabs::market(int idx) {
     GameObject *obj = new GameObject();
+    obj->name = "Market";
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(InterfaceConfig::smallR);
     circleRenderer->circle.setOrigin(InterfaceConfig::smallR, InterfaceConfig::smallR);
@@ -74,6 +79,7 @@ Market *Prefabs::market(int idx) {
 
 Storage *Prefabs::storage(int idx) {
     GameObject *obj = new GameObject();
+    obj->name = "Storage";
     CircleRenderer *circleRenderer = obj->addComponent<CircleRenderer>();
     circleRenderer->circle.setRadius(InterfaceConfig::smallR);
     circleRenderer->circle.setOrigin(InterfaceConfig::smallR, InterfaceConfig::smallR);
@@ -84,6 +90,7 @@ Storage *Prefabs::storage(int idx) {
 
 Camera *Prefabs::camera(sf::RenderTarget *renderTarget) {
     GameObject *obj = new GameObject();
+    obj->name = "Camera";
     Camera *camera = obj->addComponent<Camera>(renderTarget);
     obj->addComponent<CameraController>();
     return camera;
@@ -91,6 +98,7 @@ Camera *Prefabs::camera(sf::RenderTarget *renderTarget) {
 
 GraphController *Prefabs::graphRoot() {
     GameObject *obj = new GameObject();
+    obj->name = "Root";
     GraphController *graphController = obj->addComponent<GraphController>();
     obj->addComponent<Draggable>();
     return graphController;
