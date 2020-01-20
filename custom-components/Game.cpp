@@ -74,6 +74,18 @@ void Game::setState(GameState state) {
             playerController = gameObject->addComponent<PlayerController>();
             break;
         case GameState::FINISHED:
+            if (menuController) {
+                menuController->destroy();
+                menuController = nullptr;
+            }
+            if (playerController) {
+                playerController->destroy();
+                playerController = nullptr;
+            }
+            if (lobbyPlayerController) {
+                lobbyPlayerController->destroy();
+                lobbyPlayerController = nullptr;
+            }
             break;
         default:
             break;
