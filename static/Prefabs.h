@@ -11,7 +11,6 @@
 #include "../custom-components/Train.h"
 #include "../custom-components/Line.h"
 #include "../core-components/Camera.h"
-#include "../custom-components/GraphController.h"
 #include "../utility/Config.hpp"
 
 class Prefabs {
@@ -23,7 +22,7 @@ public:
     static Town *town(int idx);
     static Market *market(int idx);
     static Storage *storage(int idx);
-    static GraphController *graphRoot();
+    static GameObject * root();
 };
 
 

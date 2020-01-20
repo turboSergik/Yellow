@@ -5,12 +5,13 @@
 #include "Prefabs.h"
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
-#include "../custom-components/CameraController.h"
+#include "../custom-components/controllers/CameraController.h"
 #include "../core-components/RigidBody.hpp"
 #include "../core-components/colliders/CircleCollider.hpp"
-#include "../custom-components/ForceMethodPhysics/PointPhysics.hpp"
-#include "../custom-components/ForceMethodPhysics/LinePhysics.hpp"
-#include "../custom-components/ForceMethodPhysics/Draggable.hpp"
+#include "../custom-components/forceMethodPhysics/PointPhysics.hpp"
+#include "../custom-components/forceMethodPhysics/LinePhysics.hpp"
+#include "../custom-components/forceMethodPhysics/Draggable.hpp"
+#include "../custom-components/Game.hpp"
 
 
 //TODO: add constants to easy manipulate default values of shapes
@@ -29,6 +30,7 @@ Point *Prefabs::point(int idx) {
     CircleCollider * circleCollider = obj->addComponent<CircleCollider>();
     circleCollider->setRadius(InterfaceConfig::largeR);
     obj->addComponent<PointPhysics>();
+    obj->addComponent<Draggable>();
     return point;
 }
 
@@ -96,10 +98,9 @@ Camera *Prefabs::camera(sf::RenderTarget *renderTarget) {
     return camera;
 }
 
-GraphController *Prefabs::graphRoot() {
+GameObject * Prefabs::root() {
     GameObject *obj = new GameObject();
     obj->name = "Root";
-    GraphController *graphController = obj->addComponent<GraphController>();
-    obj->addComponent<Draggable>();
-    return graphController;
+    obj->addComponent<Game>();
+    return obj;
 }
