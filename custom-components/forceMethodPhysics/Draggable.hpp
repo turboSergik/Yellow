@@ -15,7 +15,9 @@
 
 class Draggable : public Component {
 private:
-    Collider * draggingCollider = nullptr;
+    bool isDragging = false;
+    Collider * collider = nullptr;
+    RigidBody * rigidBody = nullptr;
 public:
     void start();
     void update();
