@@ -26,7 +26,7 @@ std::unordered_map<int, std::set<int> > timeTableLine;
 
 std::unordered_map<int, long long> fLine[50];
 std::unordered_map<int, long long> fVertex[50];
-int countType1 = 4;
+int countType1 = 0;
 
 
 //TODO: make friend or comparator function
@@ -353,6 +353,8 @@ void PlayerController::update() {
 
 void PlayerController::strategyIteration() {
 
+    unsigned int start_time =  clock(); // начальное время
+
     std::cout << "=====================================" << std::endl;
     std::cout << "Product=" << playerTown->product <<  " Armor=" << playerTown->armor  <<  " Population=" << playerTown->population << std::endl;
 
@@ -401,6 +403,10 @@ void PlayerController::strategyIteration() {
     Database::isMapUpdated = false;
     Network::send(Action::TURN);
     Network::send(Action::MAP, {{"layer", 1}});
+
+    unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time; // искомое время
+    logTime(search_time);
 }
 
 
@@ -620,7 +626,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     do{
 
         step++;
-        if (step == 10) break;
+        if (step == 70) break;
 
         random_shuffle(needStorages.begin(), needStorages.end());
 
