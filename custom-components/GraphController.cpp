@@ -17,7 +17,8 @@
 #include "CameraController.h"
 #include "../static/Input.hpp"
 #include "../core-components/colliders/Collider.hpp"
-
+#include "../core-components/ui/Button.hpp"
+#include "../static/Prefabs.h"
 using Random = effolkronium::random_static;
 
 void GraphController::start() {
@@ -27,16 +28,23 @@ void GraphController::start() {
     Network::onMapResponse10.addListener<GraphController, &GraphController::onMapLayer10>(this);
     Network::onPlayerResponse.addListener<GraphController, &GraphController::onPlayer>(this);
     Network::onGamesResponse.addListener<GraphController, &GraphController::onGames>(this);
-
-    Network::connect("wgforge-srv.wargaming.net", 443);
-    Network::send(Action::LOGIN, {
-            {"name", PlayerConfig::playerName},
-            {"game", PlayerConfig::hostName},
-            {"num_players", PlayerConfig::numPlayers}});
-    Network::send(Action::MAP, {{"layer", 0}});
-    Network::send(Action::MAP, {{"layer", 1}});
-    //Network::send(Action::MAP, {{"layer", 10}});
-    Network::send(Action::GAMES);
+    
+//    std::cout << PlayerConfig::playerName << std::endl;
+//    std::cout << PlayerConfig::hostName << std::endl;
+//    std::cout << PlayerConfig::numPlayers << std::endl;    
+    
+//    Network::connect("wgforge-srv.wargaming.net", 443);
+//    Network::send(Action::LOGIN, {
+//            {"name", PlayerConfig::playerName},
+//            {"game", PlayerConfig::hostName},
+//            {"num_players", PlayerConfig::numPlayers}});
+//    Network::send(Action::MAP, {{"layer", 0}});
+//    Network::send(Action::MAP, {{"layer", 1}});
+//    //Network::send(Action::MAP, {{"layer", 10}});
+//    Network::send(Action::GAMES);
+    Button * button = Prefabs::button(80, 60);
+    button->gameObject->instantiate();    
+    button->transform->setPosition({0, 0});
 }
 
 void GraphController::onDestroy() {
@@ -227,7 +235,7 @@ void GraphController::onPlayer(const nlohmann::json & json) {
 }
 
 void GraphController::onGames(const nlohmann::json & json) {
-    //std::cout << json.dump(4) << std::endl;
+    // std::cout << json.dump(4) << std::endl;
     if (isGameRunning(json)) {
         //Network::send(Action::PLAYER);
         this->applyPlayerInfo(playerInfo);

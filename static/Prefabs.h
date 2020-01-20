@@ -13,6 +13,7 @@
 #include "../core-components/Camera.h"
 #include "../custom-components/GraphController.h"
 #include "../utility/Config.hpp"
+#include "../core-components/ui/Button.hpp"
 
 class Prefabs {
 public:
@@ -24,6 +25,7 @@ public:
     static Market *market(int idx);
     static Storage *storage(int idx);
     static GraphController *graphRoot();
+    static Button * button(float width, float height);
 };
 
 

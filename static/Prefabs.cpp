@@ -5,9 +5,12 @@
 #include "Prefabs.h"
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
+#include "../core-components/renderers/RectangleRenderer.hpp"
 #include "../custom-components/CameraController.h"
 #include "../core-components/RigidBody.hpp"
 #include "../core-components/colliders/CircleCollider.hpp"
+#include "../core-components/colliders/BoxCollider.hpp"
+#include "../core-components/ui/Button.hpp"
 #include "../custom-components/ForceMethodPhysics/PointPhysics.hpp"
 #include "../custom-components/ForceMethodPhysics/LinePhysics.hpp"
 #include "../custom-components/ForceMethodPhysics/Draggable.hpp"
@@ -105,4 +108,19 @@ GraphController *Prefabs::graphRoot() {
     GraphController *graphController = obj->addComponent<GraphController>();
     obj->addComponent<Draggable>();
     return graphController;
+}
+
+Button * Prefabs::button(float width, float height) {
+    GameObject * obj = new GameObject();
+    obj->name = "Button";
+    Button * button = obj->addComponent<Button>();
+    RectangleRenderer * renderer = obj->addComponent<RectangleRenderer>();
+    BoxCollider * collider = obj->addComponent<BoxCollider>();
+    renderer->rectangle.setSize({width, height});
+    renderer->rectangle.setFillColor(InterfaceConfig::buttonColor);
+    renderer->rectangle.setOrigin(width / 2, height / 2);
+    collider->setWidthHeight(width, height);
+    button->buttonCollider = collider;
+    button->renderer = renderer;
+    return button;
 }

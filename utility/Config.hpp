@@ -6,31 +6,30 @@
 #define WG_FORCEMETHODCONFIG_HPP
 
 #include <SFML/Graphics.hpp>
+#include "PlayerConfig.hpp"
+#include "../linalg/Vector2.hpp"
 
 namespace ForceMethodConfig {
-    const float charge = 100.f;
-    const float stiffnessK = 10.0f;
-    const float springLength = 1.f;
-    const float frictionK = 0.05f;
-    const float dampK = 0.9f;
-}
-
-namespace PlayerConfig {
-    const std::string playerName = "AgentDvaNoska";
-    const std::string hostName = "Yellow";
-    const int numPlayers = 2;
+    static const float charge = 100.f;
+    static const float stiffnessK = 10.0f;
+    static const float springLength = 1.f;
+    static const float frictionK = 0.05f;
+    static const float dampK = 0.9f;
 }
 
 namespace InterfaceConfig {
-    const float largeR = 1.0f;
-    const float smallR = 0.8f * largeR;
-    const sf::Color graphColor = {190, 190, 190};
-    const sf::Color playerTownColor = {190, 190, 0};
-    const sf::Color playerTrainColor = {250, 250, 0};
-    const sf::Color townColor = {0, 190, 0};
-    const sf::Color storageColor = {0, 0, 190};
-    const sf::Color marketColor = {190, 0, 0};
-    const sf::Color trainColor = {0, 250, 0};
+    static const float largeR = 1.0f;
+    static const float smallR = 0.8f * largeR;
+    static const sf::Color graphColor = {190, 190, 190};
+    static const sf::Color playerTownColor = {190, 190, 0};
+    static const sf::Color playerTrainColor = {250, 250, 0};
+    static const sf::Color townColor = {0, 190, 0};
+    static const sf::Color storageColor = {0, 0, 190};
+    static const sf::Color marketColor = {190, 0, 0};
+    static const sf::Color trainColor = {0, 250, 0};
+    
+    static const sf::Color buttonColor = {255, 255, 255};
+    static const float buttonDarkFloat = 0.75f;
 }
 
 #endif //WG_FORCEMETHODCONFIG_HPP
