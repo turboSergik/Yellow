@@ -49,6 +49,9 @@ void Game::setState(GameState state) {
                 lobbyPlayerController->destroy();
                 lobbyPlayerController = nullptr;
             }
+            for (auto & child : *transform) {
+                child->gameObject->destroy();
+            }
             menuController = gameObject->addComponent<MenuController>();
             break;
         case GameState::INIT:
@@ -59,6 +62,9 @@ void Game::setState(GameState state) {
             if (playerController) {
                 playerController->destroy();
                 playerController = nullptr;
+            }
+            for (auto & child : *transform) {
+                child->gameObject->destroy();
             }
             lobbyPlayerController = gameObject->addComponent<LobbyPlayerController>();
             break;
@@ -74,6 +80,7 @@ void Game::setState(GameState state) {
             playerController = gameObject->addComponent<PlayerController>();
             break;
         case GameState::FINISHED:
+            //TODO: decide what to do when game finished
             if (menuController) {
                 menuController->destroy();
                 menuController = nullptr;
