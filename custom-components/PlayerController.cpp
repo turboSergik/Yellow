@@ -269,9 +269,11 @@ void logTime(unsigned int time) {
 void addFictProduct(std::vector<int> &way, int capacity){
 
     int now = 0;
+    int len = 0;
+
     for (int i = way.size() - 1; i >= 0; i--) {
 
-        for (auto post : Database::posts) if (post.second -> type == PostType::MARKET) {
+        for (auto post : Database::posts) if (post.second -> type == PostType::MARKET && way[i] == post.second -> point -> idx) {
 
             auto *marketObj = static_cast<Market* >(post.second);
 
@@ -289,7 +291,7 @@ void addFictArmor(std::vector<int> &way, int capacity){
     int now = 0;
     for (int i = way.size() - 1; i >= 0; i--) {
 
-        for (auto post : Database::posts) if (post.second -> type == PostType::STORAGE) {
+        for (auto post : Database::posts) if (post.second -> type == PostType::STORAGE && way[i] == post.second -> point -> idx) {
 
             auto *storageObj = static_cast<Storage* >(post.second);
 
@@ -429,8 +431,6 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
     }
     sort(needMarkets.begin(), needMarkets.end());
 
-    std::cout << "size:" << needMarkets.size() << std::endl;
-
     unsigned int start_time =  clock(); // начальное время
 
     int step = 0;
@@ -439,7 +439,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
         random_shuffle(needMarkets.begin(), needMarkets.end());
 
         step += 1;
-        if (step == 10) break;
+        if (step == 30) break;
 
         clearLinesAndVertex(marketCount);
 
@@ -461,44 +461,6 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
 
             now = q.top();
             q.pop();
-
-            /*
-            if (now.line != nullptr) {
-
-                if (fLine[now.marketPos][now.line -> idx * 1000 + now.position] >= now.value - now.spent + fixNumber) continue;
-                fLine[now.marketPos][now.line -> idx * 1000 + now.position] = now.value - now.spent + fixNumber;
-                kol3 += 1;
-
-                if (now.position == 0) {
-                    now.vertex = now.line -> points[0] -> idx;
-                    now.point = now.line -> points[0];
-
-                    now.line = nullptr;
-                }
-
-                else if (now.position == now.line -> length) {
-                    now.vertex = now.line -> points[1] -> idx;
-                    now.point = now.line -> points[1];
-
-                    now.line = nullptr;
-                }
-                else {
-
-                    if (!isFreeTimeTable(now)) continue;
-
-                    now.spent += 1;
-                    now.position += 1;
-                    q.push(now);
-
-                    now.position -= 2;
-                    q.push(now);
-
-                    _count += 1;
-
-                    continue;
-                }
-            }
-            */
 
 
             if (!isFreeTimeTable(now)) continue;
@@ -525,13 +487,6 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
 
                 if (line.second -> points[0] -> idx == now.vertex) {
 
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = 1;
-                    to.spent += 1;
-                    */
-
                     to = now;
                     to.line = line.second;
                     for (int j = 1; j < line.second -> length; j++) {
@@ -550,13 +505,6 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
                     q.push(to);
                 }
                 else if (line.second -> points[1] -> idx == now.vertex) {
-
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = line.second -> length - 1;
-                    to.spent += 1;
-                    */
 
                     to = now;
                     to.line = line.second;
@@ -580,9 +528,6 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
             }
         }
 
-        // std::cout << "====== COUNT=" << _count << " kol3=" << kol3 << " kol2=" << kol2 << std::endl;
-        // return {};
-
     } while (1);
 
 
@@ -601,6 +546,19 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
 }
 
 
+bool NextSet(std::vector<int> &a, int n, int m)
+{
+    int k = m;
+    for (int i = k - 1; i >= 0; --i)
+        if (a[i] < n - k + i + 1)
+        {
+            ++a[i];
+            for (int j = i + 1; j < k; ++j)
+                a[j] = a[j - 1] + 1;
+            return true;
+        }
+    return false;
+}
 
 
 std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* train) {
@@ -622,142 +580,117 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     }
     sort(needStorages.begin(), needStorages.end());
 
-    int step = 0;
+    int n = needStorages.size();
+    int m = train -> level;
+    if (m == 3) m += 1;
+
+    std::vector<int> a;
+    for (int i = 0; i < n; i++) a.push_back(i + 1);
+
+    std::vector<int> b;
+    for (int i = 0; i < m; i++) b.push_back(i);
+
+    std::cout << "n=" << n << " m=" << m << std::endl;
+    for (auto i : a) std::cout << i << " ";
+    std::cout << std::endl;
+    for (auto i : b) std::cout << i << " ";
+    std::cout << std::endl;
+
+
     do{
 
-        step++;
-        if (step == 70) break;
-
-        random_shuffle(needStorages.begin(), needStorages.end());
-
-        clearLinesAndVertex(storagesCount);
-
-        start.vertex = getTrainVertex(train);
-        start.point = getTrainPoint(train);
-
-        start.marketPos = 0;
-        start.maxValue = train -> goods_capacity;
-
-        q.push(start);
-
-        while(!q.empty()) {
-
-            El to, now;
-
-            now = q.top();
-            q.pop();
+        do {
 
             /*
-            if (now.line != nullptr) {
+            std::cout << "go" << std::endl;
+            for (int i = 0; i < m; i++) std::cout << a[b[i]] - 1 << " ";
+            std::cout << std::endl;
 
-                if (fLine[now.marketPos][now.line -> idx * 1000 + now.position] >= now.value - now.spent + fixNumber) continue;
-                fLine[now.marketPos][now.line -> idx * 1000 + now.position] = now.value - now.spent + fixNumber;
-
-                if (now.position == 0) {
-                    now.vertex = now.line -> points[0] -> idx;
-                    now.point = now.line -> points[0];
-
-                    now.line = nullptr;
-                }
-
-                else if (now.position == now.line -> length) {
-                    now.vertex = now.line -> points[1] -> idx;
-                    now.point = now.line -> points[1];
-
-                    now.line = nullptr;
-                }
-                else {
-
-                    if (!isFreeTimeTable(now)) continue;
-
-                    now.spent += 1;
-                    now.position += 1;
-                    q.push(now);
-
-                    now.position -= 2;
-                    q.push(now);
-
-                    continue;
-                }
-            }
+            for (int i = 0; i < m; i++) std::cout << needStorages[a[b[i]] - 1] << " ";
+            std::cout << std::endl;
             */
 
-            if (!isFreeTimeTable(now)) continue;
-            if (isMarket(now.point) && now.value == 0) continue;
+            clearLinesAndVertex(storagesCount);
 
-            if (fVertex[now.marketPos][now.vertex] >= now.value - now.spent + fixNumber) continue;
-            fVertex[now.marketPos][now.vertex] = now.value - now.spent + fixNumber;
+            start.vertex = getTrainVertex(train);
+            start.point = getTrainPoint(train);
+
+            start.marketPos = 0;
+            start.maxValue = train -> goods_capacity;
+
+            q.push(start);
+
+            while(!q.empty()) {
+
+                El to, now;
+
+                now = q.top();
+                q.pop();
+
+                if (!isFreeTimeTable(now)) continue;
+                if (isMarket(now.point) && now.value == 0) continue;
+
+                if (fVertex[now.marketPos][now.vertex] >= now.value - now.spent + fixNumber) continue;
+                fVertex[now.marketPos][now.vertex] = now.value - now.spent + fixNumber;
 
 
-            now.way.push_back(now.vertex);
-            if (isTown(now.vertex)) checkOnBestWay(now, finalWay, bestCost);
+                now.way.push_back(now.vertex);
+                if (isTown(now.vertex)) checkOnBestWay(now, finalWay, bestCost);
 
-            if (now.marketPos != storagesCount && now.vertex == needStorages[now.marketPos]) {
-                now.marketPos += 1;
-                now.value += storageArmor(now.point);
-                now.value = std::min(now.value, now.maxValue);
-            }
-
-            for (auto line : now.point -> adjacent) {
-
-                if (line.second -> points[0] -> idx == now.vertex) {
-
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = 1;
-                    to.spent += 1;
-                    */
-
-                    to = now;
-                    to.line = line.second;
-                    for (int j = 1; j < line.second -> length; j++) {
-
-                        to.spent += 1;
-                        to.position = j;
-
-                        if (!isFreeTimeTable(to)) goto point1;
-                    }
-                    to.spent += 1;
-                    to.line = nullptr;
-
-                    to.vertex = line.second -> points[1] -> idx;
-                    to.point = line.second -> points[1];
-
-                    q.push(to);
-                }
-                else if (line.second -> points[1] -> idx == now.vertex) {
-
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = line.second -> length - 1;
-                    to.spent += 1;
-                    */
-
-                    to = now;
-                    to.line = line.second;
-                    for (int j = line.second -> length - 1; j >= 1; j--) {
-
-                        to.spent += 1;
-                        to.position = j;
-
-                        if (!isFreeTimeTable(to)) goto point1;
-                    }
-                    to.spent += 1;
-                    to.line = nullptr;
-
-                    to.vertex = line.second -> points[0] -> idx;
-                    to.point = line.second -> points[0];
-
-                    q.push(to);
+                /// if (now.marketPos != storagesCount && now.vertex == needStorages[a[b[now.marketPos]] - 1]) {
+                if (now.marketPos != m && now.vertex == needStorages[a[b[now.marketPos]] - 1]) {
+                    now.marketPos += 1;
+                    now.value += storageArmor(now.point);
+                    now.value = std::min(now.value, now.maxValue);
                 }
 
-                point1:;
-            }
-        }
+                for (auto line : now.point -> adjacent) {
 
-    } while (1);
+                    if (line.second -> points[0] -> idx == now.vertex) {
+
+                        to = now;
+                        to.line = line.second;
+                        for (int j = 1; j < line.second -> length; j++) {
+
+                            to.spent += 1;
+                            to.position = j;
+
+                            if (!isFreeTimeTable(to)) goto point1;
+                        }
+                        to.spent += 1;
+                        to.line = nullptr;
+
+                        to.vertex = line.second -> points[1] -> idx;
+                        to.point = line.second -> points[1];
+
+                        q.push(to);
+                    }
+                    else if (line.second -> points[1] -> idx == now.vertex) {
+
+                        to = now;
+                        to.line = line.second;
+                        for (int j = line.second -> length - 1; j >= 1; j--) {
+
+                            to.spent += 1;
+                            to.position = j;
+
+                            if (!isFreeTimeTable(to)) goto point1;
+                        }
+                        to.spent += 1;
+                        to.line = nullptr;
+
+                        to.vertex = line.second -> points[0] -> idx;
+                        to.point = line.second -> points[0];
+
+                        q.push(to);
+                    }
+
+                    point1:;
+                }
+            }
+        } while(next_permutation(b.begin(), b.end()));
+
+    } while (NextSet(a, n, m));
 
     addTimeTable(finalWay);
 
