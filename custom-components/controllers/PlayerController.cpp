@@ -3,11 +3,10 @@
 //
 
 #include "PlayerController.hpp"
-#include "../../static/Database.h"
-#include "../../network/Network.hpp"
-#include "../../static/Time.h"
-#include "../../utility/random.hpp"
-#include "../Game.hpp"
+#include "../static/Database.h"
+#include "../network/Network.hpp"
+#include "../static/Time.h"
+#include "../utility/random.hpp"
 
 #include <queue>
 #include <bitset>
@@ -24,20 +23,15 @@ using Random = effolkronium::random_static;
 std::unordered_map<int, std::set<int> > timeTableVertex;
 std::unordered_map<int, std::set<int> > timeTableLine;
 
+std::unordered_map<int, std::set<int> > productFict;
+std::unordered_map<int, std::set<int> > armorFict;
 
 std::unordered_map<int, long long> fLine[50];
 std::unordered_map<int, long long> fVertex[50];
-int countType1 = 4;
+std::vector<std::pair<int, std::pair<int, int> > > trainTimeTable[50];
 
-void PlayerController::start() {
-    Network::onMapResponse1.addListener<PlayerController, &PlayerController::onMapLayer1>(this);
-    Network::onGamesResponse.addListener<PlayerController, &PlayerController::onGames>(this);
-}
+int countType1 = 0;
 
-void PlayerController::onDestroy() {
-    Network::onMapResponse1.removeListener<PlayerController, &PlayerController::onMapLayer1>(this);
-    Network::onGamesResponse.removeListener<PlayerController, &PlayerController::onGames>(this);
-}
 
 //TODO: make friend or comparator function
 bool operator< (El left, El right) {
@@ -71,23 +65,53 @@ bool isMarket(Point* point) {
 
 bool PlayerController::isTown(int vertex) {
 
-    if (vertex == Database::playerTown -> point -> idx) return true;
+    if (vertex == PlayerController::playerTown -> point -> idx) return true;
     return false;
 }
 
 //TODO: point has post field or I can store all markets
-int marketProduct(Point* point) {
+int marketProduct(Point* point, int cost) {
 
     auto *marketObj = static_cast<Market* >(point -> post);
-    return marketObj->productFict;
+
+    int pointIdx = marketObj -> point -> idx;
+
+    int timeNow = cost + Database::tick;
+    int timeLeft = 0;
+
+    if (productFict[pointIdx].size()) {
+        timeLeft = *(--(productFict[pointIdx].end()));
+    }
+
+    int sum = (timeNow - timeLeft) * (marketObj -> replenishment);
+    sum = std::min(sum, marketObj -> product_capacity);
+
+    return sum;
+
+    //return marketObj->productFict;
 }
 
 
-int storageArmor(Point* point) {
+int storageArmor(Point* point, int cost) {
 
     auto *storageObj = static_cast<Storage* >(point -> post);
-    return storageObj->armorFict;
 
+    int pointIdx = storageObj -> point -> idx;
+
+    int timeNow = cost + Database::tick;
+    int timeLeft = 0;
+
+    if (productFict[pointIdx].size()) {
+        timeLeft = *(--(armorFict[pointIdx].end()));
+    }
+
+    int sum = (timeNow - timeLeft) * (storageObj -> replenishment);
+    sum = std::min(sum, storageObj -> armor_capacity);
+
+    return sum;
+
+
+    //return storageObj->armorFict;
 }
 
 
@@ -119,15 +143,15 @@ void clearLinesAndVertex(int marketCount) {
 
 void PlayerController::trainUpgrade() {
 
-    for (auto trainNow : Database::playerTrains) {
+    for (auto trainNow : PlayerController::playerTrains) {
         if (trainNow -> level == 1) tryTrainUpdate(trainNow);
     }
 
-    for (auto trainNow : Database::playerTrains) {
+    for (auto trainNow : PlayerController::playerTrains) {
         if (trainNow -> level == 2) tryTrainUpdate(trainNow);
     }
 
-    for (auto trainNow : Database::playerTrains) {
+    for (auto trainNow : PlayerController::playerTrains) {
         if (trainNow -> level == 3) tryTrainUpdate(trainNow);
     }
     return;
@@ -141,26 +165,27 @@ void checkOnBestWay(El &now, std::vector<int> &bestWay, int &bestCost) {
         bestCost = now.value - now.spent;
         bestWay = now.way;
 
+        std::cout << "Best cost=" << bestCost << " value=" << now.value << std::endl;
     }
 
     return;
 }
 
 
-void PlayerController::addTimeTable(std::vector<int> needWay) {
+void PlayerController::addTimeTable(std::vector<int> needWay, int idx) {
 
     int timeNow = 0;
+    // if (Database::tick > 10) timeNow = 1;
+
     for (int i = 0; i < needWay.size(); i++) {
 
         if (i == 0) {
-            int l1 = timeTableVertex[needWay[i]].size();
-            if (isTown(needWay[i]) == false) timeTableVertex[needWay[i]].insert(timeNow + Database::tick);
-            if (l1 == timeTableVertex[needWay[i]].size() && isTown(needWay[i]) == false) {
-                std::cout << "ERROR0" << std::endl;
-                std::cout << "ERROR0" << std::endl;
-                std::cout << "ERROR0" << std::endl;
-                std::cout << "ERROR0" << std::endl;
+
+            if (isTown(needWay[i]) == false) {
+                timeTableVertex[needWay[i]].insert(timeNow + Database::tick);
+                trainTimeTable[idx].push_back({1, {needWay[i], timeNow + Database::tick}});
             }
+
         }
         else {
 
@@ -168,28 +193,28 @@ void PlayerController::addTimeTable(std::vector<int> needWay) {
                 if (line.second -> points[0] -> idx == needWay[i - 1]
                  && line.second -> points[1] -> idx == needWay[i]) {
 
+                            if (line.second -> idx == 612) {
+                                // std::cout << "START 612!; time=" << timeNow + Database::tick << std::endl;
+                            }
+
                             int len = line.second -> length;
                             for (int j = 1; j < len; j++) {
 
                                 timeNow++;
-                                int l1 = timeTableLine[line.second -> idx * 1000 + j].size();
+
                                 timeTableLine[line.second -> idx * 1000 + j].insert(timeNow + Database::tick);
-                                if (l1 == timeTableLine[line.second -> idx * 1000 + j].size()) {
-                                    std::cout << "ERROR1" << std::endl;
-                                    std::cout << "ERROR1" << std::endl;
-                                    std::cout << "ERROR1" << std::endl;
-                                    std::cout << "ERROR1" << std::endl;
+                                trainTimeTable[idx].push_back({2, {line.second -> idx * 1000 + j, timeNow + Database::tick}});
+
+                                if (line.second -> idx == 612) {
+                                    // std::cout << "INSERT 612! pos=" << j << " time=" << timeNow + Database::tick << std::endl;
                                 }
+
                             }
                             timeNow++;
 
-                            int l1 = timeTableVertex[needWay[i]].size();
-                            if (isTown(needWay[i]) == false) timeTableVertex[needWay[i]].insert(timeNow + Database::tick);
-                            if (l1 == timeTableVertex[needWay[i]].size() && isTown(needWay[i]) == false) {
-                                std::cout << "ERROR12" << std::endl;
-                                std::cout << "ERROR12" << std::endl;
-                                std::cout << "ERROR12" << std::endl;
-                                std::cout << "ERROR12" << std::endl;
+                            if (isTown(needWay[i]) == false){
+                                timeTableVertex[needWay[i]].insert(timeNow + Database::tick);
+                                trainTimeTable[idx].push_back({1, {needWay[i], timeNow + Database::tick}});
                             }
 
                             break;
@@ -197,28 +222,30 @@ void PlayerController::addTimeTable(std::vector<int> needWay) {
                 else if (line.second -> points[1] -> idx == needWay[i - 1]
                       && line.second -> points[0] -> idx == needWay[i]) {
 
+                          if (line.second -> idx == 612) {
+                                // std::cout << "START 612!; time=" << timeNow + Database::tick << std::endl;
+                            }
+
                             int len = line.second -> length;
                             for (int j = len - 1; j >= 1; j--) {
 
                                 timeNow++;
-                                int l1 = timeTableLine[line.second -> idx * 1000 + j].size();
-                                timeTableLine[line.second -> idx * 1000 + j].insert(timeNow + Database::tick);
-                                if (l1 == timeTableLine[line.second -> idx * 1000 + j].size()) {
-                                    std::cout << "ERROR2" << std::endl;
-                                    std::cout << "ERROR2" << std::endl;
-                                    std::cout << "ERROR2" << std::endl;
-                                    std::cout << "ERROR2" << std::endl;
+
+                                if (line.second -> idx == 612) {
+                                    // std::cout << "INSERT 612! pos=" << j << " time=" << timeNow + Database::tick << std::endl;
                                 }
+
+                                timeTableLine[line.second -> idx * 1000 + j].insert(timeNow + Database::tick);
+                                trainTimeTable[idx].push_back({2, {line.second -> idx * 1000 + j, timeNow + Database::tick}});
+
+
                             }
                             timeNow++;
 
-                            int l1 = timeTableVertex[needWay[i]].size();
-                            if (isTown(needWay[i]) == false) timeTableVertex[needWay[i]].insert(timeNow + Database::tick);
-                            if (l1 == timeTableVertex[needWay[i]].size() && isTown(needWay[i]) == false) {
-                                std::cout << "ERROR22" << std::endl;
-                                std::cout << "ERROR22" << std::endl;
-                                std::cout << "ERROR22" << std::endl;
-                                std::cout << "ERROR22" << std::endl;
+                            if (isTown(needWay[i]) == false){
+                                timeTableVertex[needWay[i]].insert(timeNow + Database::tick);
+                                trainTimeTable[idx].push_back({1, {needWay[i], timeNow + Database::tick}});
+
                             }
 
                             break;
@@ -256,10 +283,11 @@ bool PlayerController::isFreeTimeTable(El now) {
 void logTrain(Train* train) {
 
 
-    if (train -> position == 0) std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " point=" << train -> line -> points[0] -> idx << " move_type=" << train -> move_type;
-    else if (train -> position == train -> line -> length) std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " point=" << train -> line -> points[1] -> idx << " move_type=" << train -> move_type;
-    else std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " line=" << train -> line -> idx << " move_type=" << train -> move_type;
+    if (train -> position == 0) std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " point=" << train -> line -> points[0] -> idx << " position=" << train -> position;
+    else if (train -> position == train -> line -> length) std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " point=" << train -> line -> points[1] -> idx << " position=" << train -> position;
+    else std::cout << "Train idx=" << train -> idx << " lvl=" << train -> level << " line=" << train -> line -> idx << " position=" << train -> position;
     std::cout << " size=" << train -> needWay.size();
+    std::cout << " tick=" << Database::tick;
     std::cout << std::endl;
 
 
@@ -278,17 +306,26 @@ void logTime(unsigned int time) {
 
 void addFictProduct(std::vector<int> &way, int capacity){
 
-    int now = 0;
+    // int now = 0;
+    int len = 0;
+
     for (int i = way.size() - 1; i >= 0; i--) {
 
-        for (auto post : Database::posts) if (post.second -> type == PostType::MARKET) {
+        for (auto post : Database::posts) if (post.second -> type == PostType::MARKET && way[i] == post.second -> point -> idx) {
 
-            auto *marketObj = static_cast<Market* >(post.second);
+            // auto *marketObj = static_cast<Market* >(post.second);
+            // int add = capacity - now;
+            // marketObj -> productFict = std::max(0, marketObj -> productFict - std::min(marketObj -> product, add));
+            //now += std::min(add, marketObj -> product);
 
-            int add = capacity - now;
-            marketObj -> productFict = std::max(0, marketObj -> productFict - std::min(marketObj -> product, add));
+            productFict[way[i]].insert(len + Database::tick);
+        }
 
-            now += std::min(add, marketObj -> product);
+        if (i >= 1) {
+            for (auto line : Database::lines) {
+                if (line.second -> points[0] -> idx == way[i] && line.second -> points[1] -> idx == way[i - 1]) len += line.second -> length;
+                if (line.second -> points[1] -> idx == way[i] && line.second -> points[0] -> idx == way[i - 1]) len += line.second -> length;
+            }
         }
     }
 }
@@ -296,28 +333,50 @@ void addFictProduct(std::vector<int> &way, int capacity){
 
 void addFictArmor(std::vector<int> &way, int capacity){
 
-    int now = 0;
+    // int now = 0;
+    int len = 0;
+
     for (int i = way.size() - 1; i >= 0; i--) {
 
-        for (auto post : Database::posts) if (post.second -> type == PostType::STORAGE) {
+        for (auto post : Database::posts) if (post.second -> type == PostType::STORAGE && way[i] == post.second -> point -> idx) {
 
-            auto *storageObj = static_cast<Storage* >(post.second);
+            // auto *storageObj = static_cast<Storage* >(post.second);
+            // int add = capacity - now;
+            // storageObj -> armorFict = std::max(0, storageObj -> armorFict - std::min(storageObj -> armor, add));
+            // now += std::min(add, storageObj -> armor);
 
-            int add = capacity - now;
-            storageObj -> armorFict = std::max(0, storageObj -> armorFict - std::min(storageObj -> armor, add));
+            armorFict[way[i]].insert(len + Database::tick);
+        }
 
-            now += std::min(add, storageObj -> armor);
+        if (i >= 1) {
+            for (auto line : Database::lines) {
+                if (line.second -> points[0] -> idx == way[i] && line.second -> points[1] -> idx == way[i - 1]) len += line.second -> length;
+                if (line.second -> points[1] -> idx == way[i] && line.second -> points[0] -> idx == way[i - 1]) len += line.second -> length;
+            }
         }
     }
 }
 
-
-void trainIteration(Train*);
 void tryTrainUpdate(Train*);
+
+
+void clearTimeTable(int xx) {
+
+    while(trainTimeTable[xx].size()) {
+
+        std::pair<int, std::pair<int, int> > a = trainTimeTable[xx].back();
+        trainTimeTable[xx].pop_back();
+
+        if (a.first == 1) timeTableVertex[a.second.first].erase(a.second.second);
+        else timeTableLine[a.second.first].erase(a.second.second);
+
+    }
+}
+
 
 void PlayerController::update() {
     int _count = 0;
-    for (auto train : Database::playerTrains) {
+    for (auto train : PlayerController::playerTrains) {
         if (_count < countType1) train -> move_type = 1;
         else train -> move_type = 2;
 
@@ -325,37 +384,15 @@ void PlayerController::update() {
     }
 
     PlayerController::timeFromLastTurn += Time::deltaTime;
-    if (Database::isMapUpdated
-    && PlayerController::timeFromLastTurn > PlayerController::waitingTime) {
+    //if (Database::isMapUpdated
+    //&& PlayerController::timeFromLastTurn > PlayerController::waitingTime) {
+
+    if (Database::isMapUpdated) {
         //TODO: most of gameLogic
 
-        std::cout << "TICK=" << Database::tick << std::endl;
-        for (auto post : Database::posts) {
-
-            if (post.second -> type == PostType::MARKET) {
-
-                auto *marketObj = static_cast<Market* >(post.second);
-                marketObj -> productFict += marketObj -> replenishment;
-
-
-                if (Database::tick % 30 == 2) marketObj -> productFict = marketObj -> product;
-                marketObj -> productFict = std::min(marketObj -> productFict, marketObj -> product_capacity);
-
-            }
-
-            if (post.second -> type == PostType::STORAGE) {
-
-                auto *storageObj = static_cast<Storage* >(post.second);
-                storageObj -> armorFict += storageObj -> replenishment;
-
-                if (Database::tick % 30 == 2) storageObj -> armor = storageObj -> armor;
-                storageObj -> armorFict = std::min(storageObj -> armorFict, storageObj -> armor_capacity);
-
-                // std::cout << "Id=" << storageObj -> point -> idx << " product=" << storageObj -> armorFict << " max=" << storageObj -> armor_capacity  << std::endl;
-            }
-        }
         strategyIteration();
         PlayerController::timeFromLastTurn = 0;
+        std::cout << "TICK=" << Database::tick << std::endl;
 
     }
 
@@ -363,18 +400,22 @@ void PlayerController::update() {
 
 void PlayerController::strategyIteration() {
 
+    unsigned int start_time =  clock(); // начальное время
+
     std::cout << "=====================================" << std::endl;
-    std::cout << "Product=" << Database::playerTown->product <<  " Armor=" << Database::playerTown->armor  <<  " Population=" << Database::playerTown->population << std::endl;
+    std::cout << "Product=" << playerTown->product <<  " Armor=" << playerTown->armor  <<  " Population=" << playerTown->population << " level=" << playerTown->level << std::endl;
 
 
-    //TODO: iterate over Database::playerTrains
-    for (auto train_now : Database::playerTrains) {
+    //TODO: iterate over PlayerController::playerTrains
+    for (auto train_now : PlayerController::playerTrains) {
 
         tryTrainUpdate(train_now);
         if (train_now -> cooldown != 0) {
 
             std::cout << "Train idx=" << train_now -> idx << " lvl=" << train_now -> level << " IN COOL DOWN! cooldown=" << train_now -> cooldown << std::endl;
             train_now -> needWay.clear();
+            clearTimeTable(train_now -> idx);
+
             continue;
         }
 
@@ -392,7 +433,7 @@ void PlayerController::strategyIteration() {
                 if (train_now -> move_type == 1) train_now -> needWay = PlayerController::trainWayToProducts(train_now).first;
                 else if (train_now -> move_type == 2) {
 
-                    if (train_now->level <= 2 || Database::playerTown->level <= 2 || Database::playerTown -> armor <= 50) train_now->needWay = PlayerController::trainWayToStorage(train_now).first;
+                    if (train_now->level <= 2 || playerTown->level <= 2 || playerTown -> armor <= 50) train_now->needWay = PlayerController::trainWayToStorage(train_now).first;
                     else train_now->needWay = PlayerController::trainWayToProducts(train_now).first;
                 }
             }
@@ -400,17 +441,39 @@ void PlayerController::strategyIteration() {
     }
 
     /// first for trains, which go to Town
-    for (auto train_now : Database::playerTrains) {
-        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() == Database::playerTown -> point -> idx) trainIteration(train_now);
+    for (auto train_now : PlayerController::playerTrains) {
+        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() == PlayerController::playerTown -> point -> idx) trainIteration(train_now);
     }
     /// then for other
-    for (auto train_now : Database::playerTrains) {
-        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() != Database::playerTown -> point -> idx) trainIteration(train_now);
+    for (auto train_now : PlayerController::playerTrains) {
+        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() != PlayerController::playerTown -> point -> idx) trainIteration(train_now);
     }
 
     Database::isMapUpdated = false;
     Network::send(Action::TURN);
     Network::send(Action::MAP, {{"layer", 1}});
+
+    /// WARNING!!
+    Database::tick += 1;
+
+    unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time; // искомое время
+    logTime(search_time);
+}
+
+
+bool NextSet(std::vector<int> &a, int n, int m)
+{
+    int k = m;
+    for (int i = k - 1; i >= 0; --i)
+        if (a[i] < n - k + i + 1)
+        {
+            ++a[i];
+            for (int j = i + 1; j < k; ++j)
+                a[j] = a[j - 1] + 1;
+            return true;
+        }
+    return false;
 }
 
 
@@ -433,177 +496,123 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToProducts(Train* tra
     }
     sort(needMarkets.begin(), needMarkets.end());
 
-    std::cout << "size:" << needMarkets.size() << std::endl;
+    int n = needMarkets.size();
+    int m = 0;
 
-    unsigned int start_time =  clock(); // начальное время
+    if (Random::get(0, 2) == 0) m = 1;
+    else m = 2;
 
-    int step = 0;
+
+    std::vector<int> a;
+    for (int i = 0; i < n; i++) a.push_back(i + 1);
+
+    std::vector<int> b;
+    for (int i = 0; i < m; i++) b.push_back(i);
+
     do{
 
-        random_shuffle(needMarkets.begin(), needMarkets.end());
+        do {
 
-        step += 1;
-        if (step == 10) break;
+            clearLinesAndVertex(marketCount);
 
-        clearLinesAndVertex(marketCount);
+            start.vertex = getTrainVertex(train);
+            start.point = getTrainPoint(train);
 
-        start.vertex = getTrainVertex(train);
-        start.point = getTrainPoint(train);
+            start.marketPos = 0;
+            start.maxValue = train -> goods_capacity;
 
-        start.marketPos = 0;
-        start.maxValue = train -> goods_capacity;
+            q.push(start);
 
-        q.push(start);
+            int _count = 0;
+            int kol2 = 0;
+            int kol3 = 0;
 
-        int _count = 0;
-        int kol2 = 0;
-        int kol3 = 0;
+            while(!q.empty()) {
 
-        while(!q.empty()) {
+                El to, now;
 
-            El to, now;
+                now = q.top();
+                q.pop();
 
-            now = q.top();
-            q.pop();
 
-            /*
-            if (now.line != nullptr) {
+                if (!isFreeTimeTable(now)) continue;
+                if (isStorage(now.point) && now.value == 0) continue;
 
-                if (fLine[now.marketPos][now.line -> idx * 1000 + now.position] >= now.value - now.spent + fixNumber) continue;
-                fLine[now.marketPos][now.line -> idx * 1000 + now.position] = now.value - now.spent + fixNumber;
-                kol3 += 1;
+                if (fVertex[now.marketPos][now.vertex] >= now.value - now.spent + fixNumber) continue;
+                fVertex[now.marketPos][now.vertex] = now.value - now.spent + fixNumber;
 
-                if (now.position == 0) {
-                    now.vertex = now.line -> points[0] -> idx;
-                    now.point = now.line -> points[0];
+                kol2 += 1;
+                _count += 1;
 
-                    now.line = nullptr;
+                now.way.push_back(now.vertex);
+
+                if (isTown(now.vertex)) checkOnBestWay(now, finalWay, bestCost);
+
+                if (now.marketPos != m && now.vertex == needMarkets[a[b[now.marketPos]] - 1]) {
+                    now.marketPos += 1;
+                    now.value += marketProduct(now.point, now.spent);
+                    now.value = std::min(now.value, now.maxValue);
                 }
 
-                else if (now.position == now.line -> length) {
-                    now.vertex = now.line -> points[1] -> idx;
-                    now.point = now.line -> points[1];
+                // std::cout << "Try do something; idx=" << now.vertex << " is Town=" << isTown(now.vertex) << " marketPos=" << now.marketPos << " product=" << now.value << " spent=" << now.spent << std::endl;
+                for (auto line : now.point -> adjacent) {
 
-                    now.line = nullptr;
-                }
-                else {
+                    if (line.second -> points[0] -> idx == now.vertex) {
 
-                    if (!isFreeTimeTable(now)) continue;
+                        to = now;
+                        to.line = line.second;
+                        for (int j = 1; j < line.second -> length; j++) {
 
-                    now.spent += 1;
-                    now.position += 1;
-                    q.push(now);
+                            to.spent += 1;
+                            to.position = j;
 
-                    now.position -= 2;
-                    q.push(now);
-
-                    _count += 1;
-
-                    continue;
-                }
-            }
-            */
-
-
-            if (!isFreeTimeTable(now)) continue;
-            if (isStorage(now.point) && now.value == 0) continue;
-
-            if (fVertex[now.marketPos][now.vertex] >= now.value - now.spent + fixNumber) continue;
-            fVertex[now.marketPos][now.vertex] = now.value - now.spent + fixNumber;
-
-            kol2 += 1;
-            _count += 1;
-
-            now.way.push_back(now.vertex);
-
-            if (isTown(now.vertex)) checkOnBestWay(now, finalWay, bestCost);
-
-            if (now.marketPos != marketCount && now.vertex == needMarkets[now.marketPos]) {
-                now.marketPos += 1;
-                now.value += marketProduct(now.point);
-                now.value = std::min(now.value, now.maxValue);
-            }
-
-            // std::cout << "Try do something; idx=" << now.vertex << " is Town=" << isTown(now.vertex) << " marketPos=" << now.marketPos << " product=" << now.value << " spent=" << now.spent << std::endl;
-            for (auto line : now.point -> adjacent) {
-
-                if (line.second -> points[0] -> idx == now.vertex) {
-
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = 1;
-                    to.spent += 1;
-                    */
-
-                    to = now;
-                    to.line = line.second;
-                    for (int j = 1; j < line.second -> length; j++) {
-
+                            if (!isFreeTimeTable(to)) goto point1;
+                        }
                         to.spent += 1;
-                        to.position = j;
+                        to.line = nullptr;
 
-                        if (!isFreeTimeTable(to)) goto point1;
+                        to.vertex = line.second -> points[1] -> idx;
+                        to.point = line.second -> points[1];
+
+                        q.push(to);
                     }
-                    to.spent += 1;
-                    to.line = nullptr;
+                    else if (line.second -> points[1] -> idx == now.vertex) {
 
-                    to.vertex = line.second -> points[1] -> idx;
-                    to.point = line.second -> points[1];
+                        to = now;
+                        to.line = line.second;
+                        for (int j = line.second -> length - 1; j >= 1; j--) {
 
-                    q.push(to);
-                }
-                else if (line.second -> points[1] -> idx == now.vertex) {
+                            to.spent += 1;
+                            to.position = j;
 
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = line.second -> length - 1;
-                    to.spent += 1;
-                    */
-
-                    to = now;
-                    to.line = line.second;
-                    for (int j = line.second -> length - 1; j >= 1; j--) {
-
+                            if (!isFreeTimeTable(to)) goto point1;
+                        }
                         to.spent += 1;
-                        to.position = j;
+                        to.line = nullptr;
 
-                        if (!isFreeTimeTable(to)) goto point1;
+                        to.vertex = line.second -> points[0] -> idx;
+                        to.point = line.second -> points[0];
+
+                        q.push(to);
                     }
-                    to.spent += 1;
-                    to.line = nullptr;
 
-                    to.vertex = line.second -> points[0] -> idx;
-                    to.point = line.second -> points[0];
-
-                    q.push(to);
+                    point1:;
                 }
-
-                point1:;
             }
-        }
+      } while(next_permutation(b.begin(), b.end()));
 
-        // std::cout << "====== COUNT=" << _count << " kol3=" << kol3 << " kol2=" << kol2 << std::endl;
-        // return {};
-
-    } while (1);
+    } while (NextSet(a, n, m));
 
 
-    addTimeTable(finalWay);
+    addTimeTable(finalWay, train -> idx);
 
     reverse(finalWay.begin(), finalWay.end());
     if (finalWay.size()) finalWay.pop_back();
 
     addFictProduct(finalWay, train -> goods_capacity);
 
-    unsigned int end_time = clock(); // конечное время
-    unsigned int search_time = end_time - start_time; // искомое время
-    logTime(search_time);
-
     return {finalWay, summary1 + summary2};
 }
-
 
 
 
@@ -626,144 +635,124 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
     }
     sort(needStorages.begin(), needStorages.end());
 
-    int step = 0;
+    int n = needStorages.size();
+    int m = train -> level;
+    if (m == 3) m -= 1;
+
+    if (Random::get(0, 1) == 0) m -= 1;
+
+
+    std::vector<int> a;
+    for (int i = 0; i < n; i++) a.push_back(i + 1);
+
+    std::vector<int> b;
+    for (int i = 0; i < m; i++) b.push_back(i);
+
+    /*
+    std::cout << "n=" << n << " m=" << m << std::endl;
+    for (auto i : a) std::cout << i << " ";
+    std::cout << std::endl;
+    for (auto i : b) std::cout << i << " ";
+    std::cout << std::endl;
+    */
+
+
     do{
 
-        step++;
-        if (step == 10) break;
-
-        random_shuffle(needStorages.begin(), needStorages.end());
-
-        clearLinesAndVertex(storagesCount);
-
-        start.vertex = getTrainVertex(train);
-        start.point = getTrainPoint(train);
-
-        start.marketPos = 0;
-        start.maxValue = train -> goods_capacity;
-
-        q.push(start);
-
-        while(!q.empty()) {
-
-            El to, now;
-
-            now = q.top();
-            q.pop();
+        do {
 
             /*
-            if (now.line != nullptr) {
+            std::cout << "go" << std::endl;
+            for (int i = 0; i < m; i++) std::cout << a[b[i]] - 1 << " ";
+            std::cout << std::endl;
 
-                if (fLine[now.marketPos][now.line -> idx * 1000 + now.position] >= now.value - now.spent + fixNumber) continue;
-                fLine[now.marketPos][now.line -> idx * 1000 + now.position] = now.value - now.spent + fixNumber;
-
-                if (now.position == 0) {
-                    now.vertex = now.line -> points[0] -> idx;
-                    now.point = now.line -> points[0];
-
-                    now.line = nullptr;
-                }
-
-                else if (now.position == now.line -> length) {
-                    now.vertex = now.line -> points[1] -> idx;
-                    now.point = now.line -> points[1];
-
-                    now.line = nullptr;
-                }
-                else {
-
-                    if (!isFreeTimeTable(now)) continue;
-
-                    now.spent += 1;
-                    now.position += 1;
-                    q.push(now);
-
-                    now.position -= 2;
-                    q.push(now);
-
-                    continue;
-                }
-            }
+            for (int i = 0; i < m; i++) std::cout << needStorages[a[b[i]] - 1] << " ";
+            std::cout << std::endl;
             */
 
-            if (!isFreeTimeTable(now)) continue;
-            if (isMarket(now.point) && now.value == 0) continue;
+            clearLinesAndVertex(storagesCount);
 
-            if (fVertex[now.marketPos][now.vertex] >= now.value - now.spent + fixNumber) continue;
-            fVertex[now.marketPos][now.vertex] = now.value - now.spent + fixNumber;
+            start.vertex = getTrainVertex(train);
+            start.point = getTrainPoint(train);
+
+            start.marketPos = 0;
+            start.maxValue = train -> goods_capacity;
+
+            q.push(start);
+
+            while(!q.empty()) {
+
+                El to, now;
+
+                now = q.top();
+                q.pop();
+
+                if (!isFreeTimeTable(now)) continue;
+                if (isMarket(now.point) && now.value == 0) continue;
+
+                if (fVertex[now.marketPos][now.vertex] >= now.value - now.spent + fixNumber) continue;
+                fVertex[now.marketPos][now.vertex] = now.value - now.spent + fixNumber;
 
 
-            now.way.push_back(now.vertex);
-            if (isTown(now.vertex)) checkOnBestWay(now, finalWay, bestCost);
+                now.way.push_back(now.vertex);
+                if (isTown(now.vertex)) checkOnBestWay(now, finalWay, bestCost);
 
-            if (now.marketPos != storagesCount && now.vertex == needStorages[now.marketPos]) {
-                now.marketPos += 1;
-                now.value += storageArmor(now.point);
-                now.value = std::min(now.value, now.maxValue);
-            }
-
-            for (auto line : now.point -> adjacent) {
-
-                if (line.second -> points[0] -> idx == now.vertex) {
-
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = 1;
-                    to.spent += 1;
-                    */
-
-                    to = now;
-                    to.line = line.second;
-                    for (int j = 1; j < line.second -> length; j++) {
-
-                        to.spent += 1;
-                        to.position = j;
-
-                        if (!isFreeTimeTable(to)) goto point1;
-                    }
-                    to.spent += 1;
-                    to.line = nullptr;
-
-                    to.vertex = line.second -> points[1] -> idx;
-                    to.point = line.second -> points[1];
-
-                    q.push(to);
-                }
-                else if (line.second -> points[1] -> idx == now.vertex) {
-
-                    /*
-                    to = now;
-                    to.line = line.second;
-                    to.position = line.second -> length - 1;
-                    to.spent += 1;
-                    */
-
-                    to = now;
-                    to.line = line.second;
-                    for (int j = line.second -> length - 1; j >= 1; j--) {
-
-                        to.spent += 1;
-                        to.position = j;
-
-                        if (!isFreeTimeTable(to)) goto point1;
-                    }
-                    to.spent += 1;
-                    to.line = nullptr;
-
-                    to.vertex = line.second -> points[0] -> idx;
-                    to.point = line.second -> points[0];
-
-                    q.push(to);
+                /// if (now.marketPos != storagesCount && now.vertex == needStorages[a[b[now.marketPos]] - 1]) {
+                if (now.marketPos != m && now.vertex == needStorages[a[b[now.marketPos]] - 1]) {
+                    now.marketPos += 1;
+                    now.value += storageArmor(now.point, now.spent);
+                    now.value = std::min(now.value, now.maxValue);
                 }
 
-                point1:;
+                for (auto line : now.point -> adjacent) {
+
+                    if (line.second -> points[0] -> idx == now.vertex) {
+
+                        to = now;
+                        to.line = line.second;
+                        for (int j = 1; j < line.second -> length; j++) {
+
+                            to.spent += 1;
+                            to.position = j;
+
+                            if (!isFreeTimeTable(to)) goto point1;
+                        }
+                        to.spent += 1;
+                        to.line = nullptr;
+
+                        to.vertex = line.second -> points[1] -> idx;
+                        to.point = line.second -> points[1];
+
+                        q.push(to);
+                    }
+                    else if (line.second -> points[1] -> idx == now.vertex) {
+
+                        to = now;
+                        to.line = line.second;
+                        for (int j = line.second -> length - 1; j >= 1; j--) {
+
+                            to.spent += 1;
+                            to.position = j;
+
+                            if (!isFreeTimeTable(to)) goto point1;
+                        }
+                        to.spent += 1;
+                        to.line = nullptr;
+
+                        to.vertex = line.second -> points[0] -> idx;
+                        to.point = line.second -> points[0];
+
+                        q.push(to);
+                    }
+
+                    point1:;
+                }
             }
-        }
+        } while(next_permutation(b.begin(), b.end()));
 
-    } while (1);
+    } while (NextSet(a, n, m));
 
-    addTimeTable(finalWay);
+    addTimeTable(finalWay, train -> idx);
 
     reverse(finalWay.begin(), finalWay.end());
     if (finalWay.size()) finalWay.pop_back();
@@ -774,7 +763,7 @@ std::pair<std::vector<int>, int> PlayerController::trainWayToStorage(Train* trai
 }
 
 
-void trainIteration(Train* train) {
+void PlayerController::trainIteration(Train* train) {
     json message;
 
     message["train_idx"] = train->idx;
@@ -829,6 +818,7 @@ void trainIteration(Train* train) {
             return;
         }
     }
+    train->needWay.clear();
 }
 
 
@@ -838,12 +828,12 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
     && mainTrain -> position != mainTrain -> line -> length) return;
 
     if (mainTrain -> position == 0
-    && Database::playerTown -> point -> idx != mainTrain -> line -> points[0] -> idx) return;
+    && PlayerController::playerTown -> point -> idx != mainTrain -> line -> points[0] -> idx) return;
 
     if (mainTrain -> position == mainTrain -> line -> length
-    && Database::playerTown -> point -> idx != mainTrain -> line -> points[1] -> idx) return;
+    && PlayerController::playerTown -> point -> idx != mainTrain -> line -> points[1] -> idx) return;
 
-    if (Database::playerTown->armor >= 70 && mainTrain->level == 1) {
+    if (playerTown->armor >= 30 && mainTrain->level == 1) {
 
         json message;
 
@@ -854,13 +844,13 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
         message["trains"] = b;
 
         mainTrain->level += 1;
-        Database::playerTown->armor -= 40;
+        playerTown->armor -= 30;
 
         std::cout << "UPGRADE TO LEVEL 2, MESSAGE=" << message << std::endl;
         Network::send(Action::UPGRADE, message);
     }
 
-    if (Database::playerTown->armor >= 110 && mainTrain->level == 2) {
+    if (playerTown->armor >= 60 && mainTrain->level == 2) {
 
         json message;
 
@@ -871,7 +861,7 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
         message["trains"] = b;
 
         mainTrain->level += 1;
-        Database::playerTown->armor -= 80;
+        playerTown->armor -= 60;
 
         std::cout << "UPGRADE TO LEVEL 3, MESSAGE=" << message << std::endl;
 
@@ -879,10 +869,10 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
     }
 
     if (mainTrain->level == 3) {
-        if (Database::playerTown->armor >= 130 && Database::playerTown->level == 1) {
+        if (playerTown->armor >= 75 && playerTown->level == 1) {
             json message;
 
-            std::vector<int> a{Database::playerTown->idx};
+            std::vector<int> a{playerTown->idx};
             std::vector<int> b{};
 
             message["posts"] = a;
@@ -890,15 +880,15 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
 
             std::cout << "UPGRADE TOWN TO LEVEL 2, MESSAGE=" << message << std::endl;
 
-            Database::playerTown->level += 1;
-            Database::playerTown->armor -= 100;
+            playerTown->level += 1;
+            playerTown->armor -= 75;
 
             Network::send(Action::UPGRADE, message);
         }
-        if (Database::playerTown->armor >= 230 && Database::playerTown->level == 2) {
+        if (playerTown->armor >= 150 && playerTown->level == 2) {
             json message;
 
-            std::vector<int> a{Database::playerTown->idx};
+            std::vector<int> a{playerTown->idx};
             std::vector<int> b{};
 
             message["posts"] = a;
@@ -906,35 +896,75 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
 
             std::cout << "UPGRADE TOWN TO LEVEL 3, MESSAGE=" << message << std::endl;
 
-            Database::playerTown->level += 1;
-            Database::playerTown->armor -= 200;
+            playerTown->level += 1;
+            playerTown->armor -= 150;
             Network::send(Action::UPGRADE, message);
         }
     }
 
 }
 
-void PlayerController::onMapLayer1(const nlohmann::json &json) {
-    if (Game::current->trySetLayer1(json)) {
-        Game::current->applyLayer1(json);
-    } else {
-        Network::send(Action::MAP, {{"layer", 1}});
-    }
-}
 
-void PlayerController::onGames(const nlohmann::json &json) {
-    if (isGameFinished(json)) {
-        Game::current->setState(GameState::FINISHED);
-    }
-}
+static const char * s_list[] = {
+    "1. Код говно.",
+    "2. Это надо переписать.",
+    "3. Ты чем вообще думаешь?",
+    "4. Так никто не пишет.",
+    "5. Ебанёт.",
+    "6. И как это поддерживать?",
+    "7. Пиздец!",
+    "8. Пиздец[2]!",
+    "9. Мы же полгода назад устно договаривались не делать так.",
+    "10. Я это ревьюить больше не буду, ищи кого-нибудь ещё.",
+    "11. Ты этот говнокод из своего днк взял?",
+    "12. Обезьяну посади - сделает лучше",
+    "13. Ты вообще чтоли животное?",
+    "14. Господь дал нам интеллект, но ты, я смотрю, от подарков отказываешься",
+    "15. Ещё раз так сделаешь - я тебя найду",
+    "16. Маме твоей вечером покажу это, если не исправишь",
+    "17. Неудивительно, что от тебя отец ушёл",
+    "18. Если бы я просто на клавиатуру сел- было бы также, как у тебя",
+    "19. Если ты считаешь, что это ок, то как ты вообще дверь открываешь?",
+    "20. Буду просить, чтобы тебя повысили, так как тебе нужны деньги на лечение",
+    "21. Да я о твоей ориентации давно догадался, можешь расслабиться",
+    "22. Из KFC сбежал какой-то недожаренный петух и пытается это вкомитить",
+    "23. Из-за тебя я всегда работу найду, спасибо",
+    "24. А сначала казался нормальным человеком",
+    "25. Твои пр- это первые автобаны в России",
+    "26. В следующий раз буду смотреть это до обеда",
+    "27. У меня от этого говна зрение на единицу село",
+    "28. Твои пр- это артхаус",
+    "29. Давай ты больше не будешь шутить в пулл реквестах?",
+    "30. У твоих родителей есть живые дети?",
+    "31. Если бы мы сидели в комнате с в комнате с Гитлером и Сталиным,у меня было бы два патрона,то я бы за такое выстрелил в тебя дважды",
+    "32. Что общего между художественным фильмом -two girls one cup- и этим ПР? И там,и тут жрут говно",
+    "33. Жаль отменили смертную казнь",
+    "34. Тебе вообще людей не жалко?",
+    "35. Когда читаю твой код, то постоянно чихаю, потому что у меня аллергия на чушб",
+    "36. Я, конечно, не гинеколог, но это пизда",
+    "37. Ты вообще в курсе, что это все видят?",
+    "38. Ты не говорил, что с цирковым прошлым",
+    "39. После этого пр не забудь руки помыть",
+    "40. И давно это с тобой?",
+    "41. Уважаемый, еб вашу мать, вам там нормально?",
+    "42. Извините, а адекватность выйдет?",
+    "43. Ну, ты хотя бы пытался!",
+    "44. Лучше бы собаку завели",
+    "45. Думать - не твоя сильная сторона",
+    "46. Ты молодец(нет)",
+    "47. Когда бог раздавал мозги, то ты, похоже, стоял между утконосом и голубем",
+    "48. Когда я говорю, что это говнокод даже голуби головой кивают",
+    "49. Твои пулл реквесты - это комедия, а последний и вовсе триллер",
+    "50. Кошечка говорит мяу, коровка говорит му, я говорю саша ты ебанулся такое писать?",
+    "51. H-водород, С-углерод, O- иди переписывай, урод",
+    "52. Ты не узнавал, этот стиль и подход - заразный?",
+    "53. Если бы у меня не было высшего образования, я бы не понял ни строчки, молодец!",
+    "54. Ты на 1xbet за машин против человечества поставил?",
+    "55. Ты доказательство того, что человечество обречено",
+    "56. Открыл сейчас этот твой код и в городе ввели чрезвычайные ситуации техногенного характера",
+    "57. Жаль, что у тебя кончился испытательный срок!",
+    "58. Я бы мог сейчас с тобой согласиться, но тогда мы оба будем не правы",
+    "59. Ты, я смотрю, и с дипломом, программер хуевый, иди на завод делать рубанок новы",
+    "60. У нас в проекте была проблема с производительностью, но я смотрю у нас есть кое-что хуже",
 
-bool PlayerController::isGameFinished(const nlohmann::json &json) {
-    if (json.contains("games")) {
-        for (auto game : json["games"]) {
-            if (game["name"] == PlayerConfig::hostName && game["state"] == GameState::FINISHED) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+};
