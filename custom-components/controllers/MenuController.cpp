@@ -3,11 +3,14 @@
 //
 
 #include "MenuController.hpp"
+<<<<<<< HEAD
 #include "../../utility/configs/PlayerConfig.hpp"
+=======
+>>>>>>> 06767c5db08002a644439033a993e152e72e4cf4
 #include "../../static/Prefabs.h"
 
-const float buttonWidth = 20;
-const float buttonHeight = 5;
+const float buttonWidth = 200;
+const float buttonHeight = 50;
 
 void MenuController::start() {
     Network::onGamesResponse.addListener<MenuController, &MenuController::onGames>(this);
@@ -65,7 +68,7 @@ void MenuController::initButtons() {
     int buttonsCount = games.size();
     buttons.resize(buttonsCount);
     for (int i = 0; i < buttonsCount; i++) {
-        buttons[i] = Prefabs::button(buttonWidth, buttonHeight, "");
+        buttons[i] = Prefabs::button(buttonWidth, buttonHeight, games[i]["name"]);
         buttons[i]->buttonIdx = i;
         buttons[i]->onClick.addListener<MenuController, &MenuController::onGameSelected>(this);
         buttons[i]->transform->setLocalPosition({0, -(buttonHeight+1)*i});
@@ -74,7 +77,7 @@ void MenuController::initButtons() {
 }
 
 void MenuController::initHostButton() {
-    hostButton = Prefabs::button(buttonWidth, buttonHeight, "");
+    hostButton = Prefabs::button(buttonWidth, buttonHeight, PlayerConfig::hostName);
     hostButton->buttonIdx = -1;
     hostButton->buttonColor = InterfaceConfig::playerTrainColor;
     hostButton->onClick.addListener<MenuController, &MenuController::onGameSelected>(this);

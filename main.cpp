@@ -67,7 +67,7 @@ int main() {
     GameObject * root = Prefabs::root()->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
-    
+
     sf::Clock clock; // starts the clock
     float time = 0.f;
     MainLoopIteration mainLoopIteration{window, mainCamera, clock, time};
