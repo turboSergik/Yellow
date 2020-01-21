@@ -9,6 +9,8 @@
 
 void Draggable::start() {
     Network::onMapResponse10.addListener<Draggable, &Draggable::onMapLayer10>(this);
+    collider = gameObject->getComponent<Collider>();
+    rigidBody = gameObject->getComponent<RigidBody>();
 }
 
 void Draggable::update() {
@@ -16,20 +18,17 @@ void Draggable::update() {
     Vector2 worldPoint = Camera::mainCamera->screenToWorldPoint(Input::mousePosition);
 
     if (Input::getMouseButtonPressed(sf::Mouse::Button::Left)) {
-        Collider * collider = Collider::overlapPoint(worldPoint);
-        if (collider) {
-            draggingCollider = collider;
-            RigidBody * rigidBody = collider->gameObject->getComponent<RigidBody>();
+        if (collider->isOverlapsPoint(worldPoint)) {
+            isDragging = true;
             rigidBody->setKinematic(true);
         }
     }
-    if (draggingCollider) {
-        draggingCollider->transform->setPosition(worldPoint);
+    if (isDragging) {
+        transform->setPosition(worldPoint);
     }
-    if (Input::getMouseButtonReleased(sf::Mouse::Button::Left) && draggingCollider) {
-        RigidBody * rigidBody = draggingCollider->gameObject->getComponent<RigidBody>();
+    if (Input::getMouseButtonReleased(sf::Mouse::Button::Left) && isDragging) {
+        isDragging = false;
         rigidBody->setKinematic(false);
-        draggingCollider = nullptr;
     }
 }
 

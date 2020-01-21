@@ -190,7 +190,7 @@ GameObject::addOnDestroy(T * component) {
 template <class T>
 typename std::enable_if<HasStart<T>::value>::type
 GameObject::onSceneStart(T * component) {
-    MethodsPool::startPool.push_front(StartWrapper(component));
+    MethodsPool::startPool.push_back(StartWrapper(component));
 }
 
 template <class T>
