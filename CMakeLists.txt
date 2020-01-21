@@ -18,6 +18,7 @@ endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGET)
 
+file(COPY ${CMAKE_SOURCE_DIR}/playerConfig.json DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 set(SOURCES
         main.cpp
