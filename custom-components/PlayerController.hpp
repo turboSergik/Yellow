@@ -46,11 +46,12 @@ public:
     std::pair<std::vector<int>, int> trainWayToProducts(Train*);
     std::pair<std::vector<int>, int> trainWayToStorage(Train*);
 
-    void addTimeTable(std::vector<int> );
+    void addTimeTable(std::vector<int>, int);
     bool isFreeTimeTable(El );
     bool isTown(int );
 
     void clearVertex();
+    void trainIteration(Train*);
 
     std::map<int, int> canGo;
 

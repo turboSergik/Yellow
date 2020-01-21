@@ -32,7 +32,8 @@ void GraphController::start() {
     Network::send(Action::LOGIN, {
             {"name", PlayerConfig::playerName},
             {"game", PlayerConfig::hostName},
-            {"num_players", PlayerConfig::numPlayers}});
+            {"num_players", PlayerConfig::numPlayers},
+            {"num_turns", 2000}});
     Network::send(Action::MAP, {{"layer", 0}});
     Network::send(Action::MAP, {{"layer", 1}});
     //Network::send(Action::MAP, {{"layer", 10}});
@@ -210,7 +211,7 @@ void GraphController::onMapLayer1(const nlohmann::json & json) {
     if (this->layer1 != json) {
         this->applyLayer1(json);
         Database::isMapUpdated = true;
-        Database::tick++;
+        // Database::tick++;
     } else {
         Network::send(Action::MAP, {{"layer", 1}});
     }
