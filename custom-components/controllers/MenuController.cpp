@@ -3,10 +3,6 @@
 //
 
 #include "MenuController.hpp"
-<<<<<<< HEAD
-#include "../../utility/configs/PlayerConfig.hpp"
-=======
->>>>>>> 06767c5db08002a644439033a993e152e72e4cf4
 #include "../../static/Prefabs.h"
 
 const float buttonWidth = 200;
