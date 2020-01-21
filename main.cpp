@@ -68,10 +68,6 @@ int main() {
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
     
-    Button * button = Prefabs::button(80, 60, "sample\ntext");
-    button->gameObject->instantiate();
-    button->transform->setPosition({0, 0});
-    
     sf::Clock clock; // starts the clock
     float time = 0.f;
     MainLoopIteration mainLoopIteration{window, mainCamera, clock, time};
@@ -96,7 +92,6 @@ int main() {
 #endif
                 root->destroyImmediate();
                 mainCamera->gameObject->destroyImmediate();
-                button->gameObject->destroyImmediate();
                 delete InterfaceConfig::textFont;
                 window.close();
                 return 0;

@@ -5,10 +5,9 @@
 #include <iostream>
 
 sf::Color multipleColorByValue(const sf::Color & color, float val) {
-    sf::Color result = {static_cast<sf::Uint8>(static_cast<float>(color.r) * val), 
+    return {static_cast<sf::Uint8>(static_cast<float>(color.r) * val), 
             static_cast<sf::Uint8>(static_cast<float>(color.g) * val), 
             static_cast<sf::Uint8>(static_cast<float>(color.b) * val)};
-    return result;
 }
 
 void Button::update() {
