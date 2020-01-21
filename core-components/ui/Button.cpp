@@ -20,19 +20,19 @@ void Button::update() {
     if (overlaps) {
         if (Input::getMouseButtonHeld(sf::Mouse::Left)) {
             renderer->rectangle.setFillColor(
-                multipleColorByValue(InterfaceConfig::buttonColor, 
+                multipleColorByValue(buttonColor,
                                      InterfaceConfig::buttonDarkFloat * 
                                      InterfaceConfig::buttonDarkFloat));
         } else if (Input::getMouseButtonReleased(sf::Mouse::Left)) {
-            renderer->rectangle.setFillColor(InterfaceConfig::buttonColor);
+            renderer->rectangle.setFillColor(buttonColor);
             onClick.invoke(buttonIdx);
         } else {
             renderer->rectangle.setFillColor(
-                multipleColorByValue(InterfaceConfig::buttonColor, 
+                multipleColorByValue(buttonColor,
                                      InterfaceConfig::buttonDarkFloat));
         }
     } else {
-        renderer->rectangle.setFillColor(InterfaceConfig::buttonColor);
+        renderer->rectangle.setFillColor(buttonColor);
     }
 }
 
