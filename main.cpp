@@ -34,11 +34,11 @@ struct MainLoopIteration {
             MethodsPool::fixedUpdate();
             time -= Time::fixedDeltaTime;
         }
+        Network::update();
         MethodsPool::onDestroy();
         window.clear();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
-        Network::update();
     }
 };
 
