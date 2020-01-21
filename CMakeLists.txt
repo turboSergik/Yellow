@@ -36,11 +36,12 @@ set(SOURCES
         core-components/renderers/Renderer.cpp
         core-components/renderers/SpriteRenderer.cpp
         core-components/renderers/CircleRenderer.cpp
-        custom-components/controllers/CameraController.cpp
+        custom-components/CameraController.cpp
         static/Time.cpp
         network/Connection.cpp
         network/Packet.cpp
         network/PacketQueue.cpp
+        custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
         static/Input.cpp
         static/InputBuffer.cpp
@@ -48,7 +49,7 @@ set(SOURCES
         utility/methodWrapper.cpp
         network/Network.cpp
         utility/Event.cpp
-        custom-components/controllers/PlayerController.cpp
+        custom-components/PlayerController.cpp
         core-components/RigidBody.cpp
         linalg/Vector2.cpp
         utility/Mathf.cpp
@@ -60,7 +61,11 @@ set(SOURCES
         custom-components/forceMethodPhysics/LinePhysics.cpp
         custom-components/Game.cpp
         custom-components/controllers/MenuController.cpp
-        custom-components/controllers/LobbyPlayerController.cpp)
+        custom-components/controllers/LobbyPlayerController.cpp
+        utility/PlayerConfig.cpp
+        core-components/ui/Button.cpp
+        core-components/renderers/RectangleRenderer.cpp
+        core-components/renderers/TextRenderer.cpp)
 
 add_executable(WG ${SOURCES})
 

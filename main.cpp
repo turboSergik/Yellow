@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include <fstream>
 #include <thread>
 #include <mutex>
 #include <atomic>
@@ -78,7 +78,7 @@ int main() {
 #endif
     
     sf::Event event{};
-
+    
     while (window.isOpen()) {
 
         if (window.pollEvent(event)) {

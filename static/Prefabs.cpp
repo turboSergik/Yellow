@@ -6,12 +6,15 @@
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
 #include "../custom-components/controllers/CameraController.h"
+#include "../core-components/renderers/RectangleRenderer.hpp"
 #include "../core-components/RigidBody.hpp"
 #include "../core-components/colliders/CircleCollider.hpp"
 #include "../custom-components/forceMethodPhysics/PointPhysics.hpp"
 #include "../custom-components/forceMethodPhysics/LinePhysics.hpp"
 #include "../custom-components/forceMethodPhysics/Draggable.hpp"
 #include "../custom-components/Game.hpp"
+#include "../core-components/colliders/BoxCollider.hpp"
+#include "../core-components/ui/Button.hpp"
 
 
 //TODO: add constants to easy manipulate default values of shapes
@@ -22,6 +25,7 @@ Point *Prefabs::point(int idx) {
     circleRenderer->circle.setRadius(InterfaceConfig::largeR);
     circleRenderer->circle.setOrigin(InterfaceConfig::largeR, InterfaceConfig::largeR);
     circleRenderer->circle.setFillColor(InterfaceConfig::graphColor);
+    circleRenderer->priotity = 1;
     Point *point = obj->addComponent<Point>(idx);
     RigidBody * rigidBody = obj->addComponent<RigidBody>();
     point->rigidBody = rigidBody;
@@ -30,7 +34,6 @@ Point *Prefabs::point(int idx) {
     CircleCollider * circleCollider = obj->addComponent<CircleCollider>();
     circleCollider->setRadius(InterfaceConfig::largeR);
     obj->addComponent<PointPhysics>();
-    obj->addComponent<Draggable>();
     return point;
 }
 
@@ -39,6 +42,7 @@ Line *Prefabs::line(int idx) {
     obj->name = "Line";
     LineRenderer * lineRenderer =  obj->addComponent<LineRenderer>();
     lineRenderer->setColor(InterfaceConfig::graphColor);
+    lineRenderer->priotity = 1;
     Line *line = obj->addComponent<Line>(idx);
     obj->addComponent<LinePhysics>();
     return line;
@@ -53,6 +57,7 @@ Train *Prefabs::train(int idx) {
     circleRenderer->circle.setFillColor(InterfaceConfig::trainColor);
     circleRenderer->circle.setPointCount(3);
     circleRenderer->circle.setRotation(90);
+    circleRenderer->priotity = -1;
     Train *train = obj->addComponent<Train>(idx);
     return train;
 }
@@ -103,4 +108,19 @@ GameObject * Prefabs::root() {
     obj->name = "Root";
     obj->addComponent<Game>();
     return obj;
+}
+
+Button * Prefabs::button(float width, float height) {
+    GameObject * obj = new GameObject();
+    obj->name = "Button";
+    Button * button = obj->addComponent<Button>();
+    RectangleRenderer * renderer = obj->addComponent<RectangleRenderer>();
+    BoxCollider * collider = obj->addComponent<BoxCollider>();
+    renderer->rectangle.setSize({width, height});
+    renderer->rectangle.setFillColor(InterfaceConfig::buttonColor);
+    renderer->rectangle.setOrigin(width / 2, height / 2);
+    collider->setWidthHeight(width, height);
+    button->buttonCollider = collider;
+    button->renderer = renderer;
+    return button;
 }

@@ -12,6 +12,7 @@
 #include "../custom-components/Line.h"
 #include "../core-components/Camera.h"
 #include "../utility/Config.hpp"
+#include "../core-components/ui/Button.hpp"
 
 class Prefabs {
 public:
@@ -23,6 +24,7 @@ public:
     static Market *market(int idx);
     static Storage *storage(int idx);
     static GameObject * root();
+    static Button * button(float width, float height);
 };
 
 
