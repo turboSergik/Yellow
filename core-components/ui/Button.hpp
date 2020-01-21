@@ -7,14 +7,11 @@
 #include "../../core-components/renderers/RectangleRenderer.hpp"
 
 class Button : public Component {
-    static size_t ButtonCounter;
-    size_t buttonIdx;
-
 public:
+    int buttonIdx;
     BoxCollider * buttonCollider;
     RectangleRenderer * renderer;
-    Button();
-    Event<size_t> onPress;
+    Event<int> onClick;
     void update();
 };
 

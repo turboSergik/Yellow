@@ -4,12 +4,6 @@
 #include "../Camera.h"
 #include <iostream>
 
-size_t Button::ButtonCounter;
-
-Button::Button() {
-    this->buttonIdx = Button::ButtonCounter++;
-}
-
 sf::Color multipleColorByValue(const sf::Color & color, float val) {
     sf::Color result = {static_cast<sf::Uint8>(static_cast<float>(color.r) * val), 
             static_cast<sf::Uint8>(static_cast<float>(color.g) * val), 
@@ -31,7 +25,7 @@ void Button::update() {
                                      InterfaceConfig::buttonDarkFloat));
         } else if (Input::getMouseButtonReleased(sf::Mouse::Left)) {
             renderer->rectangle.setFillColor(InterfaceConfig::buttonColor);
-            onPress.invoke(buttonIdx);
+            onClick.invoke(buttonIdx);
         } else {
             renderer->rectangle.setFillColor(
                 multipleColorByValue(InterfaceConfig::buttonColor, 
