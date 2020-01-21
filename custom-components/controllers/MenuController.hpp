@@ -9,13 +9,22 @@
 #include "../../core/GameObject.h"
 #include "../Game.hpp"
 #include "../../utility/json.hpp"
+#include "../../core-components/ui/Button.hpp"
 #include <iostream>
 
 class MenuController : public Component {
+private:
+    nlohmann::json games;
+    Button * hostButton = nullptr;
+    std::vector<Button *> buttons;
+    void filterGames();
+    void initButtons();
+    void initHostButton();
 public:
     void start();
     void onDestroy();
 
+    void onGameSelected(int idx);
     void onGames(const nlohmann::json & json);
 };
 

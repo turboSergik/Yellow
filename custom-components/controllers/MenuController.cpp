@@ -3,19 +3,73 @@
 //
 
 #include "MenuController.hpp"
+#include "../../utility/PlayerConfig.hpp"
+#include "../../static/Prefabs.h"
+
+const float buttonWidth = 20;
+const float buttonHeight = 5;
 
 void MenuController::start() {
     Network::onGamesResponse.addListener<MenuController, &MenuController::onGames>(this);
     Network::send(Action::GAMES);
-    //TODO: instantiate UI here
+    initHostButton();
 }
 
 void MenuController::onDestroy() {
     Network::onGamesResponse.removeListener<MenuController, &MenuController::onGames>(this);
+    for (auto button : buttons) {
+        button->gameObject->destroy();
+    }
+    hostButton->gameObject->destroy();
+}
+
+void MenuController::onGameSelected(int idx) {
+    if (idx >= 0) {
+        PlayerConfig::hostName = games[idx]["name"];
+    }
+    Game::current->setState(GameState::INIT);
 }
 
 void MenuController::onGames(const nlohmann::json & json) {
-    //TODO: store all games here and connect to the desired
     //std::cout << json.dump(4) << std::endl;
-    Game::current->setState(GameState::INIT);
+    games = json["games"];
+    filterGames();
+    initButtons();
+}
+
+void MenuController::filterGames() {
+    std::cout << games.dump(4) << std::endl;
+    for (auto iter = games.cbegin(); iter != games.cend();) {
+        if ((*iter)["state"] != GameState::INIT || (*iter)["num_players"] <= 1) {
+            iter = games.erase(iter);
+        }
+        else {
+            ++iter;
+        }
+    }
+    std::cout << games.dump(4) << std::endl;
+}
+
+void MenuController::initButtons() {
+    for (auto button : buttons) {
+        button->gameObject->destroy();
+    }
+    int buttonsCount = games.size();
+    buttons.resize(buttonsCount);
+    for (int i = 0; i < buttonsCount; i++) {
+        buttons[i] = Prefabs::button(buttonWidth, buttonHeight);
+        buttons[i]->buttonIdx = i;
+        buttons[i]->onClick.addListener<MenuController, &MenuController::onGameSelected>(this);
+        buttons[i]->transform->setLocalPosition({0, -(buttonHeight+1)*i});
+        buttons[i]->gameObject->instantiate(transform);
+    }
+}
+
+void MenuController::initHostButton() {
+    hostButton = Prefabs::button(buttonWidth, buttonHeight);
+    hostButton->buttonIdx = -1;
+    hostButton->buttonColor = InterfaceConfig::playerTrainColor;
+    hostButton->onClick.addListener<MenuController, &MenuController::onGameSelected>(this);
+    hostButton->transform->setLocalPosition({-(buttonWidth+1), 0});
+    hostButton->gameObject->instantiate(transform);
 }
