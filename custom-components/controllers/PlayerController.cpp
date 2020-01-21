@@ -3,10 +3,11 @@
 //
 
 #include "PlayerController.hpp"
-#include "../static/Database.h"
-#include "../network/Network.hpp"
-#include "../static/Time.h"
-#include "../utility/random.hpp"
+#include "../../static/Database.h"
+#include "../../network/Network.hpp"
+#include "../../static/Time.h"
+#include "../../utility/random.hpp"
+#include "../Game.hpp"
 
 #include <queue>
 #include <bitset>
@@ -28,6 +29,15 @@ std::unordered_map<int, long long> fLine[50];
 std::unordered_map<int, long long> fVertex[50];
 int countType1 = 4;
 
+void PlayerController::start() {
+    Network::onMapResponse1.addListener<PlayerController, &PlayerController::onMapLayer1>(this);
+    Network::onGamesResponse.addListener<PlayerController, &PlayerController::onGames>(this);
+}
+
+void PlayerController::onDestroy() {
+    Network::onMapResponse1.removeListener<PlayerController, &PlayerController::onMapLayer1>(this);
+    Network::onGamesResponse.removeListener<PlayerController, &PlayerController::onGames>(this);
+}
 
 //TODO: make friend or comparator function
 bool operator< (El left, El right) {
@@ -61,7 +71,7 @@ bool isMarket(Point* point) {
 
 bool PlayerController::isTown(int vertex) {
 
-    if (vertex == PlayerController::playerTown -> point -> idx) return true;
+    if (vertex == Database::playerTown -> point -> idx) return true;
     return false;
 }
 
@@ -109,15 +119,15 @@ void clearLinesAndVertex(int marketCount) {
 
 void PlayerController::trainUpgrade() {
 
-    for (auto trainNow : PlayerController::playerTrains) {
+    for (auto trainNow : Database::playerTrains) {
         if (trainNow -> level == 1) tryTrainUpdate(trainNow);
     }
 
-    for (auto trainNow : PlayerController::playerTrains) {
+    for (auto trainNow : Database::playerTrains) {
         if (trainNow -> level == 2) tryTrainUpdate(trainNow);
     }
 
-    for (auto trainNow : PlayerController::playerTrains) {
+    for (auto trainNow : Database::playerTrains) {
         if (trainNow -> level == 3) tryTrainUpdate(trainNow);
     }
     return;
@@ -307,7 +317,7 @@ void tryTrainUpdate(Train*);
 
 void PlayerController::update() {
     int _count = 0;
-    for (auto train : PlayerController::playerTrains) {
+    for (auto train : Database::playerTrains) {
         if (_count < countType1) train -> move_type = 1;
         else train -> move_type = 2;
 
@@ -354,11 +364,11 @@ void PlayerController::update() {
 void PlayerController::strategyIteration() {
 
     std::cout << "=====================================" << std::endl;
-    std::cout << "Product=" << playerTown->product <<  " Armor=" << playerTown->armor  <<  " Population=" << playerTown->population << std::endl;
+    std::cout << "Product=" << Database::playerTown->product <<  " Armor=" << Database::playerTown->armor  <<  " Population=" << Database::playerTown->population << std::endl;
 
 
-    //TODO: iterate over PlayerController::playerTrains
-    for (auto train_now : PlayerController::playerTrains) {
+    //TODO: iterate over Database::playerTrains
+    for (auto train_now : Database::playerTrains) {
 
         tryTrainUpdate(train_now);
         if (train_now -> cooldown != 0) {
@@ -382,7 +392,7 @@ void PlayerController::strategyIteration() {
                 if (train_now -> move_type == 1) train_now -> needWay = PlayerController::trainWayToProducts(train_now).first;
                 else if (train_now -> move_type == 2) {
 
-                    if (train_now->level <= 2 || playerTown->level <= 2 || playerTown -> armor <= 50) train_now->needWay = PlayerController::trainWayToStorage(train_now).first;
+                    if (train_now->level <= 2 || Database::playerTown->level <= 2 || Database::playerTown -> armor <= 50) train_now->needWay = PlayerController::trainWayToStorage(train_now).first;
                     else train_now->needWay = PlayerController::trainWayToProducts(train_now).first;
                 }
             }
@@ -390,12 +400,12 @@ void PlayerController::strategyIteration() {
     }
 
     /// first for trains, which go to Town
-    for (auto train_now : PlayerController::playerTrains) {
-        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() == PlayerController::playerTown -> point -> idx) trainIteration(train_now);
+    for (auto train_now : Database::playerTrains) {
+        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() == Database::playerTown -> point -> idx) trainIteration(train_now);
     }
     /// then for other
-    for (auto train_now : PlayerController::playerTrains) {
-        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() != PlayerController::playerTown -> point -> idx) trainIteration(train_now);
+    for (auto train_now : Database::playerTrains) {
+        if (train_now -> needWay.size() != 0 && train_now -> needWay.back() != Database::playerTown -> point -> idx) trainIteration(train_now);
     }
 
     Database::isMapUpdated = false;
@@ -828,12 +838,12 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
     && mainTrain -> position != mainTrain -> line -> length) return;
 
     if (mainTrain -> position == 0
-    && PlayerController::playerTown -> point -> idx != mainTrain -> line -> points[0] -> idx) return;
+    && Database::playerTown -> point -> idx != mainTrain -> line -> points[0] -> idx) return;
 
     if (mainTrain -> position == mainTrain -> line -> length
-    && PlayerController::playerTown -> point -> idx != mainTrain -> line -> points[1] -> idx) return;
+    && Database::playerTown -> point -> idx != mainTrain -> line -> points[1] -> idx) return;
 
-    if (playerTown->armor >= 70 && mainTrain->level == 1) {
+    if (Database::playerTown->armor >= 70 && mainTrain->level == 1) {
 
         json message;
 
@@ -844,13 +854,13 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
         message["trains"] = b;
 
         mainTrain->level += 1;
-        playerTown->armor -= 40;
+        Database::playerTown->armor -= 40;
 
         std::cout << "UPGRADE TO LEVEL 2, MESSAGE=" << message << std::endl;
         Network::send(Action::UPGRADE, message);
     }
 
-    if (playerTown->armor >= 110 && mainTrain->level == 2) {
+    if (Database::playerTown->armor >= 110 && mainTrain->level == 2) {
 
         json message;
 
@@ -861,7 +871,7 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
         message["trains"] = b;
 
         mainTrain->level += 1;
-        playerTown->armor -= 80;
+        Database::playerTown->armor -= 80;
 
         std::cout << "UPGRADE TO LEVEL 3, MESSAGE=" << message << std::endl;
 
@@ -869,10 +879,10 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
     }
 
     if (mainTrain->level == 3) {
-        if (playerTown->armor >= 130 && playerTown->level == 1) {
+        if (Database::playerTown->armor >= 130 && Database::playerTown->level == 1) {
             json message;
 
-            std::vector<int> a{playerTown->idx};
+            std::vector<int> a{Database::playerTown->idx};
             std::vector<int> b{};
 
             message["posts"] = a;
@@ -880,15 +890,15 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
 
             std::cout << "UPGRADE TOWN TO LEVEL 2, MESSAGE=" << message << std::endl;
 
-            playerTown->level += 1;
-            playerTown->armor -= 100;
+            Database::playerTown->level += 1;
+            Database::playerTown->armor -= 100;
 
             Network::send(Action::UPGRADE, message);
         }
-        if (playerTown->armor >= 230 && playerTown->level == 2) {
+        if (Database::playerTown->armor >= 230 && Database::playerTown->level == 2) {
             json message;
 
-            std::vector<int> a{playerTown->idx};
+            std::vector<int> a{Database::playerTown->idx};
             std::vector<int> b{};
 
             message["posts"] = a;
@@ -896,75 +906,35 @@ void PlayerController::tryTrainUpdate(Train* mainTrain) {
 
             std::cout << "UPGRADE TOWN TO LEVEL 3, MESSAGE=" << message << std::endl;
 
-            playerTown->level += 1;
-            playerTown->armor -= 200;
+            Database::playerTown->level += 1;
+            Database::playerTown->armor -= 200;
             Network::send(Action::UPGRADE, message);
         }
     }
 
 }
 
+void PlayerController::onMapLayer1(const nlohmann::json &json) {
+    if (Game::current->trySetLayer1(json)) {
+        Game::current->applyLayer1(json);
+    } else {
+        Network::send(Action::MAP, {{"layer", 1}});
+    }
+}
 
-static const char * s_list[] = {
-    "1. Код говно.",
-    "2. Это надо переписать.",
-    "3. Ты чем вообще думаешь?",
-    "4. Так никто не пишет.",
-    "5. Ебанёт.",
-    "6. И как это поддерживать?",
-    "7. Пиздец!",
-    "8. Пиздец[2]!",
-    "9. Мы же полгода назад устно договаривались не делать так.",
-    "10. Я это ревьюить больше не буду, ищи кого-нибудь ещё.",
-    "11. Ты этот говнокод из своего днк взял?",
-    "12. Обезьяну посади - сделает лучше",
-    "13. Ты вообще чтоли животное?",
-    "14. Господь дал нам интеллект, но ты, я смотрю, от подарков отказываешься",
-    "15. Ещё раз так сделаешь - я тебя найду",
-    "16. Маме твоей вечером покажу это, если не исправишь",
-    "17. Неудивительно, что от тебя отец ушёл",
-    "18. Если бы я просто на клавиатуру сел- было бы также, как у тебя",
-    "19. Если ты считаешь, что это ок, то как ты вообще дверь открываешь?",
-    "20. Буду просить, чтобы тебя повысили, так как тебе нужны деньги на лечение",
-    "21. Да я о твоей ориентации давно догадался, можешь расслабиться",
-    "22. Из KFC сбежал какой-то недожаренный петух и пытается это вкомитить",
-    "23. Из-за тебя я всегда работу найду, спасибо",
-    "24. А сначала казался нормальным человеком",
-    "25. Твои пр- это первые автобаны в России",
-    "26. В следующий раз буду смотреть это до обеда",
-    "27. У меня от этого говна зрение на единицу село",
-    "28. Твои пр- это артхаус",
-    "29. Давай ты больше не будешь шутить в пулл реквестах?",
-    "30. У твоих родителей есть живые дети?",
-    "31. Если бы мы сидели в комнате с в комнате с Гитлером и Сталиным,у меня было бы два патрона,то я бы за такое выстрелил в тебя дважды",
-    "32. Что общего между художественным фильмом -two girls one cup- и этим ПР? И там,и тут жрут говно",
-    "33. Жаль отменили смертную казнь",
-    "34. Тебе вообще людей не жалко?",
-    "35. Когда читаю твой код, то постоянно чихаю, потому что у меня аллергия на чушб",
-    "36. Я, конечно, не гинеколог, но это пизда",
-    "37. Ты вообще в курсе, что это все видят?",
-    "38. Ты не говорил, что с цирковым прошлым",
-    "39. После этого пр не забудь руки помыть",
-    "40. И давно это с тобой?",
-    "41. Уважаемый, еб вашу мать, вам там нормально?",
-    "42. Извините, а адекватность выйдет?",
-    "43. Ну, ты хотя бы пытался!",
-    "44. Лучше бы собаку завели",
-    "45. Думать - не твоя сильная сторона",
-    "46. Ты молодец(нет)",
-    "47. Когда бог раздавал мозги, то ты, похоже, стоял между утконосом и голубем",
-    "48. Когда я говорю, что это говнокод даже голуби головой кивают",
-    "49. Твои пулл реквесты - это комедия, а последний и вовсе триллер",
-    "50. Кошечка говорит мяу, коровка говорит му, я говорю саша ты ебанулся такое писать?",
-    "51. H-водород, С-углерод, O- иди переписывай, урод",
-    "52. Ты не узнавал, этот стиль и подход - заразный?",
-    "53. Если бы у меня не было высшего образования, я бы не понял ни строчки, молодец!",
-    "54. Ты на 1xbet за машин против человечества поставил?",
-    "55. Ты доказательство того, что человечество обречено",
-    "56. Открыл сейчас этот твой код и в городе ввели чрезвычайные ситуации техногенного характера",
-    "57. Жаль, что у тебя кончился испытательный срок!",
-    "58. Я бы мог сейчас с тобой согласиться, но тогда мы оба будем не правы",
-    "59. Ты, я смотрю, и с дипломом, программер хуевый, иди на завод делать рубанок новы",
-    "60. У нас в проекте была проблема с производительностью, но я смотрю у нас есть кое-что хуже",
+void PlayerController::onGames(const nlohmann::json &json) {
+    if (isGameFinished(json)) {
+        Game::current->setState(GameState::FINISHED);
+    }
+}
 
-};
+bool PlayerController::isGameFinished(const nlohmann::json &json) {
+    if (json.contains("games")) {
+        for (auto game : json["games"]) {
+            if (game["name"] == PlayerConfig::hostName && game["state"] == GameState::FINISHED) {
+                return true;
+            }
+        }
+    }
+    return false;
+}

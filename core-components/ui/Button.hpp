@@ -5,17 +5,15 @@
 #include "../../core/Component.h"
 #include "../../core-components/colliders/BoxCollider.hpp"
 #include "../../core-components/renderers/RectangleRenderer.hpp"
-// #include "../../core-components/renderers/TextRenderer.hpp"
+#include "../../utility/Config.hpp"
 
 class Button : public Component {
-    static size_t ButtonCounter;
-    size_t buttonIdx;
-
 public:
+    int buttonIdx;
+    sf::Color buttonColor = InterfaceConfig::buttonColor;
     BoxCollider * buttonCollider;
     RectangleRenderer * renderer;
-    Button();
-    Event<size_t> onPress;
+    Event<int> onClick;
     void update();
 };
 

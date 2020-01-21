@@ -11,7 +11,6 @@
 #include "../custom-components/Train.h"
 #include "../custom-components/Line.h"
 #include "../core-components/Camera.h"
-#include "../custom-components/GraphController.h"
 #include "../utility/Config.hpp"
 #include "../core-components/ui/Button.hpp"
 
@@ -24,8 +23,8 @@ public:
     static Town *town(int idx);
     static Market *market(int idx);
     static Storage *storage(int idx);
-    static GraphController *graphRoot();
     static Button * button(float width, float height, std::string text);
+    static GameObject * root();
 };
 
 

@@ -6,8 +6,8 @@
 #define WG_PLAYERCONTROLLER_HPP
 
 
-#include "../core/Component.h"
-#include "Point.h"
+#include "../../core/Component.h"
+#include "../Point.h"
 #include <bitset>
 
 
@@ -35,11 +35,9 @@ private:
     float timeFromLastTurn = 0.5f;
     float waitingTime = 0.5f;//time to wait (show animations)
 public:
-    Point * playerPoint = nullptr;
-    Town * playerTown = nullptr;
-    std::vector<Train*> playerTrains;
-
+    void start();
     void update();
+    void onDestroy();
     void trainUpgrade();
     void tryTrainUpdate(Train*);
     void strategyIteration();
@@ -54,6 +52,10 @@ public:
 
     std::map<int, int> canGo;
 
+    bool isGameFinished(const nlohmann::json & json);
+
+    void onMapLayer1(const nlohmann::json & json);
+    void onGames(const nlohmann::json & json);
 };
 
 

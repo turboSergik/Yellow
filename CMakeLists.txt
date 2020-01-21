@@ -38,12 +38,10 @@ set(SOURCES
         core-components/renderers/Renderer.cpp
         core-components/renderers/SpriteRenderer.cpp
         core-components/renderers/CircleRenderer.cpp
-        custom-components/CameraController.cpp
         static/Time.cpp
         network/Connection.cpp
         network/Packet.cpp
         network/PacketQueue.cpp
-        custom-components/GraphController.cpp
         utility/GraphVisualizer.cpp
         static/Input.cpp
         static/InputBuffer.cpp
@@ -51,23 +49,27 @@ set(SOURCES
         utility/methodWrapper.cpp
         network/Network.cpp
         utility/Event.cpp
-        custom-components/PlayerController.cpp
         core-components/RigidBody.cpp
         linalg/Vector2.cpp
         utility/Mathf.cpp
         core-components/colliders/Collider.cpp
         core-components/colliders/CircleCollider.cpp
         core-components/colliders/BoxCollider.cpp
-        custom-components/ForceMethodPhysics/Draggable.cpp
-        custom-components/ForceMethodPhysics/PointPhysics.cpp
-        custom-components/ForceMethodPhysics/LinePhysics.cpp
-        utility//configs/PlayerConfig.cpp
+        utility/configs/PlayerConfig.cpp
         utility/configs/InterfaceConfig.cpp
         utility/configs/ForceMethodConfig.cpp
+        custom-components/forceMethodPhysics/Draggable.cpp
+        custom-components/forceMethodPhysics/PointPhysics.cpp
+        custom-components/forceMethodPhysics/LinePhysics.cpp
+        custom-components/Game.cpp
+        custom-components/controllers/CameraController.cpp
+        custom-components/controllers/MenuController.cpp
+        custom-components/controllers/PlayerController.cpp
+        custom-components/controllers/LobbyPlayerController.cpp
         core-components/ui/Button.cpp
         core-components/renderers/RectangleRenderer.cpp
         core-components/renderers/TextRenderer.cpp)
-
 add_executable(WG ${SOURCES})
 
 target_link_libraries(WG ${CONAN_LIBS})
+
