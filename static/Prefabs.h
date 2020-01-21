@@ -25,7 +25,7 @@ public:
     static Market *market(int idx);
     static Storage *storage(int idx);
     static GraphController *graphRoot();
-    static Button * button(float width, float height);
+    static Button * button(float width, float height, std::string text);
 };
 
 

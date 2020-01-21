@@ -42,9 +42,7 @@ void GraphController::start() {
 //    Network::send(Action::MAP, {{"layer", 1}});
 //    //Network::send(Action::MAP, {{"layer", 10}});
 //    Network::send(Action::GAMES);
-    Button * button = Prefabs::button(80, 60);
-    button->gameObject->instantiate();    
-    button->transform->setPosition({0, 0});
+
 }
 
 void GraphController::onDestroy() {

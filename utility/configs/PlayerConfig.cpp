@@ -1,6 +1,6 @@
 #include "PlayerConfig.hpp"
 #include <fstream>
-#include "json.hpp"
+#include "../json.hpp"
 
 std::string PlayerConfig::playerName;
 std::string PlayerConfig::hostName;

@@ -18,7 +18,8 @@ endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGET)
 
-file(COPY ${CMAKE_SOURCE_DIR}/playerConfig.json DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY ${CMAKE_SOURCE_DIR}/assets/playerConfig.json DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY ${CMAKE_SOURCE_DIR}/assets/Menlo-Regular.ttf DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 set(SOURCES
         main.cpp
@@ -60,7 +61,9 @@ set(SOURCES
         custom-components/ForceMethodPhysics/Draggable.cpp
         custom-components/ForceMethodPhysics/PointPhysics.cpp
         custom-components/ForceMethodPhysics/LinePhysics.cpp
-        utility/PlayerConfig.cpp
+        utility//configs/PlayerConfig.cpp
+        utility/configs/InterfaceConfig.cpp
+        utility/configs/ForceMethodConfig.cpp
         core-components/ui/Button.cpp
         core-components/renderers/RectangleRenderer.cpp
         core-components/renderers/TextRenderer.cpp)

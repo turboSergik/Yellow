@@ -34,11 +34,11 @@ struct MainLoopIteration {
             MethodsPool::fixedUpdate();
             time -= Time::fixedDeltaTime;
         }
+        Network::update();
         MethodsPool::onDestroy();
         window.clear();
         Renderer::draw(window, mainCamera->getRenderState());
         window.display();
-        Network::update();
     }
 };
 
@@ -58,6 +58,8 @@ void mainLoop(MainLoopIteration & mainLoopIteration,
 }
 
 int main() {
+    InterfaceConfig::textFont = new sf::Font;
+    InterfaceConfig::textFont->loadFromFile(InterfaceConfig::fontFileName);
     
     sf::RenderWindow window(sf::VideoMode(1000, 600), "Graph");
     window.setActive(true);
@@ -65,6 +67,10 @@ int main() {
     GameObject * root = Prefabs::graphRoot()->gameObject->instantiate();
     Camera * mainCamera = Prefabs::camera(&window);
     mainCamera->gameObject->instantiate();
+    
+    Button * button = Prefabs::button(80, 60, "sample\ntext");
+    button->gameObject->instantiate();
+    button->transform->setPosition({0, 0});
     
     sf::Clock clock; // starts the clock
     float time = 0.f;
@@ -90,6 +96,8 @@ int main() {
 #endif
                 root->destroyImmediate();
                 mainCamera->gameObject->destroyImmediate();
+                button->gameObject->destroyImmediate();
+                delete InterfaceConfig::textFont;
                 window.close();
                 return 0;
             case sf::Event::Resized:

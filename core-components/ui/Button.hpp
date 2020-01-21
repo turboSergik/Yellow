@@ -5,6 +5,7 @@
 #include "../../core/Component.h"
 #include "../../core-components/colliders/BoxCollider.hpp"
 #include "../../core-components/renderers/RectangleRenderer.hpp"
+// #include "../../core-components/renderers/TextRenderer.hpp"
 
 class Button : public Component {
     static size_t ButtonCounter;

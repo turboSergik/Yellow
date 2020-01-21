@@ -1,11 +1,13 @@
 //
 // Created by Олег Бобров on 17.11.2019.
 //
+#include <iostream>
 
 #include "Prefabs.h"
 #include "../core-components/renderers/CircleRenderer.h"
 #include "../core-components/renderers/LineRenderer.h"
 #include "../core-components/renderers/RectangleRenderer.hpp"
+#include "../core-components/renderers/TextRenderer.hpp"
 #include "../custom-components/CameraController.h"
 #include "../core-components/RigidBody.hpp"
 #include "../core-components/colliders/CircleCollider.hpp"
@@ -110,7 +112,7 @@ GraphController *Prefabs::graphRoot() {
     return graphController;
 }
 
-Button * Prefabs::button(float width, float height) {
+Button * Prefabs::button(float width, float height, std::string text) {
     GameObject * obj = new GameObject();
     obj->name = "Button";
     Button * button = obj->addComponent<Button>();
@@ -119,8 +121,18 @@ Button * Prefabs::button(float width, float height) {
     renderer->rectangle.setSize({width, height});
     renderer->rectangle.setFillColor(InterfaceConfig::buttonColor);
     renderer->rectangle.setOrigin(width / 2, height / 2);
+    renderer->priotity = 1;
     collider->setWidthHeight(width, height);
     button->buttonCollider = collider;
     button->renderer = renderer;
+    TextRenderer * textRenderer = obj->addComponent<TextRenderer>();
+    textRenderer->text.setString(text);
+    textRenderer->text.setFont(*InterfaceConfig::textFont);
+    textRenderer->text.setCharacterSize(20);
+    sf::FloatRect textRect = textRenderer->text.getLocalBounds();    
+    textRenderer->text.setOrigin(textRect.left + (textRect.width / 2), textRect.top + textRect.height / 2);
+    textRenderer->text.setScale(1, -1);
+    textRenderer->text.setFillColor(sf::Color::Black);
+    
     return button;
 }
