@@ -26,14 +26,11 @@ public:
 
     Line* line = nullptr;
     Point* point = nullptr;
-
 };
 
 
 class PlayerController : public Component {
 private:
-    float timeFromLastTurn = 0.5f;
-    float waitingTime = 0.5f;//time to wait (show animations)
 public:
     void start();
     void update();
@@ -47,8 +44,6 @@ public:
     void addTimeTable(std::vector<int>, int);
     bool isFreeTimeTable(El );
     bool isTown(int );
-
-    void clearVertex();
     void trainIteration(Train*);
 
     std::map<int, int> canGo;
