@@ -5,8 +5,8 @@
 #include "MenuController.hpp"
 #include "../../static/Prefabs.h"
 
-const float buttonWidth = 20;
-const float buttonHeight = 5;
+const float buttonWidth = 200;
+const float buttonHeight = 50;
 
 void MenuController::start() {
     Network::onGamesResponse.addListener<MenuController, &MenuController::onGames>(this);
