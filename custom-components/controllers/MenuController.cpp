@@ -15,6 +15,14 @@ void MenuController::start() {
     initHostButton();
 }
 
+void MenuController::update() {
+    timeSinceRefresh += Time::deltaTime;
+    if (timeSinceRefresh >= refreshTime) {
+        timeSinceRefresh = 0.f;
+        Network::send(Action::GAMES);
+    }
+}
+
 void MenuController::onDestroy() {
     Network::onGamesResponse.removeListener<MenuController, &MenuController::onGames>(this);
     for (auto button : buttons) {

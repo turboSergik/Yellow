@@ -14,6 +14,7 @@
 
 class MenuController : public Component {
 private:
+    float timeSinceRefresh = 0.f;
     nlohmann::json games;
     Button * hostButton = nullptr;
     std::vector<Button *> buttons;
@@ -21,7 +22,9 @@ private:
     void initButtons();
     void initHostButton();
 public:
+    float refreshTime = 1.f;
     void start();
+    void update();
     void onDestroy();
 
     void onGameSelected(int idx);
