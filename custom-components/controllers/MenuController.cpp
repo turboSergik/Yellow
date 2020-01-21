@@ -3,7 +3,6 @@
 //
 
 #include "MenuController.hpp"
-#include "../../utility/PlayerConfig.hpp"
 #include "../../static/Prefabs.h"
 
 const float buttonWidth = 20;
@@ -65,7 +64,7 @@ void MenuController::initButtons() {
     int buttonsCount = games.size();
     buttons.resize(buttonsCount);
     for (int i = 0; i < buttonsCount; i++) {
-        buttons[i] = Prefabs::button(buttonWidth, buttonHeight);
+        buttons[i] = Prefabs::button(buttonWidth, buttonHeight, games[i]["name"]);
         buttons[i]->buttonIdx = i;
         buttons[i]->onClick.addListener<MenuController, &MenuController::onGameSelected>(this);
         buttons[i]->transform->setLocalPosition({0, -(buttonHeight+1)*i});
@@ -74,7 +73,7 @@ void MenuController::initButtons() {
 }
 
 void MenuController::initHostButton() {
-    hostButton = Prefabs::button(buttonWidth, buttonHeight);
+    hostButton = Prefabs::button(buttonWidth, buttonHeight, PlayerConfig::hostName);
     hostButton->buttonIdx = -1;
     hostButton->buttonColor = InterfaceConfig::playerTrainColor;
     hostButton->onClick.addListener<MenuController, &MenuController::onGameSelected>(this);
