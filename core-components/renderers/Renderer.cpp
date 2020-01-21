@@ -14,6 +14,9 @@ void Renderer::draw(sf::RenderTarget &target, sf::RenderStates states) {
                   [](Renderer * first, Renderer * second) {
             return first->priotity > second->priotity;
         });
+        for (size_t i = 0; i < Renderer::renderers.size(); ++i) {
+            Renderer::renderers[i]->positionInRenderers = i;
+        }
     }
     for (auto renderer : renderers) {
         renderer->onDraw(target, states);

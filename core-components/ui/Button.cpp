@@ -11,9 +11,9 @@ sf::Color multipleColorByValue(const sf::Color & color, float val) {
 }
 
 void Button::update() {
-//    if (Input::getMouseButtonPressed(sf::Mouse::Left)) {
-//        std::cout << "here" << std::endl;
-//    }
+    if (Input::getMouseButtonPressed(sf::Mouse::Left)) {
+        std::cout << "here" << std::endl;
+    }
     Vector2 worldPoint = Camera::mainCamera->screenToWorldPoint(Input::mousePosition);    
     bool overlaps = this->buttonCollider->isOverlapsPoint(worldPoint);
     if (overlaps) {
