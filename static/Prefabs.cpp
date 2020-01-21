@@ -36,6 +36,7 @@ Point *Prefabs::point(int idx) {
     CircleCollider * circleCollider = obj->addComponent<CircleCollider>();
     circleCollider->setRadius(InterfaceConfig::largeR);
     obj->addComponent<PointPhysics>();
+    obj->addComponent<Draggable>();
     return point;
 }
 
